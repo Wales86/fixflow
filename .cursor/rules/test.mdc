@@ -1,0 +1,20 @@
+---
+globs: tests/**/*
+alwaysApply: false
+---
+
+## Testing instructions
+ 
+Use Pest and not PHPUnit. Run tests with `sail artisan test`.
+ 
+Every test method should be structured with Arrange-Act-Assert.
+ 
+In the Arrange phase, use Laravel factories but add meaningful column values and variable names if they help to understand failed tests better.
+Bad example: `$user1 = User::factory()->create();`
+Better example: `$adminUser = User::factory()->create(['email' => 'admin@admin.com'])`;
+ 
+In the Assert phase, perform these assertions when applicable:
+- HTTP status code returned from Act: `assertStatus()`
+- Structure/data returned from Act (Blade or JSON): functions like `assertViewHas()`, `assertSee()`, `assertDontSee()` or `assertJsonContains()`
+- Or, redirect assertions like `assertRedirect()` and `assertSessionHas()` in case of Flash session values passed
+- DB changes if any create/update/delete operation was performed: functions like `assertDatabaseHas()`, `assertDatabaseMissing()`, `expect($variable)->toBe()` and similar.

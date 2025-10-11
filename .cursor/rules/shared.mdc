@@ -1,0 +1,44 @@
+---
+alwaysApply: true
+---
+
+# AI Rules for FixFlow
+
+FixFlow is a workshop management tool designed to accurately track the working time devoted to repair orders. The main goal of the application is to provide the data necessary for analyzing the profitability of repairs and the efficiency of the team, thus eliminating the need for paper documentation. This system will serve as the single source of truth for all activities related to recording working time in the workshop, enabling managers to make data-driven decisions to optimize operations. The Minimum Viable Product (MVP) version focuses on the core functionalities of client and vehicle management, order processing, time tracking, and reporting.
+
+## Tech Stack
+- Laravel 12
+- Inertia 2
+- React 19
+- Tailwind 4
+
+## Project Strucure
+
+- `app/Http/Controllers`: Return Inertia responses (`Inertia::render`) and delegate logic to Services
+- `app/Http/Requests`: Form Request validation; use `$request->validated()`
+- `app/Models`: Eloquent models; relationships, casts, scopes
+- `app/Services`: Business logic; keep Controllers slim
+- `resources/views/app.blade.php`: Inertia root view with `@vite` and `@inertia`
+- `resources/js/app.tsx`: Inertia initialization (`createInertiaApp`), page resolver, progress
+- `resources/js/Pages`: Top-level React pages rendered via Inertia
+- `resources/js/Components`: Reusable UI components; use Tailwind and Shadcn/Radix
+- `resources/js/Layouts`: Shared page layouts; set `<Head>` and structure
+- `resources/js/hooks`, `lib`, `types`: Custom hooks, utilities, and TypeScript types
+- `routes/web.php`: Define routes that render Inertia pages or call Controllers
+- `routes/api.php`: Optional API endpoints when needed beyond Inertia
+- `routes/console.php`: Scheduled commands per Laravel 11/12 conventions
+- `vite.config.ts`: Laravel Vite plugin configured for React/Inertia (SSR optional)
+- `tailwind.config.ts`, `postcss.config.js`: Tailwind setup; scan `resources/**/*.tsx`
+
+## Coding practices
+
+### Guidelines for clean code
+
+- Prioritize error handling and edge cases
+- Handle errors and edge cases at the beginning of functions.
+- Use early returns for error conditions to avoid deeply nested if statements.
+- Place the happy path last in the function for improved readability.
+- Avoid unnecessary else statements; use if-return pattern instead.
+- Use guard clauses to handle preconditions and invalid states early.
+- Implement proper error logging and user-friendly error messages.
+- Consider using custom error types or error factories for consistent error handling.
