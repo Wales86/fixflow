@@ -62,8 +62,8 @@ Przechowuje dane pojazdów powiązanych z klientami.
 | `make`          | `VARCHAR(255)`     | `NOT NULL`                                       | Marka pojazdu                               |
 | `model`         | `VARCHAR(255)`     | `NOT NULL`                                       | Model pojazdu                               |
 | `year`          | `SMALLINT UNSIGNED`| `NOT NULL`                                       | Rocznik produkcji                           |
-| `vin`           | `VARCHAR(17)`      | `NOT NULL`, `UNIQUE(workshop_id, vin)`           | Numer VIN (unikalny w obrębie warsztatu)    |
-| `license_plate` | `VARCHAR(20)`      | `NOT NULL`                                       | Numer rejestracyjny                         |
+| `vin`                  | `VARCHAR(17)`      | `NOT NULL`, `UNIQUE(workshop_id, vin)`           | Numer VIN (unikalny w obrębie warsztatu)    |
+| `registration_number`  | `VARCHAR(20)`      | `NOT NULL`                                       | Numer rejestracyjny                         |
 | `created_at`    | `TIMESTAMP`        | `NOT NULL`, `DEFAULT CURRENT_TIMESTAMP`          | Data utworzenia rekordu                     |
 | `updated_at`    | `TIMESTAMP`        | `NOT NULL`, `DEFAULT CURRENT_TIMESTAMP ON UPDATE`| Data ostatniej aktualizacji                 |
 | `deleted_at`    | `TIMESTAMP`        | `NULLABLE`                                       | Data "miękkiego" usunięcia                  |
@@ -145,7 +145,7 @@ W celu optymalizacji wydajności zapytań, następujące kolumny powinny zostać
     -   `clients_phone_number_index` (`phone_number`)
 -   **`vehicles`**:
     -   `vehicles_workshop_id_vin_unique` (`workshop_id`, `vin`)
-    -   `vehicles_license_plate_index` (`license_plate`)
+    -   `vehicles_registration_number_index` (`registration_number`)
 -   **`repair_orders`**:
     -   `repair_orders_status_index` (`status`)
 -   **`internal_notes`**:
