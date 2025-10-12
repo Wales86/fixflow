@@ -110,20 +110,34 @@
     3. Associate user with workshop (set workshop_id)
     4. Auto-login the new owner
   - **Proposed React Component:** N/A (redirects to `dashboard`)
+  - **Success/Error Handling:**
+    - Success: Auto-login and `redirect()->route('dashboard')->with('success', 'Witamy w FixFlow! Twój warsztat został utworzony.')`
+    - Error: `redirect()->back()->withErrors($validator)->withInput()`
 
 #### Login/Logout
 - `GET /login` → Show login form (Laravel Fortify)
   - **Proposed React Component:** `Pages/Auth/Login`
 - `POST /login` → Process login (Laravel Fortify)
+  - **Success/Error Handling:**
+    - Success: `redirect()->intended(route('dashboard'))`
+    - Error: `redirect()->back()->withErrors(['email' => 'Nieprawidłowe dane logowania'])->withInput()`
 - `POST /logout` → Logout user (Laravel Fortify)
+  - **Success/Error Handling:**
+    - Success: `redirect()->route('login')`
 
 #### Password Reset
 - `GET /forgot-password` → Show password reset form (Laravel Fortify)
   - **Proposed React Component:** `Pages/Auth/ForgotPassword`
 - `POST /forgot-password` → Send reset link (Laravel Fortify)
+  - **Success/Error Handling:**
+    - Success: `redirect()->back()->with('status', 'Link do resetowania hasła został wysłany na podany adres email')`
+    - Error: `redirect()->back()->withErrors(['email' => 'Nie znaleziono użytkownika z tym adresem email'])`
 - `GET /reset-password/{token}` → Show reset password form (Laravel Fortify)
   - **Proposed React Component:** `Pages/Auth/ResetPassword`
 - `POST /reset-password` → Process password reset (Laravel Fortify)
+  - **Success/Error Handling:**
+    - Success: `redirect()->route('login')->with('status', 'Hasło zostało pomyślnie zresetowane')`
+    - Error: `redirect()->back()->withErrors($validator)->withInput()`
 
 ### 2.2 DashboardController
 
@@ -188,6 +202,9 @@
 - **Description:** Store new client
 - **Proposed Authorization:** `ClientPolicy::create` (Owner, Office)
 - **Proposed React Component:** N/A (redirects to `clients.show`)
+- **Success/Error Handling:**
+  - Success: `redirect()->route('clients.show', $client)->with('success', 'Klient został dodany')`
+  - Error: `redirect()->back()->withErrors($validator)->withInput()`
 
 #### Show Client
 - **Route:** `GET /clients/{client}` → `clients.show` → `ClientController@show`
@@ -248,12 +265,18 @@
 - **Description:** Update client
 - **Proposed Authorization:** `ClientPolicy::update` (Owner, Office)
 - **Proposed React Component:** N/A (redirects to `clients.show`)
+- **Success/Error Handling:**
+  - Success: `redirect()->route('clients.show', $client)->with('success', 'Klient został zaktualizowany')`
+  - Error: `redirect()->back()->withErrors($validator)->withInput()`
 
 #### Delete Client
 - **Route:** `DELETE /clients/{client}` → `clients.destroy` → `ClientController@destroy`
 - **Description:** Delete client (soft delete)
 - **Proposed Authorization:** `ClientPolicy::delete` (Owner only)
 - **Proposed React Component:** N/A (redirects to `clients.index`)
+- **Success/Error Handling:**
+  - Success: `redirect()->route('clients.index')->with('success', 'Klient został usunięty')`
+  - Error: `redirect()->back()->with('error', 'Nie można usunąć klienta z przypisanymi pojazdami')`
 
 ---
 
@@ -307,6 +330,9 @@
 - **Description:** Store new vehicle
 - **Proposed Authorization:** `VehiclePolicy::create` (Owner, Office)
 - **Proposed React Component:** N/A (redirects to `vehicles.show`)
+- **Success/Error Handling:**
+  - Success: `redirect()->route('vehicles.show', $vehicle)->with('success', 'Pojazd został dodany')`
+  - Error: `redirect()->back()->withErrors($validator)->withInput()`
 
 #### Show Vehicle
 - **Route:** `GET /vehicles/{vehicle}` → `vehicles.show` → `VehicleController@show`
@@ -368,12 +394,18 @@
 - **Description:** Update vehicle
 - **Proposed Authorization:** `VehiclePolicy::update` (Owner, Office)
 - **Proposed React Component:** N/A (redirects to `vehicles.show`)
+- **Success/Error Handling:**
+  - Success: `redirect()->route('vehicles.show', $vehicle)->with('success', 'Pojazd został zaktualizowany')`
+  - Error: `redirect()->back()->withErrors($validator)->withInput()`
 
 #### Delete Vehicle
 - **Route:** `DELETE /vehicles/{vehicle}` → `vehicles.destroy` → `VehicleController@destroy`
 - **Description:** Delete vehicle (soft delete)
 - **Proposed Authorization:** `VehiclePolicy::delete` (Owner only)
 - **Proposed React Component:** N/A (redirects to `clients.show`)
+- **Success/Error Handling:**
+  - Success: `redirect()->route('clients.show', $vehicle->client)->with('success', 'Pojazd został usunięty')`
+  - Error: `redirect()->back()->with('error', 'Nie można usunąć pojazdu z aktywnymi zleceniami')`
 
 ---
 
@@ -437,6 +469,9 @@
 - **Description:** Store new repair order with attachments
 - **Proposed Authorization:** `RepairOrderPolicy::create` (Owner, Office)
 - **Proposed React Component:** N/A (redirects to `repair-orders.show`)
+- **Success/Error Handling:**
+  - Success: `redirect()->route('repair-orders.show', $order)->with('success', 'Zlecenie zostało utworzone')`
+  - Error: `redirect()->back()->withErrors($validator)->withInput()`
 
 #### Show Repair Order
 - **Route:** `GET /repair-orders/{repairOrder}` → `repair-orders.show` → `RepairOrderController@show`
@@ -550,18 +585,27 @@
 - **Description:** Update repair order
 - **Proposed Authorization:** `RepairOrderPolicy::update` (Owner, Office)
 - **Proposed React Component:** N/A (redirects to `repair-orders.show`)
+- **Success/Error Handling:**
+  - Success: `redirect()->route('repair-orders.show', $order)->with('success', 'Zlecenie zostało zaktualizowane')`
+  - Error: `redirect()->back()->withErrors($validator)->withInput()`
 
 #### Update Order Status
 - **Route:** `PATCH /repair-orders/{repairOrder}/status` → `repair-orders.update-status` → `RepairOrderController@updateStatus`
 - **Description:** Update order status only
 - **Proposed Authorization:** `RepairOrderPolicy::updateStatus` (Owner, Office)
 - **Proposed React Component:** N/A (redirects back)
+- **Success/Error Handling:**
+  - Success: `redirect()->back()->with('success', 'Status zlecenia został zmieniony')`
+  - Error: `redirect()->back()->with('error', 'Nie udało się zmienić statusu')`
 
 #### Delete Repair Order
 - **Route:** `DELETE /repair-orders/{repairOrder}` → `repair-orders.destroy` → `RepairOrderController@destroy`
 - **Description:** Delete repair order (soft delete)
 - **Proposed Authorization:** `RepairOrderPolicy::delete` (Owner only)
 - **Proposed React Component:** N/A (redirects to `repair-orders.index`)
+- **Success/Error Handling:**
+  - Success: `redirect()->route('repair-orders.index')->with('success', 'Zlecenie zostało usunięte')`
+  - Error: `redirect()->back()->with('error', 'Nie można usunąć zlecenia z wpisami czasu')`
 
 ---
 
@@ -593,6 +637,9 @@
 - **Description:** Store new time entry
 - **Proposed Authorization:** Authenticated user with Mechanic role
 - **Proposed React Component:** N/A (redirects back to `time-entry.create`)
+- **Success/Error Handling:**
+  - Success: `redirect()->route('time-entry.create')->with('success', 'Czas pracy został zapisany')`
+  - Error: `redirect()->back()->withErrors($validator)->withInput()`
 
 #### Edit Time Entry Form
 - **Route:** `GET /time-entries/{timeEntry}/edit` → `time-entries.edit` → `TimeEntryController@edit`
@@ -623,12 +670,18 @@
 - **Description:** Update time entry
 - **Proposed Authorization:** `TimeEntryPolicy::update` (Owner, Office, or mechanic's own entry)
 - **Proposed React Component:** N/A (redirects to related `repair-orders.show`)
+- **Success/Error Handling:**
+  - Success: `redirect()->route('repair-orders.show', $timeEntry->repair_order_id)->with('success', 'Wpis czasu został zaktualizowany')`
+  - Error: `redirect()->back()->withErrors($validator)->withInput()`
 
 #### Delete Time Entry
 - **Route:** `DELETE /time-entries/{timeEntry}` → `time-entries.destroy` → `TimeEntryController@destroy`
 - **Description:** Delete time entry
 - **Proposed Authorization:** `TimeEntryPolicy::delete` (Owner, Office)
 - **Proposed React Component:** N/A (redirects back)
+- **Success/Error Handling:**
+  - Success: `redirect()->back()->with('success', 'Wpis czasu został usunięty')`
+  - Error: `redirect()->back()->with('error', 'Nie udało się usunąć wpisu')`
 
 ---
 
@@ -639,18 +692,27 @@
 - **Description:** Add note to repair order
 - **Proposed Authorization:** `InternalNotePolicy::create` (Owner, Office)
 - **Proposed React Component:** N/A (redirects back to `repair-orders.show`)
+- **Success/Error Handling:**
+  - Success: `redirect()->back()->with('success', 'Notatka została dodana')`
+  - Error: `redirect()->back()->withErrors($validator)->withInput()`
 
 #### Update Internal Note
 - **Route:** `PUT/PATCH /internal-notes/{internalNote}` → `internal-notes.update` → `InternalNoteController@update`
 - **Description:** Update note
 - **Proposed Authorization:** `InternalNotePolicy::update` (Owner, or author)
 - **Proposed React Component:** N/A (redirects back)
+- **Success/Error Handling:**
+  - Success: `redirect()->back()->with('success', 'Notatka została zaktualizowana')`
+  - Error: `redirect()->back()->withErrors($validator)`
 
 #### Delete Internal Note
 - **Route:** `DELETE /internal-notes/{internalNote}` → `internal-notes.destroy` → `InternalNoteController@destroy`
 - **Description:** Delete note
 - **Proposed Authorization:** `InternalNotePolicy::delete` (Owner, or author)
 - **Proposed React Component:** N/A (redirects back)
+- **Success/Error Handling:**
+  - Success: `redirect()->back()->with('success', 'Notatka została usunięta')`
+  - Error: `redirect()->back()->with('error', 'Nie udało się usunąć notatki')`
 
 ---
 
@@ -690,6 +752,9 @@
 - **Description:** Store new mechanic
 - **Proposed Authorization:** `MechanicPolicy::create` (Owner, Office)
 - **Proposed React Component:** N/A (redirects to `mechanics.index`)
+- **Success/Error Handling:**
+  - Success: `redirect()->route('mechanics.index')->with('success', 'Mechanik został dodany')`
+  - Error: `redirect()->back()->withErrors($validator)->withInput()`
 
 #### Edit Mechanic Form
 - **Route:** `GET /mechanics/{mechanic}/edit` → `mechanics.edit` → `MechanicController@edit`
@@ -713,12 +778,18 @@
 - **Description:** Update mechanic (including is_active status)
 - **Proposed Authorization:** `MechanicPolicy::update` (Owner, Office)
 - **Proposed React Component:** N/A (redirects to `mechanics.index`)
+- **Success/Error Handling:**
+  - Success: `redirect()->route('mechanics.index')->with('success', 'Mechanik został zaktualizowany')`
+  - Error: `redirect()->back()->withErrors($validator)->withInput()`
 
 #### Delete Mechanic
 - **Route:** `DELETE /mechanics/{mechanic}` → `mechanics.destroy` → `MechanicController@destroy`
 - **Description:** Delete mechanic (soft delete)
 - **Proposed Authorization:** `MechanicPolicy::delete` (Owner only)
 - **Proposed React Component:** N/A (redirects to `mechanics.index`)
+- **Success/Error Handling:**
+  - Success: `redirect()->route('mechanics.index')->with('success', 'Mechanik został usunięty')`
+  - Error: `redirect()->back()->with('error', 'Nie można usunąć mechanika z wpisami czasu')`
 
 ---
 
@@ -759,6 +830,9 @@
 - **Description:** Store new user with role assignment
 - **Proposed Authorization:** `UserPolicy::create` (Owner only)
 - **Proposed React Component:** N/A (redirects to `users.index`)
+- **Success/Error Handling:**
+  - Success: `redirect()->route('users.index')->with('success', 'Użytkownik został dodany')`
+  - Error: `redirect()->back()->withErrors($validator)->withInput()`
 
 #### Edit User Form
 - **Route:** `GET /users/{user}/edit` → `users.edit` → `UserController@edit`
@@ -783,12 +857,18 @@
 - **Description:** Update user and role
 - **Proposed Authorization:** `UserPolicy::update` (Owner only)
 - **Proposed React Component:** N/A (redirects to `users.index`)
+- **Success/Error Handling:**
+  - Success: `redirect()->route('users.index')->with('success', 'Użytkownik został zaktualizowany')`
+  - Error: `redirect()->back()->withErrors($validator)->withInput()`
 
 #### Delete User
 - **Route:** `DELETE /users/{user}` → `users.destroy` → `UserController@destroy`
 - **Description:** Delete user (soft delete)
 - **Proposed Authorization:** `UserPolicy::delete` (Owner only, cannot delete self)
 - **Proposed React Component:** N/A (redirects to `users.index`)
+- **Success/Error Handling:**
+  - Success: `redirect()->route('users.index')->with('success', 'Użytkownik został usunięty')`
+  - Error: `redirect()->back()->with('error', 'Nie można usunąć własnego konta')`
 
 ---
 
@@ -912,6 +992,6 @@ RepairOrder statuses (enum): `Nowe`, `Diagnoza`, `Wymaga kontaktu`, `Czeka na cz
 
 ---
 
-**Document Version:** 2.2 (Added Workshop Registration)
+**Document Version:** 2.3 (Added Success/Error Handling for all routes)
 **Created:** 2025-10-12
 **Status:** Ready for Implementation
