@@ -32,8 +32,9 @@ The project is built using a modern monolithic architecture with the TALL stack 
 
 The Minimum Viable Product (MVP) version focuses on the core functionalities:
 
--   **Client Management**: CRUD operations for client profiles.
--   **Vehicle Management**: CRUD operations for vehicles, with the ability to assign them to clients and view their repair history.
+-   **Multi-Tenancy**: The application is designed to support multiple independent workshops, ensuring complete data isolation.
+-   **Client Management**: CRUD operations for client profiles within a specific workshop.
+-   **Vehicle Management**: CRUD operations for vehicles, with the ability to assign them to clients and view their repair history within a specific workshop.
 -   **Order Management**: Create and manage repair orders, track their status (e.g., *New, In Progress, Awaiting Parts, Completed*), and associate them with clients and vehicles.
 -   **Time Tracking**: A simple interface for mechanics to log time spent on specific tasks within a repair order.
 -   **Reporting**: Basic reports on team efficiency and total time logged per order.
