@@ -16,3 +16,4 @@ alwaysApply: false
 - **Console Scheduler**: scheduled commands should be in `routes/console.php` and not `app/Console/Kernel.php` which doesn't exist since Laravel 11.
 - **Middleware**: whenever possible, use Middleware by class name in the routes. But if you do need to register Middleware alias, it should be registered in `bootstrap/app.php` and not `app/Http/Kernel.php` which doesn't exist since Laravel 11.
 - **Policies**: Laravel automatically auto-discovers Policies, no need to register them in the Service Providers.
+- use spatie/laravel-data package for Request -> Service data flow
