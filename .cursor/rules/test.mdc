@@ -14,7 +14,24 @@ Bad example: `$user1 = User::factory()->create();`
 Better example: `$adminUser = User::factory()->create(['email' => 'admin@admin.com'])`;
  
 In the Assert phase, perform these assertions when applicable:
-- HTTP status code returned from Act: `assertStatus()`
-- Structure/data returned from Act (Blade or JSON): functions like `assertViewHas()`, `assertSee()`, `assertDontSee()` or `assertJsonContains()`
-- Or, redirect assertions like `assertRedirect()` and `assertSessionHas()` in case of Flash session values passed
+- redirect assertions like `assertRedirect()` and `assertSessionHas()` in case of Flash session values passed
 - DB changes if any create/update/delete operation was performed: functions like `assertDatabaseHas()`, `assertDatabaseMissing()`, `expect($variable)->toBe()` and similar.
+- use inertia asserts, example:
+```
+use Inertia\Testing\AssertableInertia;
+
+it('displays the users page with correct props', function () {
+    User::factory()->count(5)->create();
+
+    $response = $this->get('/users');
+
+    $response->assertInertia(function (AssertableInertia $page) {
+        $page->component('Users/Index');
+
+        $page->has('users');
+
+        $page->has('users.data', 5);
+        $page->where('someOtherData', 'wartosc');
+    });
+});
+```

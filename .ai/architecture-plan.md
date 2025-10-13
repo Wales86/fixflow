@@ -6,7 +6,13 @@
 - **Source Table:** `workshops` (managed by spatie/laravel-multitenancy)
 - **Proposed Model:** `Workshop` (extends Tenant)
 - **Proposed Controller:** N/A (created during registration, managed through package)
-- **Key Fields:** name
+- **Key Fields:**
+  - `id`: int
+  - `name`: string
+  - `created_at`: ?Carbon
+  - `updated_at`: ?Carbon
+- **Validation Rules:**
+  - `name`: `required|string|max:255`
 - **Relationships:**
   - hasMany: User, Mechanic, Client, Vehicle, RepairOrder
 
@@ -14,6 +20,28 @@
 - **Source Table:** `users`
 - **Proposed Model:** `User`
 - **Proposed Controller:** `UserController`
+- **Key Fields:**
+  - `id`: int
+  - `workshop_id`: int
+  - `name`: string
+  - `email`: string
+  - `email_verified_at`: ?Carbon
+  - `password`: string
+  - `remember_token`: ?string
+  - `created_at`: ?Carbon
+  - `updated_at`: ?Carbon
+  - `deleted_at`: ?Carbon
+- **Validation Rules:**
+  - Create:
+    - `name`: `required|string|max:255`
+    - `email`: `required|email|max:255|unique:users,email,NULL,id,workshop_id,{workshop_id}`
+    - `password`: `required|string|min:8|confirmed`
+    - `role`: `required|string|in:Owner,Office,Mechanic`
+  - Update:
+    - `name`: `required|string|max:255`
+    - `email`: `required|email|max:255|unique:users,email,{user_id},id,workshop_id,{workshop_id}`
+    - `password`: `nullable|string|min:8|confirmed`
+    - `role`: `required|string|in:Owner,Office,Mechanic`
 - **Relationships:**
   - belongsTo: Workshop
   - morphMany: InternalNote (as author)
@@ -23,6 +51,24 @@
 - **Source Table:** `mechanics`
 - **Proposed Model:** `Mechanic`
 - **Proposed Controller:** `MechanicController`
+- **Key Fields:**
+  - `id`: int
+  - `workshop_id`: int
+  - `first_name`: string
+  - `last_name`: string
+  - `is_active`: bool
+  - `created_at`: ?Carbon
+  - `updated_at`: ?Carbon
+  - `deleted_at`: ?Carbon
+- **Validation Rules:**
+  - Create:
+    - `first_name`: `required|string|max:255`
+    - `last_name`: `required|string|max:255`
+    - `is_active`: `boolean`
+  - Update:
+    - `first_name`: `required|string|max:255`
+    - `last_name`: `required|string|max:255`
+    - `is_active`: `required|boolean`
 - **Relationships:**
   - belongsTo: Workshop
   - hasMany: TimeEntry
@@ -32,6 +78,39 @@
 - **Source Table:** `clients`
 - **Proposed Model:** `Client`
 - **Proposed Controller:** `ClientController`
+- **Key Fields:**
+  - `id`: int
+  - `workshop_id`: int
+  - `first_name`: string
+  - `last_name`: ?string
+  - `phone_number`: string
+  - `email`: ?string
+  - `address_street`: ?string
+  - `address_city`: ?string
+  - `address_postal_code`: ?string
+  - `address_country`: ?string
+  - `created_at`: ?Carbon
+  - `updated_at`: ?Carbon
+  - `deleted_at`: ?Carbon
+- **Validation Rules:**
+  - Create:
+    - `first_name`: `required|string|max:255`
+    - `last_name`: `nullable|string|max:255`
+    - `phone_number`: `required|string|max:50`
+    - `email`: `nullable|email|max:255`
+    - `address_street`: `nullable|string|max:255`
+    - `address_city`: `nullable|string|max:255`
+    - `address_postal_code`: `nullable|string|max:20`
+    - `address_country`: `nullable|string|max:100`
+  - Update:
+    - `first_name`: `required|string|max:255`
+    - `last_name`: `nullable|string|max:255`
+    - `phone_number`: `required|string|max:50`
+    - `email`: `nullable|email|max:255`
+    - `address_street`: `nullable|string|max:255`
+    - `address_city`: `nullable|string|max:255`
+    - `address_postal_code`: `nullable|string|max:20`
+    - `address_country`: `nullable|string|max:100`
 - **Relationships:**
   - belongsTo: Workshop
   - hasMany: Vehicle
@@ -41,6 +120,33 @@
 - **Source Table:** `vehicles`
 - **Proposed Model:** `Vehicle`
 - **Proposed Controller:** `VehicleController`
+- **Key Fields:**
+  - `id`: int
+  - `workshop_id`: int
+  - `client_id`: int
+  - `make`: string
+  - `model`: string
+  - `year`: int
+  - `vin`: string
+  - `registration_number`: string
+  - `created_at`: ?Carbon
+  - `updated_at`: ?Carbon
+  - `deleted_at`: ?Carbon
+- **Validation Rules:**
+  - Create:
+    - `client_id`: `required|integer|exists:clients,id`
+    - `make`: `required|string|max:255`
+    - `model`: `required|string|max:255`
+    - `year`: `required|integer|min:1900|max:{current_year+1}`
+    - `vin`: `required|string|size:17|unique:vehicles,vin,NULL,id,workshop_id,{workshop_id}`
+    - `registration_number`: `required|string|max:20`
+  - Update:
+    - `client_id`: `required|integer|exists:clients,id`
+    - `make`: `required|string|max:255`
+    - `model`: `required|string|max:255`
+    - `year`: `required|integer|min:1900|max:{current_year+1}`
+    - `vin`: `required|string|size:17|unique:vehicles,vin,{vehicle_id},id,workshop_id,{workshop_id}`
+    - `registration_number`: `required|string|max:20`
 - **Relationships:**
   - belongsTo: Workshop
   - belongsTo: Client
@@ -51,6 +157,36 @@
 - **Source Table:** `repair_orders`
 - **Proposed Model:** `RepairOrder`
 - **Proposed Controller:** `RepairOrderController`
+- **Key Fields:**
+  - `id`: int
+  - `workshop_id`: int
+  - `vehicle_id`: int
+  - `status`: string
+  - `problem_description`: string
+  - `started_at`: ?Carbon
+  - `finished_at`: ?Carbon
+  - `created_at`: ?Carbon
+  - `updated_at`: ?Carbon
+  - `deleted_at`: ?Carbon
+- **Validation Rules:**
+  - Create:
+    - `vehicle_id`: `required|integer|exists:vehicles,id`
+    - `status`: `required|string|in:new,diagnosis,awaiting_contact,awaiting_parts,in_progress,ready_for_pickup,closed`
+    - `problem_description`: `required|string|max:65535`
+    - `started_at`: `nullable|date`
+    - `finished_at`: `nullable|date|after_or_equal:started_at`
+    - `images`: `nullable|array|max:10`
+    - `images.*`: `image|mimes:jpeg,png,jpg,gif|max:10240`
+  - Update:
+    - `vehicle_id`: `required|integer|exists:vehicles,id`
+    - `status`: `required|string|in:new,diagnosis,awaiting_contact,awaiting_parts,in_progress,ready_for_pickup,closed`
+    - `problem_description`: `required|string|max:65535`
+    - `started_at`: `nullable|date`
+    - `finished_at`: `nullable|date|after_or_equal:started_at`
+    - `images`: `nullable|array|max:10`
+    - `images.*`: `image|mimes:jpeg,png,jpg,gif|max:10240`
+  - Update Status:
+    - `status`: `required|string|in:new,diagnosis,awaiting_contact,awaiting_parts,in_progress,ready_for_pickup,closed`
 - **Relationships:**
   - belongsTo: Workshop
   - belongsTo: Vehicle
@@ -64,6 +200,25 @@
 - **Source Table:** `time_entries`
 - **Proposed Model:** `TimeEntry`
 - **Proposed Controller:** `TimeEntryController`
+- **Key Fields:**
+  - `id`: int
+  - `repair_order_id`: int
+  - `mechanic_id`: int
+  - `duration_minutes`: int
+  - `description`: ?string
+  - `created_at`: ?Carbon
+  - `updated_at`: ?Carbon
+- **Validation Rules:**
+  - Create:
+    - `repair_order_id`: `required|integer|exists:repair_orders,id`
+    - `mechanic_id`: `required|integer|exists:mechanics,id`
+    - `duration_minutes`: `required|integer|min:1|max:1440`
+    - `description`: `nullable|string|max:65535`
+  - Update:
+    - `repair_order_id`: `required|integer|exists:repair_orders,id`
+    - `mechanic_id`: `required|integer|exists:mechanics,id`
+    - `duration_minutes`: `required|integer|min:1|max:1440`
+    - `description`: `nullable|string|max:65535`
 - **Relationships:**
   - belongsTo: RepairOrder
   - belongsTo: Mechanic
@@ -74,18 +229,24 @@
 - **Source Table:** `internal_notes`
 - **Proposed Model:** `InternalNote`
 - **Proposed Controller:** `InternalNoteController`
+- **Key Fields:**
+  - `id`: int
+  - `repair_order_id`: int
+  - `content`: string
+  - `author_id`: int
+  - `author_type`: string
+  - `created_at`: ?Carbon
+  - `updated_at`: ?Carbon
+- **Validation Rules:**
+  - Create:
+    - `repair_order_id`: `required|integer|exists:repair_orders,id`
+    - `content`: `required|string|max:65535`
+  - Update:
+    - `content`: `required|string|max:65535`
 - **Relationships:**
   - belongsTo: RepairOrder
   - morphTo: author (User or Mechanic)
   - hasOneThrough: Workshop (through RepairOrder)
-
-### 1.9 Additional Controllers
-
-**DashboardController**
-- Purpose: Display workshop overview and statistics
-
-**ReportController**
-- Purpose: Generate mechanic and team performance reports
 
 ---
 
@@ -988,10 +1149,17 @@ The following models use soft deletes (deleted_at column):
 - User, Mechanic, Client, Vehicle, RepairOrder
 
 ### Status Values
-RepairOrder statuses (enum): `Nowe`, `Diagnoza`, `Wymaga kontaktu`, `Czeka na części`, `W naprawie`, `Gotowe do odbioru`, `Zamknięte`
+RepairOrder statuses (enum with Polish labels):
+- `new` → "Nowe"
+- `diagnosis` → "Diagnoza"
+- `awaiting_contact` → "Wymaga kontaktu"
+- `awaiting_parts` → "Czeka na części"
+- `in_progress` → "W naprawie"
+- `ready_for_pickup` → "Gotowe do odbioru"
+- `closed` → "Zamknięte"
 
 ---
 
-**Document Version:** 2.3 (Added Success/Error Handling for all routes)
+**Document Version:** 2.4 (Added Key Fields and Validation Rules; Updated statuses to snake_case English keys)
 **Created:** 2025-10-12
 **Status:** Ready for Implementation
