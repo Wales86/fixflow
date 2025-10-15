@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Dto\DashboardData;
+use App\Dto\Dashboard\DashboardData;
 use App\Enums\RepairOrderStatus;
 use App\Models\RepairOrder;
 use App\Models\TimeEntry;

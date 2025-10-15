@@ -16,8 +16,6 @@ class DashboardController extends Controller
     {
         $dashboardData = $this->dashboardService->getDashboardData();
 
-        return Inertia::render('dashboard/index', [
-            'data' => $dashboardData,
-        ]);
+        return Inertia::render('dashboard/index', $dashboardData);
     }
 }

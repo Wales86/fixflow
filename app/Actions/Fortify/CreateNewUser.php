@@ -2,7 +2,7 @@
 
 namespace App\Actions\Fortify;
 
-use App\Dto\RegisterWorkshopData;
+use App\Dto\Workshop\RegisterWorkshopData;
 use App\Models\User;
 use App\Services\Auth\WorkshopRegistrationService;
 use Laravel\Fortify\Contracts\CreatesNewUsers;

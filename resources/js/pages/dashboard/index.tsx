@@ -14,11 +14,9 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-interface DashboardPageProps {
-    data: App.Dto.DashboardData;
-}
+interface DashboardPageProps extends App.Dto.DashboardData {}
 
-export default function Dashboard({ data }: DashboardPageProps) {
+export default function Dashboard({ activeOrdersCount, pendingOrdersCount, todayTimeEntriesTotal, recentOrders }: DashboardPageProps) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -27,22 +25,22 @@ export default function Dashboard({ data }: DashboardPageProps) {
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     <StatCard
                         title="Aktywne zlecenia"
-                        value={data.activeOrdersCount}
+                        value={activeOrdersCount}
                         icon={Activity}
                     />
                     <StatCard
                         title="Gotowe do odbioru"
-                        value={data.pendingOrdersCount}
+                        value={pendingOrdersCount}
                         icon={PackageCheck}
                     />
                     <StatCard
                         title="Dzisiejszy czas pracy"
-                        value={`${data.todayTimeEntriesTotal}h`}
+                        value={`${todayTimeEntriesTotal}h`}
                         icon={Timer}
                     />
                 </div>
 
-                <RecentOrdersTable orders={data.recentOrders} />
+                <RecentOrdersTable orders={recentOrders} />
             </div>
         </AppLayout>
     );

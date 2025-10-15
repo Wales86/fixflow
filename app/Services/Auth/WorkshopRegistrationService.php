@@ -2,7 +2,7 @@
 
 namespace App\Services\Auth;
 
-use App\Dto\RegisterWorkshopData;
+use App\Dto\Workshop\RegisterWorkshopData;
 use App\Models\User;
 use App\Models\Workshop;
 use Illuminate\Support\Facades\DB;
