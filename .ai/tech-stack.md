@@ -31,6 +31,8 @@ Wybrano architekturę "nowoczesnego monolitu" opartą o framework **Laravel** po
     *   **Bogaty interfejs użytkownika:** React pozwala na tworzenie złożonych, interaktywnych i szybkich komponentów UI, co jest kluczowe dla zapewnienia dobrego UX, zwłaszcza na urządzeniach mobilnych.
     *   **Architektura komponentowa:** Ułatwia zarządzanie kodem i jego ponowne wykorzystanie w miarę rozrastania się aplikacji.
     *   **Doświadczenie dewelopera:** Wybór podyktowany wieloletnim doświadczeniem i znajomością biblioteki, co minimalizuje czas potrzebny na wdrożenie.
+    * Shadcnui jako biblioteka kompomentów ui
+    * Tailwind CSS z plikiem konfiguracyjnym resources/css/app.css
 
 ### 3. "Klej": Inertia.js
 
