@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\RepairOrderStatus;
+use App\Models\Concerns\BelongsToWorkshop;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,7 +17,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class RepairOrder extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia, LogsActivity, SoftDeletes;
+    use BelongsToWorkshop, HasFactory, InteractsWithMedia, LogsActivity, SoftDeletes;
 
     protected $fillable = [
         'workshop_id',

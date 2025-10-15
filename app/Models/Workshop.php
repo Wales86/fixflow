@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Multitenancy\Models\Tenant;
 
 class Workshop extends Tenant
 {
+    use HasFactory;
+
     protected $fillable = [
         'name',
     ];
