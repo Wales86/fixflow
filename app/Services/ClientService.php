@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Dto\Client\ClientListItemData;
+use App\Dto\Client\StoreClientData;
 use App\Models\Client;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -31,5 +32,13 @@ class ClientService
 
         return $query->paginate(15)
             ->through(fn ($client) => ClientListItemData::from($client));
+    }
+
+    public function create(StoreClientData $data): Client
+    {
+        return Client::create([
+            ...$data->all(),
+            'workshop_id' => auth()->user()->workshop_id,
+        ]);
     }
 }

@@ -1,7 +1,7 @@
 declare namespace App.Dto.Client {
 export type ClientIndexPagePropsData = {
 clients: any;
-filters: App.Dto.Client.FiltersData;
+filters: App.Dto.Common.FiltersData;
 };
 export type ClientListItemData = {
 id: number;
@@ -11,6 +11,18 @@ phone_number: string;
 email: string | null;
 vehicles_count: number;
 };
+export type StoreClientData = {
+last_name: string;
+first_name: string;
+phone_number: string;
+email?: string;
+address_street?: string;
+address_city?: string;
+address_postal_code?: string;
+address_country?: string;
+};
+}
+declare namespace App.Dto.Common {
 export type FiltersData = {
 search: string | null;
 sort: string | null;

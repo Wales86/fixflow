@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Dto\Client\ClientIndexPagePropsData;
+use App\Dto\Client\StoreClientData;
 use App\Dto\Common\FiltersData;
 use App\Http\Requests\Client\IndexClientRequest;
+use App\Http\Requests\Client\StoreClientRequest;
 use App\Models\Client;
 use App\Services\ClientService;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -33,5 +36,16 @@ class ClientController extends Controller
         $this->authorize('create', Client::class);
 
         return Inertia::render('clients/create');
+    }
+
+    public function store(StoreClientRequest $request): RedirectResponse
+    {
+        $clientData = StoreClientData::from($request->validated());
+
+        $client = $this->clientService->create($clientData);
+
+        return redirect()
+            ->route('clients.index')
+            ->with('success', 'Klient został dodany');
     }
 }
