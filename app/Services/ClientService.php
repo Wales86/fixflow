@@ -56,6 +56,7 @@ class ClientService
     public function prepareClientShowData(Client $client): ClientShowPagePropsData
     {
         $client->load('vehicles');
+        $client->vehicles->loadCount('repairOrders');
 
         return ClientShowPagePropsData::from([
             'client' => ClientData::from($client),

@@ -8,7 +8,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { router } from '@inertiajs/react';
-import { MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import { Eye, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import {
     Dialog,
@@ -25,6 +25,10 @@ interface DataTableRowActionsProps {
 
 export function DataTableRowActions({ client }: DataTableRowActionsProps) {
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+    const handleView = () => {
+        router.visit(`/clients/${client.id}`);
+    };
 
     const handleEdit = () => {
         router.visit(`/clients/${client.id}/edit`);
@@ -50,6 +54,10 @@ export function DataTableRowActions({ client }: DataTableRowActionsProps) {
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Akcje</DropdownMenuLabel>
                     <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleView}>
+                        <Eye className="mr-2 size-4" />
+                        Zobacz
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={handleEdit}>
                         <Pencil className="mr-2 size-4" />
                         Edytuj

@@ -15,5 +15,6 @@ class VehicleData extends Data
         public int $year,
         public string $registration_number,
         public string $vin,
+        public ?int $repair_orders_count,
     ) {}
 }

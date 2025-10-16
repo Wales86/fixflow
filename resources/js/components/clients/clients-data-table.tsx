@@ -25,6 +25,7 @@ import {
 } from '@tanstack/react-table';
 import { useMemo } from 'react';
 import { DataTableRowActions } from './data-table-row-actions';
+import { router } from '@inertiajs/react';
 
 interface ClientsDataTableProps {
     clients: PaginatedResponse<App.Dto.Client.ClientListItemData>;
@@ -34,6 +35,10 @@ interface ClientsDataTableProps {
 export function ClientsDataTable({ clients, filters }: ClientsDataTableProps) {
     const { search, handleSearch, handleSort, currentSort, currentDirection } =
         useDataTableFilters(filters);
+
+    const handleRowClick = (clientId: number) => {
+        router.visit(`/clients/${clientId}`);
+    };
 
     const columns = useMemo<
         ColumnDef<App.Dto.Client.ClientListItemData>[]
@@ -152,7 +157,19 @@ export function ClientsDataTable({ clients, filters }: ClientsDataTableProps) {
                     <TableBody>
                         {table.getRowModel().rows.length > 0 ? (
                             table.getRowModel().rows.map((row) => (
-                                <TableRow key={row.id}>
+                                <TableRow
+                                    key={row.id}
+                                    onClick={(e) => {
+                                        const target = e.target as HTMLElement;
+                                        if (
+                                            !target.closest('button') &&
+                                            !target.closest('[role="menu"]')
+                                        ) {
+                                            handleRowClick(row.original.id);
+                                        }
+                                    }}
+                                    className="cursor-pointer"
+                                >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
                                             {flexRender(
