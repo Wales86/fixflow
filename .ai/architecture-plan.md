@@ -258,7 +258,7 @@
 - `GET /register` → Show registration form (Laravel Fortify)
   - **Description:** Display workshop registration form
   - **Proposed Authorization:** Guest only
-  - **Proposed React Component:** `Pages/Auth/Register`
+  - **Proposed React Component:** `pages/auth/register`
   - **Component Props:** `{}`
   - **Form Fields:** workshop_name, owner_name, email, password, password_confirmation
 
@@ -277,7 +277,7 @@
 
 #### Login/Logout
 - `GET /login` → Show login form (Laravel Fortify)
-  - **Proposed React Component:** `Pages/Auth/Login`
+  - **Proposed React Component:** `pages/auth/login`
 - `POST /login` → Process login (Laravel Fortify)
   - **Success/Error Handling:**
     - Success: `redirect()->intended(route('dashboard'))`
@@ -288,13 +288,13 @@
 
 #### Password Reset
 - `GET /forgot-password` → Show password reset form (Laravel Fortify)
-  - **Proposed React Component:** `Pages/Auth/ForgotPassword`
+  - **Proposed React Component:** `pages/auth/forgot-password`
 - `POST /forgot-password` → Send reset link (Laravel Fortify)
   - **Success/Error Handling:**
     - Success: `redirect()->back()->with('status', 'Link do resetowania hasła został wysłany na podany adres email')`
     - Error: `redirect()->back()->withErrors(['email' => 'Nie znaleziono użytkownika z tym adresem email'])`
 - `GET /reset-password/{token}` → Show reset password form (Laravel Fortify)
-  - **Proposed React Component:** `Pages/Auth/ResetPassword`
+  - **Proposed React Component:** `pages/auth/reset-password`
 - `POST /reset-password` → Process password reset (Laravel Fortify)
   - **Success/Error Handling:**
     - Success: `redirect()->route('login')->with('status', 'Hasło zostało pomyślnie zresetowane')`
@@ -306,7 +306,7 @@
 - **Route:** `GET /dashboard` → `dashboard` → `DashboardController@index`
 - **Description:** Display workshop overview with active orders count and statistics
 - **Proposed Authorization:** Authenticated user (any role)
-- **Proposed React Component:** `Pages/Dashboard/Index`
+- **Proposed React Component:** `pages/dashboard/index`
 - **Component Props:**
   ```typescript
   {
@@ -331,7 +331,7 @@
 - **Route:** `GET /clients` → `clients.index` → `ClientController@index`
 - **Description:** List all clients (paginated, searchable)
 - **Proposed Authorization:** `ClientPolicy::viewAny` (Owner, Office)
-- **Proposed React Component:** `Pages/Clients/Index`
+- **Proposed React Component:** `pages/clients/index`
 - **Component Props:**
   ```typescript
   {
@@ -355,7 +355,7 @@
 - **Route:** `GET /clients/create` → `clients.create` → `ClientController@create`
 - **Description:** Show create client form
 - **Proposed Authorization:** `ClientPolicy::create` (Owner, Office)
-- **Proposed React Component:** `Pages/Clients/Create`
+- **Proposed React Component:** `pages/clients/create`
 - **Component Props:** `{}`
 
 #### Store Client
@@ -371,7 +371,7 @@
 - **Route:** `GET /clients/{client}` → `clients.show` → `ClientController@show`
 - **Description:** Show client details with vehicles list
 - **Proposed Authorization:** `ClientPolicy::view` (Owner, Office)
-- **Proposed React Component:** `Pages/Clients/Show`
+- **Proposed React Component:** `pages/clients/show`
 - **Component Props:**
   ```typescript
   {
@@ -403,7 +403,7 @@
 - **Route:** `GET /clients/{client}/edit` → `clients.edit` → `ClientController@edit`
 - **Description:** Show edit client form
 - **Proposed Authorization:** `ClientPolicy::update` (Owner, Office)
-- **Proposed React Component:** `Pages/Clients/Edit`
+- **Proposed React Component:** `pages/clients/edit`
 - **Component Props:**
   ```typescript
   {
@@ -447,7 +447,7 @@
 - **Route:** `GET /vehicles` → `vehicles.index` → `VehicleController@index`
 - **Description:** List/search all vehicles (searchable by registration, VIN, make, model)
 - **Proposed Authorization:** `VehiclePolicy::viewAny` (Owner, Office)
-- **Proposed React Component:** `Pages/Vehicles/Index`
+- **Proposed React Component:** `pages/vehicles/index`
 - **Component Props:**
   ```typescript
   {
@@ -477,7 +477,7 @@
 - **Route:** `GET /vehicles/create` → `vehicles.create` → `VehicleController@create`
 - **Description:** Show create vehicle form
 - **Proposed Authorization:** `VehiclePolicy::create` (Owner, Office)
-- **Proposed React Component:** `Pages/Vehicles/Create`
+- **Proposed React Component:** `pages/vehicles/create`
 - **Component Props:**
   ```typescript
   {
@@ -499,7 +499,7 @@
 - **Route:** `GET /vehicles/{vehicle}` → `vehicles.show` → `VehicleController@show`
 - **Description:** Show vehicle details with full repair history
 - **Proposed Authorization:** `VehiclePolicy::view` (Owner, Office, Mechanic)
-- **Proposed React Component:** `Pages/Vehicles/Show`
+- **Proposed React Component:** `pages/vehicles/show`
 - **Component Props:**
   ```typescript
   {
@@ -533,7 +533,7 @@
 - **Route:** `GET /vehicles/{vehicle}/edit` → `vehicles.edit` → `VehicleController@edit`
 - **Description:** Show edit vehicle form
 - **Proposed Authorization:** `VehiclePolicy::update` (Owner, Office)
-- **Proposed React Component:** `Pages/Vehicles/Edit`
+- **Proposed React Component:** `pages/vehicles/edit`
 - **Component Props:**
   ```typescript
   {
@@ -576,7 +576,7 @@
 - **Route:** `GET /repair-orders` → `repair-orders.index` → `RepairOrderController@index`
 - **Description:** List all active orders (filterable by status)
 - **Proposed Authorization:** `RepairOrderPolicy::viewAny` (all authenticated users)
-- **Proposed React Component:** `Pages/RepairOrders/Index`
+- **Proposed React Component:** `pages/repair-orders/index`
 - **Component Props:**
   ```typescript
   {
@@ -611,7 +611,7 @@
 - **Route:** `GET /repair-orders/create` → `repair-orders.create` → `RepairOrderController@create`
 - **Description:** Show create repair order form
 - **Proposed Authorization:** `RepairOrderPolicy::create` (Owner, Office)
-- **Proposed React Component:** `Pages/RepairOrders/Create`
+- **Proposed React Component:** `pages/repair-orders/create`
 - **Component Props:**
   ```typescript
   {
@@ -638,7 +638,7 @@
 - **Route:** `GET /repair-orders/{repairOrder}` → `repair-orders.show` → `RepairOrderController@show`
 - **Description:** Show order details with time entries, notes, attachments, activity log
 - **Proposed Authorization:** `RepairOrderPolicy::view` (all authenticated users)
-- **Proposed React Component:** `Pages/RepairOrders/Show`
+- **Proposed React Component:** `pages/repair-orders/show`
 - **Component Props:**
   ```typescript
   {
@@ -716,7 +716,7 @@
 - **Route:** `GET /repair-orders/{repairOrder}/edit` → `repair-orders.edit` → `RepairOrderController@edit`
 - **Description:** Show edit repair order form
 - **Proposed Authorization:** `RepairOrderPolicy::update` (Owner, Office)
-- **Proposed React Component:** `Pages/RepairOrders/Edit`
+- **Proposed React Component:** `pages/repair-orders/edit`
 - **Component Props:**
   ```typescript
   {
@@ -776,7 +776,7 @@
 - **Route:** `GET /time-entry` → `time-entry.create` → `TimeEntryController@create`
 - **Description:** Show time entry form (mobile optimized, for mechanics)
 - **Proposed Authorization:** Authenticated user with Mechanic role
-- **Proposed React Component:** `Pages/TimeEntry/Create`
+- **Proposed React Component:** `pages/time-entry/create`
 - **Component Props:**
   ```typescript
   {
@@ -806,7 +806,7 @@
 - **Route:** `GET /time-entries/{timeEntry}/edit` → `time-entries.edit` → `TimeEntryController@edit`
 - **Description:** Show edit time entry form
 - **Proposed Authorization:** `TimeEntryPolicy::update` (Owner, Office, or mechanic's own entry)
-- **Proposed React Component:** `Pages/TimeEntry/Edit`
+- **Proposed React Component:** `pages/time-entry/edit`
 - **Component Props:**
   ```typescript
   {
@@ -883,7 +883,7 @@
 - **Route:** `GET /mechanics` → `mechanics.index` → `MechanicController@index`
 - **Description:** List all mechanics
 - **Proposed Authorization:** `MechanicPolicy::viewAny` (Owner, Office)
-- **Proposed React Component:** `Pages/Mechanics/Index`
+- **Proposed React Component:** `pages/mechanics/index`
 - **Component Props:**
   ```typescript
   {
@@ -905,7 +905,7 @@
 - **Route:** `GET /mechanics/create` → `mechanics.create` → `MechanicController@create`
 - **Description:** Show create mechanic form
 - **Proposed Authorization:** `MechanicPolicy::create` (Owner, Office)
-- **Proposed React Component:** `Pages/Mechanics/Create`
+- **Proposed React Component:** `pages/mechanics/create`
 - **Component Props:** `{}`
 
 #### Store Mechanic
@@ -921,7 +921,7 @@
 - **Route:** `GET /mechanics/{mechanic}/edit` → `mechanics.edit` → `MechanicController@edit`
 - **Description:** Show edit mechanic form
 - **Proposed Authorization:** `MechanicPolicy::update` (Owner, Office)
-- **Proposed React Component:** `Pages/Mechanics/Edit`
+- **Proposed React Component:** `pages/mechanics/edit`
 - **Component Props:**
   ```typescript
   {
@@ -960,7 +960,7 @@
 - **Route:** `GET /users` → `users.index` → `UserController@index`
 - **Description:** List all workshop users with roles
 - **Proposed Authorization:** `UserPolicy::viewAny` (Owner only)
-- **Proposed React Component:** `Pages/Users/Index`
+- **Proposed React Component:** `pages/users/index`
 - **Component Props:**
   ```typescript
   {
@@ -978,7 +978,7 @@
 - **Route:** `GET /users/create` → `users.create` → `UserController@create`
 - **Description:** Show create user form
 - **Proposed Authorization:** `UserPolicy::create` (Owner only)
-- **Proposed React Component:** `Pages/Users/Create`
+- **Proposed React Component:** `pages/users/create`
 - **Component Props:**
   ```typescript
   {
@@ -999,7 +999,7 @@
 - **Route:** `GET /users/{user}/edit` → `users.edit` → `UserController@edit`
 - **Description:** Show edit user form
 - **Proposed Authorization:** `UserPolicy::update` (Owner only)
-- **Proposed React Component:** `Pages/Users/Edit`
+- **Proposed React Component:** `pages/users/edit`
 - **Component Props:**
   ```typescript
   {
@@ -1039,7 +1039,7 @@
 - **Route:** `GET /reports/mechanic` → `reports.mechanic` → `ReportController@mechanic`
 - **Description:** Generate mechanic performance report (query params: mechanic_id, start_date, end_date)
 - **Proposed Authorization:** `ReportPolicy::viewMechanic` (Owner only)
-- **Proposed React Component:** `Pages/Reports/Mechanic`
+- **Proposed React Component:** `pages/reports/mechanic`
 - **Component Props:**
   ```typescript
   {
@@ -1073,7 +1073,7 @@
 - **Route:** `GET /reports/team` → `reports.team` → `ReportController@team`
 - **Description:** Generate team performance report (query params: start_date, end_date)
 - **Proposed Authorization:** `ReportPolicy::viewTeam` (Owner only)
-- **Proposed React Component:** `Pages/Reports/Team`
+- **Proposed React Component:** `pages/reports/team`
 - **Component Props:**
   ```typescript
   {
