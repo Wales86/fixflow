@@ -1,10 +1,16 @@
+import ClientForm from '@/components/clients/client-form';
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
-import { Head } from '@inertiajs/react';
 import { type BreadcrumbItem } from '@/types';
-import { type ClientData } from '@/types/generated';
+import { Head } from '@inertiajs/react';
 
 interface ClientsEditProps {
-    client: ClientData;
+    client: App.Dto.Client.ClientData;
 }
 
 export default function ClientsEdit({ client }: ClientsEditProps) {
@@ -25,12 +31,22 @@ export default function ClientsEdit({ client }: ClientsEditProps) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={`Edycja - ${client.first_name} ${client.last_name || ''}`.trim()} />
+            <Head
+                title={`Edycja - ${client.first_name} ${client.last_name || ''}`.trim()}
+            />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <h1 className="text-2xl font-bold tracking-tight">
-                    Edycja klienta: {client.first_name} {client.last_name}
+                    Edytuj klienta
                 </h1>
-                <p>Formularz edycji klienta będzie tutaj.</p>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Dane klienta</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <ClientForm client={client} />
+                    </CardContent>
+                </Card>
             </div>
         </AppLayout>
     );

@@ -1,6 +1,13 @@
+import ClientForm from '@/components/clients/client-form';
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
-import { Head } from '@inertiajs/react';
 import { type BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -18,8 +25,18 @@ export default function ClientsCreate() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Nowy klient" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <h1 className="text-2xl font-bold tracking-tight">Nowy klient</h1>
-                <p>Formularz tworzenia klienta będzie tutaj.</p>
+                <h1 className="text-2xl font-bold tracking-tight">
+                    Dodaj nowego klienta
+                </h1>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Dane klienta</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <ClientForm />
+                    </CardContent>
+                </Card>
             </div>
         </AppLayout>
     );
