@@ -37,7 +37,7 @@ class RepairOrder extends Model implements HasMedia
         ];
     }
 
-    public function getActivitylogOptions(): LogOptions
+    public function getActivityLogOptions(): LogOptions
     {
         return LogOptions::defaults()
             ->logOnly(['status', 'problem_description', 'started_at', 'finished_at'])
