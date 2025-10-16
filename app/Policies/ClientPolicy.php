@@ -19,7 +19,7 @@ class ClientPolicy
 
     public function create(User $user): bool
     {
-        return false;
+        return $user->hasAnyRole(['Owner', 'Office']);
     }
 
     public function update(User $user, Client $client): bool

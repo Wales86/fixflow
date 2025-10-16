@@ -12,7 +12,6 @@ use App\Models\Workshop;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
-
 beforeEach(function () {
     $this->workshop1 = Workshop::factory()->create(['name' => 'Workshop 1']);
     $this->workshop2 = Workshop::factory()->create(['name' => 'Workshop 2']);
@@ -63,17 +62,15 @@ test('dashboard only shows data from authenticated user workshop', function () {
     // User 1 should only see 3 orders from Workshop 1
     actingAs($this->user1)
         ->get(route('dashboard'))
-        ->assertInertia(fn ($page) =>
-            $page->component('dashboard/index')
-                ->where('activeOrdersCount', 3)
+        ->assertInertia(fn ($page) => $page->component('dashboard/index')
+            ->where('activeOrdersCount', 3)
         );
 
     // User 2 should only see 5 orders from Workshop 2
     actingAs($this->user2)
         ->get(route('dashboard'))
-        ->assertInertia(fn ($page) =>
-            $page->component('dashboard/index')
-                ->where('activeOrdersCount', 5)
+        ->assertInertia(fn ($page) => $page->component('dashboard/index')
+            ->where('activeOrdersCount', 5)
         );
 });
 
@@ -141,9 +138,8 @@ test('active orders count excludes closed orders', function () {
 
     actingAs($this->user1)
         ->get(route('dashboard'))
-        ->assertInertia(fn ($page) =>
-            $page->component('dashboard/index')
-                ->where('activeOrdersCount', 5)
+        ->assertInertia(fn ($page) => $page->component('dashboard/index')
+            ->where('activeOrdersCount', 5)
         );
 });
 
@@ -179,9 +175,8 @@ test('active orders count includes all non-closed statuses', function () {
 
     actingAs($this->user1)
         ->get(route('dashboard'))
-        ->assertInertia(fn ($page) =>
-            $page->component('dashboard/index')
-                ->where('activeOrdersCount', 6)
+        ->assertInertia(fn ($page) => $page->component('dashboard/index')
+            ->where('activeOrdersCount', 6)
         );
 });
 
@@ -207,9 +202,8 @@ test('pending orders count only includes ready for pickup status', function () {
 
     actingAs($this->user1)
         ->get(route('dashboard'))
-        ->assertInertia(fn ($page) =>
-            $page->component('dashboard/index')
-                ->where('pendingOrdersCount', 3)
+        ->assertInertia(fn ($page) => $page->component('dashboard/index')
+            ->where('pendingOrdersCount', 3)
         );
 });
 
@@ -251,9 +245,8 @@ test('today time entries total only includes entries from today', function () {
 
     actingAs($this->user1)
         ->get(route('dashboard'))
-        ->assertInertia(fn ($page) =>
-            $page->component('dashboard/index')
-                ->where('todayTimeEntriesTotal', 105)
+        ->assertInertia(fn ($page) => $page->component('dashboard/index')
+            ->where('todayTimeEntriesTotal', 105)
         );
 });
 
@@ -299,17 +292,15 @@ test('today time entries respects workshop multi-tenancy', function () {
     // User 1 should only see 60 minutes
     actingAs($this->user1)
         ->get(route('dashboard'))
-        ->assertInertia(fn ($page) =>
-            $page->component('dashboard/index')
-                ->where('todayTimeEntriesTotal', 60)
+        ->assertInertia(fn ($page) => $page->component('dashboard/index')
+            ->where('todayTimeEntriesTotal', 60)
         );
 
     // User 2 should only see 90 minutes
     actingAs($this->user2)
         ->get(route('dashboard'))
-        ->assertInertia(fn ($page) =>
-            $page->component('dashboard/index')
-                ->where('todayTimeEntriesTotal', 90)
+        ->assertInertia(fn ($page) => $page->component('dashboard/index')
+            ->where('todayTimeEntriesTotal', 90)
         );
 });
 
@@ -328,9 +319,8 @@ test('recent orders are limited to 10 items', function () {
 
     actingAs($this->user1)
         ->get(route('dashboard'))
-        ->assertInertia(fn ($page) =>
-            $page->component('dashboard/index')
-                ->has('recentOrders', 10)
+        ->assertInertia(fn ($page) => $page->component('dashboard/index')
+            ->has('recentOrders', 10)
         );
 });
 
@@ -395,12 +385,11 @@ test('recent orders have correct data structure', function () {
         ->get(route('dashboard'))
         ->assertInertia(function ($page) use ($repairOrder) {
             $page->component('dashboard/index')
-                ->has('recentOrders.0', fn ($order) =>
-                    $order->where('id', $repairOrder->id)
-                        ->where('vehicle', 'Toyota Camry 2022')
-                        ->where('client', 'John Doe')
-                        ->where('status', 'W naprawie')
-                        ->has('created_at')
+                ->has('recentOrders.0', fn ($order) => $order->where('id', $repairOrder->id)
+                    ->where('vehicle', 'Toyota Camry 2022')
+                    ->where('client', 'John Doe')
+                    ->where('status', 'W naprawie')
+                    ->has('created_at')
                 );
         });
 });
@@ -409,12 +398,11 @@ test('recent orders have correct data structure', function () {
 test('dashboard displays zeros when no data exists', function () {
     actingAs($this->user1)
         ->get(route('dashboard'))
-        ->assertInertia(fn ($page) =>
-            $page->component('dashboard/index')
-                ->where('activeOrdersCount', 0)
-                ->where('pendingOrdersCount', 0)
-                ->where('todayTimeEntriesTotal', 0)
-                ->has('recentOrders', 0)
+        ->assertInertia(fn ($page) => $page->component('dashboard/index')
+            ->where('activeOrdersCount', 0)
+            ->where('pendingOrdersCount', 0)
+            ->where('todayTimeEntriesTotal', 0)
+            ->has('recentOrders', 0)
         );
 });
 
@@ -433,10 +421,9 @@ test('dashboard handles workshop with only closed orders', function () {
 
     actingAs($this->user1)
         ->get(route('dashboard'))
-        ->assertInertia(fn ($page) =>
-            $page->component('dashboard/index')
-                ->where('activeOrdersCount', 0)
-                ->where('pendingOrdersCount', 0)
-                ->has('recentOrders', 5) // Closed orders still appear in recent orders
+        ->assertInertia(fn ($page) => $page->component('dashboard/index')
+            ->where('activeOrdersCount', 0)
+            ->where('pendingOrdersCount', 0)
+            ->has('recentOrders', 5) // Closed orders still appear in recent orders
         );
 });

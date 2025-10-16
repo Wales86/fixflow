@@ -12,7 +12,7 @@ class ClientService
     {
         $query = Client::query()->withCount('vehicles');
 
-        if (!empty($filters['search'])) {
+        if (! empty($filters['search'])) {
             $search = $filters['search'];
             $query->where(function ($q) use ($search) {
                 $q->where('first_name', 'like', "%{$search}%")

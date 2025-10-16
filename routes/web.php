@@ -12,6 +12,7 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('clients', [ClientController::class, 'index'])->name('clients.index');
+    Route::get('clients/create', [ClientController::class, 'create'])->name('clients.create');
 });
 
 require __DIR__.'/settings.php';
