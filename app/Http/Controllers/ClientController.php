@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Dto\Client\ClientData;
 use App\Dto\Client\ClientIndexPagePropsData;
 use App\Dto\Client\StoreClientData;
+use App\Dto\Client\UpdateClientData;
 use App\Dto\Common\FiltersData;
 use App\Http\Requests\Client\IndexClientRequest;
 use App\Http\Requests\Client\StoreClientRequest;
+use App\Http\Requests\Client\UpdateClientRequest;
 use App\Models\Client;
 use App\Services\ClientService;
 use Illuminate\Http\RedirectResponse;
@@ -59,5 +61,16 @@ class ClientController extends Controller
         return Inertia::render('clients/edit', [
             'client' => $clientData,
         ]);
+    }
+
+    public function update(UpdateClientRequest $request, Client $client): RedirectResponse
+    {
+        $updateClientData = UpdateClientData::from($request->validated());
+
+        $this->clientService->update($client, $updateClientData);
+
+        return redirect()
+            ->route('clients.index')
+            ->with('success', 'Klient został zaktualizowany');
     }
 }

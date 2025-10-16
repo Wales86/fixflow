@@ -7,6 +7,7 @@ use Spatie\Permission\Models\Role;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
+use function Pest\Laravel\put;
 
 beforeEach(function () {
     /** @var Workshop $this->workshop */
@@ -233,4 +234,149 @@ test('accessing non-existent client returns 404', function () {
     actingAs($user)
         ->get(route('clients.edit', 99999))
         ->assertNotFound();
+});
+
+test('guests cannot update client', function () {
+    $client = Client::factory()->for($this->workshop)->create();
+
+    put(route('clients.update', $client), [
+        'first_name' => 'Updated',
+        'last_name' => 'Name',
+        'phone_number' => '123456789',
+    ])->assertRedirect(route('login'));
+});
+
+test('authenticated users without proper role cannot update client', function () {
+    $mechanicRole = Role::firstOrCreate(['name' => 'Mechanic']);
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole($mechanicRole);
+
+    $client = Client::factory()->for($this->workshop)->create();
+
+    actingAs($user)
+        ->put(route('clients.update', $client), [
+            'first_name' => 'Updated',
+            'last_name' => 'Name',
+            'phone_number' => '123456789',
+        ])
+        ->assertForbidden();
+});
+
+test('owner can update client', function () {
+    $ownerRole = Role::firstOrCreate(['name' => 'Owner']);
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole($ownerRole);
+
+    $client = Client::factory()->for($this->workshop)->create([
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+        'phone_number' => '111222333',
+        'email' => 'john@example.com',
+    ]);
+
+    actingAs($user)
+        ->put(route('clients.update', $client), [
+            'first_name' => 'Jane',
+            'last_name' => 'Smith',
+            'phone_number' => '999888777',
+            'email' => 'jane@example.com',
+            'address_street' => '123 Main St',
+            'address_city' => 'New York',
+            'address_postal_code' => '10001',
+            'address_country' => 'USA',
+        ])
+        ->assertRedirect(route('clients.index'))
+        ->assertSessionHas('success', 'Klient został zaktualizowany');
+
+    $client->refresh();
+
+    expect($client->first_name)->toBe('Jane');
+    expect($client->last_name)->toBe('Smith');
+    expect($client->phone_number)->toBe('999888777');
+    expect($client->email)->toBe('jane@example.com');
+    expect($client->address_street)->toBe('123 Main St');
+    expect($client->address_city)->toBe('New York');
+    expect($client->address_postal_code)->toBe('10001');
+    expect($client->address_country)->toBe('USA');
+});
+
+test('office can update client', function () {
+    $officeRole = Role::firstOrCreate(['name' => 'Office']);
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole($officeRole);
+
+    $client = Client::factory()->for($this->workshop)->create([
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+    ]);
+
+    actingAs($user)
+        ->put(route('clients.update', $client), [
+            'first_name' => 'Jane',
+            'last_name' => 'Smith',
+            'phone_number' => '999888777',
+        ])
+        ->assertRedirect(route('clients.index'))
+        ->assertSessionHas('success');
+
+    expect($client->fresh()->first_name)->toBe('Jane');
+});
+
+test('updating non-existent client returns 404', function () {
+    $ownerRole = Role::firstOrCreate(['name' => 'Owner']);
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole($ownerRole);
+
+    actingAs($user)
+        ->put(route('clients.update', 99999), [
+            'first_name' => 'Test',
+            'last_name' => 'User',
+            'phone_number' => '123456789',
+        ])
+        ->assertNotFound();
+});
+
+test('update validation fails for missing required fields', function () {
+    $ownerRole = Role::firstOrCreate(['name' => 'Owner']);
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole($ownerRole);
+
+    $client = Client::factory()->for($this->workshop)->create();
+
+    actingAs($user)
+        ->put(route('clients.update', $client), [])
+        ->assertSessionHasErrors(['first_name', 'last_name', 'phone_number']);
+});
+
+test('update validation fails for invalid email', function () {
+    $ownerRole = Role::firstOrCreate(['name' => 'Owner']);
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole($ownerRole);
+
+    $client = Client::factory()->for($this->workshop)->create();
+
+    actingAs($user)
+        ->put(route('clients.update', $client), [
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'phone_number' => '123456789',
+            'email' => 'invalid-email',
+        ])
+        ->assertSessionHasErrors('email');
+});
+
+test('update validation fails for fields exceeding max length', function () {
+    $ownerRole = Role::firstOrCreate(['name' => 'Owner']);
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole($ownerRole);
+
+    $client = Client::factory()->for($this->workshop)->create();
+
+    actingAs($user)
+        ->put(route('clients.update', $client), [
+            'first_name' => str_repeat('a', 256),
+            'last_name' => 'Doe',
+            'phone_number' => '123456789',
+        ])
+        ->assertSessionHasErrors('first_name');
 });

@@ -15,6 +15,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('clients/create', [ClientController::class, 'create'])->name('clients.create');
     Route::post('clients', [ClientController::class, 'store'])->name('clients.store');
     Route::get('clients/{client}/edit', [ClientController::class, 'edit'])->name('clients.edit');
+    Route::put('clients/{client}', [ClientController::class, 'update'])->name('clients.update');
 });
 
 require __DIR__.'/settings.php';

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Dto\Client\ClientListItemData;
 use App\Dto\Client\StoreClientData;
+use App\Dto\Client\UpdateClientData;
 use App\Models\Client;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -40,5 +41,12 @@ class ClientService
             ...$data->all(),
             'workshop_id' => auth()->user()->workshop_id,
         ]);
+    }
+
+    public function update(Client $client, UpdateClientData $data): Client
+    {
+        $client->update($data->all());
+
+        return $client->fresh();
     }
 }
