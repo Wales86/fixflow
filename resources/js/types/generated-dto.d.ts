@@ -1,4 +1,15 @@
 declare namespace App.Dto.Client {
+export type ClientData = {
+id: number;
+first_name: string;
+last_name: string | null;
+phone_number: string;
+email: string | null;
+address_street: string | null;
+address_city: string | null;
+address_postal_code: string | null;
+address_country: string | null;
+};
 export type ClientIndexPagePropsData = {
 clients: any;
 filters: App.Dto.Common.FiltersData;

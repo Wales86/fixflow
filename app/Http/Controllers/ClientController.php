@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Dto\Client\ClientData;
 use App\Dto\Client\ClientIndexPagePropsData;
 use App\Dto\Client\StoreClientData;
 use App\Dto\Common\FiltersData;
@@ -47,5 +48,16 @@ class ClientController extends Controller
         return redirect()
             ->route('clients.index')
             ->with('success', 'Klient został dodany');
+    }
+
+    public function edit(Client $client): Response
+    {
+        $this->authorize('update', $client);
+
+        $clientData = ClientData::from($client);
+
+        return Inertia::render('clients/edit', [
+            'client' => $clientData,
+        ]);
     }
 }

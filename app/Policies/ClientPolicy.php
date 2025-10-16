@@ -24,7 +24,7 @@ class ClientPolicy
 
     public function update(User $user, Client $client): bool
     {
-        return false;
+        return $user->hasAnyRole(['Owner', 'Office']);
     }
 
     public function delete(User $user, Client $client): bool

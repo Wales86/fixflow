@@ -164,3 +164,73 @@ test('invalid direction parameter fails validation', function () {
         ->get(route('clients.index', ['direction' => 'invalid']))
         ->assertSessionHasErrors('direction');
 });
+
+test('guests cannot access client edit page', function () {
+    $client = Client::factory()->for($this->workshop)->create();
+
+    get(route('clients.edit', $client))->assertRedirect(route('login'));
+});
+
+test('authenticated users without proper role cannot access client edit page', function () {
+    $mechanicRole = Role::firstOrCreate(['name' => 'Mechanic']);
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole($mechanicRole);
+
+    $client = Client::factory()->for($this->workshop)->create();
+
+    actingAs($user)
+        ->get(route('clients.edit', $client))
+        ->assertForbidden();
+});
+
+test('owner can access client edit page', function () {
+    $ownerRole = Role::firstOrCreate(['name' => 'Owner']);
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole($ownerRole);
+
+    $client = Client::factory()->for($this->workshop)->create();
+
+    actingAs($user)
+        ->get(route('clients.edit', $client))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('clients/edit')
+            ->has('client')
+            ->where('client.id', $client->id)
+            ->where('client.first_name', $client->first_name)
+            ->where('client.last_name', $client->last_name)
+            ->where('client.phone_number', $client->phone_number)
+            ->where('client.email', $client->email)
+            ->where('client.address_street', $client->address_street)
+            ->where('client.address_city', $client->address_city)
+            ->where('client.address_postal_code', $client->address_postal_code)
+            ->where('client.address_country', $client->address_country)
+        );
+});
+
+test('office can access client edit page', function () {
+    $officeRole = Role::firstOrCreate(['name' => 'Office']);
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole($officeRole);
+
+    $client = Client::factory()->for($this->workshop)->create();
+
+    actingAs($user)
+        ->get(route('clients.edit', $client))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('clients/edit')
+            ->has('client')
+            ->where('client.id', $client->id)
+        );
+});
+
+test('accessing non-existent client returns 404', function () {
+    $ownerRole = Role::firstOrCreate(['name' => 'Owner']);
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole($ownerRole);
+
+    actingAs($user)
+        ->get(route('clients.edit', 99999))
+        ->assertNotFound();
+});
