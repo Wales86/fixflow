@@ -18,6 +18,7 @@ FixFlow is a workshop management tool designed to accurately track the working t
 - `app/Http/Controllers`: Return Inertia responses (`Inertia::render`) and delegate logic to Services
 - `app/Http/Requests`: Form Request validation; use `$request->validated()`
 - `app/Models`: Eloquent models; relationships, casts, scopes
+- `app/Dto`: Dto's - types for data flow
 - `app/Services`: Business logic; keep Controllers slim
 - `resources/views/app.blade.php`: Inertia root view with `@vite` and `@inertia`
 - `resources/js/app.tsx`: Inertia initialization (`createInertiaApp`), page resolver, progress
