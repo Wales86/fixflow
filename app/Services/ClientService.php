@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
+use App\Dto\Client\ClientData;
 use App\Dto\Client\ClientListItemData;
+use App\Dto\Client\ClientShowPagePropsData;
 use App\Dto\Client\StoreClientData;
 use App\Dto\Client\UpdateClientData;
+use App\Dto\Vehicle\VehicleData;
 use App\Models\Client;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -48,5 +51,15 @@ class ClientService
         $client->update($data->all());
 
         return $client->fresh();
+    }
+
+    public function prepareClientShowData(Client $client): ClientShowPagePropsData
+    {
+        $client->load('vehicles');
+
+        return ClientShowPagePropsData::from([
+            'client' => ClientData::from($client),
+            'vehicles' => VehicleData::collect($client->vehicles),
+        ]);
     }
 }

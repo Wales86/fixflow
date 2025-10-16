@@ -9,6 +9,7 @@ address_street: string | null;
 address_city: string | null;
 address_postal_code: string | null;
 address_country: string | null;
+created_at: string;
 };
 export type ClientIndexPagePropsData = {
 clients: any;
@@ -21,6 +22,10 @@ last_name: string | null;
 phone_number: string;
 email: string | null;
 vehicles_count: number;
+};
+export type ClientShowPagePropsData = {
+client: App.Dto.Client.ClientData;
+vehicles: Array<App.Dto.Vehicle.VehicleData>;
 };
 export type StoreClientData = {
 last_name: string;
@@ -63,6 +68,16 @@ vehicle: string;
 client: string;
 status: string;
 created_at: string;
+};
+}
+declare namespace App.Dto.Vehicle {
+export type VehicleData = {
+id: number;
+make: string;
+model: string;
+year: number;
+registration_number: string;
+vin: string;
 };
 }
 declare namespace App.Enums {

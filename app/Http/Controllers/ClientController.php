@@ -34,6 +34,15 @@ class ClientController extends Controller
         return Inertia::render('clients/index', $props);
     }
 
+    public function show(Client $client): Response
+    {
+        $this->authorize('view', $client);
+
+        $props = $this->clientService->prepareClientShowData($client);
+
+        return Inertia::render('clients/show', $props);
+    }
+
     public function create(): Response
     {
         $this->authorize('create', Client::class);

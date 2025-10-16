@@ -18,5 +18,6 @@ class ClientData extends Data
         public ?string $address_city,
         public ?string $address_postal_code,
         public ?string $address_country,
+        public string $created_at,
     ) {}
 }

@@ -14,7 +14,7 @@ class ClientPolicy
 
     public function view(User $user, Client $client): bool
     {
-        return false;
+        return $user->hasAnyRole(['Owner', 'Office']);
     }
 
     public function create(User $user): bool
