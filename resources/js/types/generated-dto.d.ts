@@ -71,6 +71,11 @@ created_at: string;
 };
 }
 declare namespace App.Dto.Vehicle {
+export type VehicleClientData = {
+id: number;
+first_name: string;
+last_name: string | null;
+};
 export type VehicleData = {
 id: number;
 make: string;
@@ -78,6 +83,12 @@ model: string;
 year: number;
 registration_number: string;
 vin: string;
+repair_orders_count: number | null;
+client: App.Dto.Vehicle.VehicleClientData | null;
+};
+export type VehicleIndexPagePropsData = {
+vehicles: any;
+filters: App.Dto.Common.FiltersData;
 };
 }
 declare namespace App.Enums {

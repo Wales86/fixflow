@@ -14,7 +14,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 interface ClientsPageProps {
     clients: PaginatedResponse<App.Dto.Client.ClientListItemData>;
-    filters: App.Dto.Client.FiltersData;
+    filters: App.Dto.Common.FiltersData;
 }
 
 export default function ClientsIndex({ clients, filters }: ClientsPageProps) {
