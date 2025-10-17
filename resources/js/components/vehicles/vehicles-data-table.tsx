@@ -24,68 +24,85 @@ import {
     useReactTable,
 } from '@tanstack/react-table';
 import { useMemo } from 'react';
-import { DataTableRowActions } from './data-table-row-actions';
 import { router } from '@inertiajs/react';
 
-interface ClientsDataTableProps {
-    clients: PaginatedResponse<App.Dto.Client.ClientListItemData>;
+interface VehiclesDataTableProps {
+    vehicles: PaginatedResponse<App.Dto.Vehicle.VehicleData>;
     filters: App.Dto.Common.FiltersData;
 }
 
-export function ClientsDataTable({ clients, filters }: ClientsDataTableProps) {
+export function VehiclesDataTable({ vehicles, filters }: VehiclesDataTableProps) {
     const { search, handleSearch, handleSort, currentSort, currentDirection } =
         useDataTableFilters(filters);
 
-    const handleRowClick = (clientId: number) => {
-        router.visit(`/clients/${clientId}`);
+    const handleRowClick = (vehicleId: number) => {
+        router.visit(`/vehicles/${vehicleId}`);
     };
 
     const columns = useMemo<
-        ColumnDef<App.Dto.Client.ClientListItemData>[]
+        ColumnDef<App.Dto.Vehicle.VehicleData>[]
     >(() => {
         return [
             {
-                accessorKey: 'full_name',
-                header: 'Imię i nazwisko',
-                cell: ({ row }) => {
-                    const firstName = row.original.first_name;
-                    const lastName = row.original.last_name || '';
-                    return `${firstName} ${lastName}`.trim();
-                },
+                accessorKey: 'registration_number',
+                header: 'Nr rejestracyjny',
+                cell: ({ row }) => row.original.registration_number,
                 enableSorting: true,
             },
             {
-                accessorKey: 'phone_number',
-                header: 'Numer telefonu',
-                cell: ({ row }) => row.original.phone_number,
+                accessorKey: 'make',
+                header: 'Marka',
+                cell: ({ row }) => row.original.make,
+                enableSorting: true,
+            },
+            {
+                accessorKey: 'model',
+                header: 'Model',
+                cell: ({ row }) => row.original.model,
+                enableSorting: true,
+            },
+            {
+                accessorKey: 'year',
+                header: 'Rocznik',
+                cell: ({ row }) => row.original.year,
+                enableSorting: true,
+            },
+            {
+                accessorKey: 'vin',
+                header: 'VIN',
+                cell: ({ row }) => row.original.vin,
                 enableSorting: false,
             },
             {
-                accessorKey: 'email',
-                header: 'Email',
-                cell: ({ row }) => row.original.email || '-',
+                accessorKey: 'client',
+                header: 'Właściciel',
+                cell: ({ row }) => {
+                    const client = row.original.client;
+                    if (!client) {
+                        return '-';
+                    }
+                    const firstName = client.first_name;
+                    const lastName = client.last_name || '';
+                    return `${firstName} ${lastName}`.trim();
+                },
                 enableSorting: false,
             },
             {
-                accessorKey: 'vehicles_count',
-                header: 'Liczba pojazdów',
-                cell: ({ row }) => row.original.vehicles_count,
+                accessorKey: 'repair_orders_count',
+                header: 'Liczba napraw',
+                cell: ({ row }) => row.original.repair_orders_count ?? 0,
                 enableSorting: false,
-            },
-            {
-                id: 'actions',
-                cell: ({ row }) => <DataTableRowActions client={row.original} />,
             },
         ];
     }, []);
 
     const table = useReactTable({
-        data: clients.data,
+        data: vehicles.data,
         columns,
         getCoreRowModel: getCoreRowModel(),
         manualSorting: true,
         manualPagination: true,
-        pageCount: clients.last_page,
+        pageCount: vehicles.last_page,
     });
 
     return (
@@ -93,15 +110,15 @@ export function ClientsDataTable({ clients, filters }: ClientsDataTableProps) {
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <div>
-                        <CardTitle>Lista klientów</CardTitle>
+                        <CardTitle>Lista pojazdów</CardTitle>
                         <CardDescription>
-                            Zarządzaj klientami warsztatu
+                            Zarządzaj pojazdami w warsztacie
                         </CardDescription>
                     </div>
                     <div className="relative w-64">
                         <Search className="absolute left-2 top-2.5 size-4 text-muted-foreground" />
                         <Input
-                            placeholder="Szukaj klientów..."
+                            placeholder="Szukaj pojazdów..."
                             value={search}
                             onChange={(e) => handleSearch(e.target.value)}
                             className="pl-8"
@@ -159,15 +176,7 @@ export function ClientsDataTable({ clients, filters }: ClientsDataTableProps) {
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
                                     key={row.id}
-                                    onClick={(e) => {
-                                        const target = e.target as HTMLElement;
-                                        if (
-                                            !target.closest('button') &&
-                                            !target.closest('[role="menu"]')
-                                        ) {
-                                            handleRowClick(row.original.id);
-                                        }
-                                    }}
+                                    onClick={() => handleRowClick(row.original.id)}
                                     className="cursor-pointer"
                                 >
                                     {row.getVisibleCells().map((cell) => (
@@ -187,14 +196,14 @@ export function ClientsDataTable({ clients, filters }: ClientsDataTableProps) {
                                     className="h-24 text-center"
                                 >
                                     {search
-                                        ? 'Nie znaleziono klientów pasujących do Twoich kryteriów'
-                                        : 'Nie znaleziono klientów'}
+                                        ? 'Nie znaleziono pojazdów pasujących do Twoich kryteriów'
+                                        : 'Nie znaleziono pojazdów'}
                                 </TableCell>
                             </TableRow>
                         )}
                     </TableBody>
                 </Table>
-                <DataTablePagination table={table} pagination={clients} />
+                <DataTablePagination table={table} pagination={vehicles} />
             </CardContent>
         </Card>
     );

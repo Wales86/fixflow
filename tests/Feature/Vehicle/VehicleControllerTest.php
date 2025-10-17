@@ -4,7 +4,6 @@ use App\Models\Client;
 use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\Workshop;
-use Spatie\Permission\Models\Role;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;

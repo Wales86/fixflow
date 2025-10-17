@@ -12,9 +12,10 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import clients from '@/routes/clients';
+import vehicles from '@/routes/vehicles';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Users } from 'lucide-react';
+import { BookOpen, Car, Folder, LayoutGrid, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -27,6 +28,11 @@ const mainNavItems: NavItem[] = [
         title: 'Klienci',
         href: clients.index(),
         icon: Users,
+    },
+    {
+        title: 'Pojazdy',
+        href: vehicles.index(),
+        icon: Car,
     },
 ];
 
