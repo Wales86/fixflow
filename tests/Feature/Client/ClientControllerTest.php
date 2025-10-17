@@ -2,6 +2,7 @@
 
 use App\Models\Client;
 use App\Models\User;
+use App\Models\Vehicle;
 use App\Models\Workshop;
 use Spatie\Permission\Models\Role;
 
@@ -472,6 +473,7 @@ test('client show includes all client vehicles', function () {
                 ->has('year')
                 ->has('registration_number')
                 ->has('vin')
+                ->has('repair_orders_count')
             )
         );
 });
@@ -711,4 +713,53 @@ test('update validation fails for fields exceeding max length', function () {
             'phone_number' => '123456789',
         ])
         ->assertSessionHasErrors('first_name');
+});
+
+// ============================================================================
+// DESTROY TESTS
+// ============================================================================
+
+test('owner can delete a client without vehicles', function () {
+    $owner = User::factory()->for($this->workshop)->create()->assignRole('Owner');
+    $client = Client::factory()->for($this->workshop)->create();
+
+    actingAs($owner)
+        ->delete(route('clients.destroy', $client))
+        ->assertRedirect(route('clients.index'))
+        ->assertSessionHas('success', 'Klient został usunięty');
+
+    $this->assertSoftDeleted('clients', ['id' => $client->id]);
+});
+
+test('office user cannot delete a client', function () {
+    $office = User::factory()->for($this->workshop)->create()->assignRole('Office');
+    $client = Client::factory()->for($this->workshop)->create();
+
+    actingAs($office)
+        ->delete(route('clients.destroy', $client))
+        ->assertForbidden();
+
+    assertDatabaseHas('clients', ['id' => $client->id, 'deleted_at' => null]);
+});
+
+test('cannot delete client with associated vehicles', function () {
+    $owner = User::factory()->for($this->workshop)->create()->assignRole('Owner');
+    $client = Client::factory()->for($this->workshop)->create();
+    Vehicle::factory()->for($client)->for($this->workshop)->create();
+
+    actingAs($owner)
+        ->delete(route('clients.destroy', $client))
+        ->assertRedirect()
+        ->assertSessionHas('error', 'Nie można usunąć klienta z przypisanymi pojazdami');
+
+    assertDatabaseHas('clients', ['id' => $client->id, 'deleted_at' => null]);
+});
+
+test('unauthenticated user cannot delete a client', function () {
+    $client = Client::factory()->for($this->workshop)->create();
+
+    $this->delete(route('clients.destroy', $client))
+        ->assertRedirect(route('login'));
+
+    assertDatabaseHas('clients', ['id' => $client->id, 'deleted_at' => null]);
 });

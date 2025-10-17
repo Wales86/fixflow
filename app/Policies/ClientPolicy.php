@@ -29,7 +29,7 @@ class ClientPolicy
 
     public function delete(User $user, Client $client): bool
     {
-        return false;
+        return $user->hasRole('Owner');
     }
 
     public function restore(User $user, Client $client): bool

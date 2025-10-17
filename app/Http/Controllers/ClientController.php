@@ -7,6 +7,7 @@ use App\Dto\Client\ClientIndexPagePropsData;
 use App\Dto\Client\StoreClientData;
 use App\Dto\Client\UpdateClientData;
 use App\Dto\Common\FiltersData;
+use App\Exceptions\CannotDeleteClientWithVehiclesException;
 use App\Http\Requests\Client\IndexClientRequest;
 use App\Http\Requests\Client\StoreClientRequest;
 use App\Http\Requests\Client\UpdateClientRequest;
@@ -81,5 +82,22 @@ class ClientController extends Controller
         return redirect()
             ->route('clients.index')
             ->with('success', 'Klient został zaktualizowany');
+    }
+
+    public function destroy(Client $client): RedirectResponse
+    {
+        $this->authorize('delete', $client);
+
+        try {
+            $this->clientService->deleteClient($client);
+        } catch (CannotDeleteClientWithVehiclesException) {
+            return redirect()
+                ->back()
+                ->with('error', 'Nie można usunąć klienta z przypisanymi pojazdami');
+        }
+
+        return redirect()
+            ->route('clients.index')
+            ->with('success', 'Klient został usunięty');
     }
 }

@@ -8,8 +8,10 @@ use App\Dto\Client\ClientShowPagePropsData;
 use App\Dto\Client\StoreClientData;
 use App\Dto\Client\UpdateClientData;
 use App\Dto\Vehicle\VehicleData;
+use App\Exceptions\CannotDeleteClientWithVehiclesException;
 use App\Models\Client;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Log;
 
 class ClientService
 {
@@ -62,5 +64,25 @@ class ClientService
             'client' => ClientData::from($client),
             'vehicles' => VehicleData::collect($client->vehicles),
         ]);
+    }
+
+    /**
+     * @throws CannotDeleteClientWithVehiclesException
+     */
+    public function deleteClient(Client $client): void
+    {
+        if ($client->vehicles()->exists()) {
+            throw new CannotDeleteClientWithVehiclesException(
+                'Cannot delete client with associated vehicles.'
+            );
+        }
+
+        try {
+            $client->delete();
+        } catch (\Exception $e) {
+            Log::error('Error deleting client: '.$e->getMessage());
+
+            throw $e;
+        }
     }
 }
