@@ -1,12 +1,8 @@
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
-import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
+
+import AppLayout from '@/layouts/app-layout';
+import { VehicleForm } from '@/components/vehicles/vehicle-form';
+import { type BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -21,31 +17,24 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 interface VehiclesCreateProps {
     clients: App.Dto.Client.ClientSelectOptionData[];
-    preselectedClientId: number | null;
+    preselected_client_id?: number;
 }
 
 export default function VehiclesCreate({
     clients,
-    preselectedClientId,
+    preselected_client_id,
 }: VehiclesCreateProps) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Nowy pojazd" />
+            <Head title="Dodaj Nowy Pojazd" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <h1 className="text-2xl font-bold tracking-tight">
-                    Dodaj nowy pojazd
+                    Dodaj Nowy Pojazd
                 </h1>
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Formularz pojazdu</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p>Dostępnych klientów: {clients.length}</p>
-                        {preselectedClientId && (
-                            <p>Wybrany klient ID: {preselectedClientId}</p>
-                        )}
-                    </CardContent>
-                </Card>
+                <VehicleForm
+                    clients={clients}
+                    preselectedClientId={preselected_client_id}
+                />
             </div>
         </AppLayout>
     );

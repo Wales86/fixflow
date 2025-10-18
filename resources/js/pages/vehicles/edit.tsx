@@ -1,12 +1,8 @@
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
-import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
+
+import AppLayout from '@/layouts/app-layout';
+import { VehicleForm } from '@/components/vehicles/vehicle-form';
+import { type BreadcrumbItem } from '@/types';
 
 interface VehiclesEditProps {
     vehicle: App.Dto.Vehicle.VehicleData;
@@ -36,15 +32,7 @@ export default function VehiclesEdit({ vehicle, clients }: VehiclesEditProps) {
                 <h1 className="text-2xl font-bold tracking-tight">
                     Edytuj pojazd: {vehicle.make} {vehicle.model}
                 </h1>
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Formularz edycji pojazdu</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p>VIN: {vehicle.vin}</p>
-                        <p>Dostępnych klientów: {clients.length}</p>
-                    </CardContent>
-                </Card>
+                <VehicleForm vehicle={vehicle} clients={clients} />
             </div>
         </AppLayout>
     );
