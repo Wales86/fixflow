@@ -8,7 +8,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class VehicleService
 {
-    public function list(array $filters = []): LengthAwarePaginator
+    public function paginatedList(array $filters = []): LengthAwarePaginator
     {
         $query = Vehicle::query()
             ->with('client')

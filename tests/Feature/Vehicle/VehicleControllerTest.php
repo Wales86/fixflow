@@ -4,6 +4,7 @@ use App\Models\Client;
 use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\Workshop;
+use Spatie\Permission\Models\Role;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
@@ -12,6 +13,10 @@ beforeEach(function () {
     /** @var Workshop $this->workshop */
     $this->workshop = Workshop::factory()->create();
     $this->workshop->makeCurrent();
+
+    Role::firstOrCreate(['name' => 'Owner']);
+    Role::firstOrCreate(['name' => 'Office']);
+    Role::firstOrCreate(['name' => 'Mechanic']);
 });
 
 test('guests are redirected to login page when accessing index', function () {
@@ -36,7 +41,7 @@ test('owner can view vehicles list', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('vehicles/index')
-            ->has('vehicles.data')
+            ->has('tableData.data')
             ->has('filters')
         );
 });
@@ -50,7 +55,7 @@ test('office can view vehicles list', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('vehicles/index')
-            ->has('vehicles.data')
+            ->has('tableData.data')
             ->has('filters')
         );
 });
@@ -67,8 +72,8 @@ test('vehicles list includes pagination and client data', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('vehicles/index')
-            ->has('vehicles.data', 3)
-            ->has('vehicles.data.0', fn ($vehicle) => $vehicle
+            ->has('tableData.data', 3)
+            ->has('tableData.data.0', fn ($vehicle) => $vehicle
                 ->has('id')
                 ->has('make')
                 ->has('model')
@@ -80,11 +85,12 @@ test('vehicles list includes pagination and client data', function () {
                 ->has('client.id')
                 ->has('client.first_name')
                 ->has('client.last_name')
+                ->etc()
             )
-            ->has('vehicles.links')
-            ->has('vehicles.current_page')
-            ->has('vehicles.per_page')
-            ->has('vehicles.total')
+            ->has('tableData.links')
+            ->has('tableData.current_page')
+            ->has('tableData.per_page')
+            ->has('tableData.total')
         );
 });
 
@@ -101,8 +107,8 @@ test('search filters vehicles by make', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('vehicles/index')
-            ->has('vehicles.data', 1)
-            ->where('vehicles.data.0.make', 'Toyota')
+            ->has('tableData.data', 1)
+            ->where('tableData.data.0.make', 'Toyota')
             ->where('filters.search', 'Toyota')
         );
 });
@@ -120,8 +126,8 @@ test('search filters vehicles by model', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('vehicles/index')
-            ->has('vehicles.data', 1)
-            ->where('vehicles.data.0.model', 'Civic')
+            ->has('tableData.data', 1)
+            ->where('tableData.data.0.model', 'Civic')
         );
 });
 
@@ -138,8 +144,8 @@ test('search filters vehicles by registration number', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('vehicles/index')
-            ->has('vehicles.data', 1)
-            ->where('vehicles.data.0.registration_number', 'ABC123')
+            ->has('tableData.data', 1)
+            ->where('tableData.data.0.registration_number', 'ABC123')
         );
 });
 
@@ -156,8 +162,8 @@ test('search filters vehicles by VIN', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('vehicles/index')
-            ->has('vehicles.data', 1)
-            ->where('vehicles.data.0.vin', '1HGBH41JXMN109186')
+            ->has('tableData.data', 1)
+            ->where('tableData.data.0.vin', '1HGBH41JXMN109186')
         );
 });
 
@@ -175,9 +181,9 @@ test('sort parameter orders vehicles correctly by make', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('vehicles/index')
-            ->where('vehicles.data.0.make', 'Ford')
-            ->where('vehicles.data.1.make', 'Honda')
-            ->where('vehicles.data.2.make', 'Toyota')
+            ->where('tableData.data.0.make', 'Ford')
+            ->where('tableData.data.1.make', 'Honda')
+            ->where('tableData.data.2.make', 'Toyota')
             ->where('filters.sort', 'make')
             ->where('filters.direction', 'asc')
         );
@@ -197,9 +203,9 @@ test('sort parameter orders vehicles correctly by year', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('vehicles/index')
-            ->where('vehicles.data.0.year', 2022)
-            ->where('vehicles.data.1.year', 2020)
-            ->where('vehicles.data.2.year', 2018)
+            ->where('tableData.data.0.year', 2022)
+            ->where('tableData.data.1.year', 2020)
+            ->where('tableData.data.2.year', 2018)
             ->where('filters.sort', 'year')
             ->where('filters.direction', 'desc')
         );
@@ -239,8 +245,8 @@ test('vehicles are scoped to current workshop', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('vehicles/index')
-            ->has('vehicles.data', 1)
-            ->where('vehicles.data.0.make', 'Toyota')
+            ->has('tableData.data', 1)
+            ->where('tableData.data.0.make', 'Toyota')
         );
 });
 
@@ -256,8 +262,8 @@ test('vehicles list shows repair orders count', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('vehicles/index')
-            ->has('vehicles.data', 1)
-            ->where('vehicles.data.0.repair_orders_count', 0)
+            ->has('tableData.data', 1)
+            ->where('tableData.data.0.repair_orders_count', 0)
         );
 });
 

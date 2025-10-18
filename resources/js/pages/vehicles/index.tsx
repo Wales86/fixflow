@@ -12,12 +12,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-interface VehiclesPageProps {
-    vehicles: PaginatedResponse<App.Dto.Vehicle.VehicleData>;
-    filters: App.Dto.Common.FiltersData;
-}
-
-export default function VehiclesIndex({ vehicles, filters }: VehiclesPageProps) {
+export default function VehiclesIndex({ tableData, filters }: App.Dto.Common.FilterableTablePagePropsData) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Pojazdy" />
@@ -31,7 +26,7 @@ export default function VehiclesIndex({ vehicles, filters }: VehiclesPageProps) 
                         </Link>
                     </Button>
                 </div>
-                <VehiclesDataTable vehicles={vehicles} filters={filters} />
+                <VehiclesDataTable tableData={tableData} filters={filters} />
             </div>
         </AppLayout>
     );

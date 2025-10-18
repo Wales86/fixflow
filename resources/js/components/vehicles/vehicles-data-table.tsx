@@ -26,18 +26,15 @@ import {
 import { useMemo } from 'react';
 import { router } from '@inertiajs/react';
 
-interface VehiclesDataTableProps {
-    vehicles: PaginatedResponse<App.Dto.Vehicle.VehicleData>;
-    filters: App.Dto.Common.FiltersData;
-}
-
-export function VehiclesDataTable({ vehicles, filters }: VehiclesDataTableProps) {
+export function VehiclesDataTable({ tableData, filters }: App.Dto.Common.FilterableTablePagePropsData) {
     const { search, handleSearch, handleSort, currentSort, currentDirection } =
         useDataTableFilters(filters);
 
     const handleRowClick = (vehicleId: number) => {
         router.visit(`/vehicles/${vehicleId}`);
     };
+
+    const vehicles: Array<App.Dto.Vehicle.VehicleData> = tableData.data;
 
     const columns = useMemo<
         ColumnDef<App.Dto.Vehicle.VehicleData>[]
@@ -97,12 +94,12 @@ export function VehiclesDataTable({ vehicles, filters }: VehiclesDataTableProps)
     }, []);
 
     const table = useReactTable({
-        data: vehicles.data,
+        data: vehicles,
         columns,
         getCoreRowModel: getCoreRowModel(),
         manualSorting: true,
         manualPagination: true,
-        pageCount: vehicles.last_page,
+        pageCount: tableData.last_page,
     });
 
     return (
@@ -203,7 +200,7 @@ export function VehiclesDataTable({ vehicles, filters }: VehiclesDataTableProps)
                         )}
                     </TableBody>
                 </Table>
-                <DataTablePagination table={table} pagination={vehicles} />
+                <DataTablePagination table={table} pagination={tableData} />
             </CardContent>
         </Card>
     );

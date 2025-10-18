@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Dto\Common\FilterableTablePagePropsData;
 use App\Dto\Common\FiltersData;
-use App\Dto\Vehicle\VehicleIndexPagePropsData;
 use App\Http\Requests\Vehicle\VehicleIndexRequest;
 use App\Services\VehicleService;
 use Inertia\Inertia;
@@ -17,10 +17,10 @@ class VehicleController extends Controller
 
     public function index(VehicleIndexRequest $request): Response
     {
-        $vehicles = $this->vehicleService->list($request->validated());
+        $vehiclesPaginated = $this->vehicleService->paginatedList($request->validated());
 
-        $props = VehicleIndexPagePropsData::from([
-            'vehicles' => $vehicles,
+        $props = FilterableTablePagePropsData::from([
+            'tableData' => $vehiclesPaginated,
             'filters' => FiltersData::from($request->validated()),
         ]);
 
