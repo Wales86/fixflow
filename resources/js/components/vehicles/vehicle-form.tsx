@@ -1,5 +1,6 @@
 import { FormEventHandler } from "react";
 import { useForm } from "@inertiajs/react";
+import { useLaravelReactI18n } from "laravel-react-i18n";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,6 +22,7 @@ export function VehicleForm({
     clients,
     preselectedClientId,
 }: VehicleFormProps) {
+    const { t } = useLaravelReactI18n();
     const isEditMode = !!vehicle;
 
     const { data, setData, post, put, processing, errors, clearErrors } = useForm({
@@ -39,14 +41,14 @@ export function VehicleForm({
             put(`/vehicles/${vehicle.id}`, {
                 preserveScroll: true,
                 onError: () => {
-                    toast.error("Wystąpił błąd podczas aktualizacji pojazdu");
+                    toast.error(t("an_error_occurred"));
                 },
             });
         } else {
             post("/vehicles", {
                 preserveScroll: true,
                 onError: () => {
-                    toast.error("Wystąpił błąd podczas tworzenia pojazdu");
+                    toast.error(t("an_error_occurred"));
                 },
             });
         }
@@ -56,14 +58,14 @@ export function VehicleForm({
         <Card>
             <CardHeader>
                 <CardTitle>
-                    {isEditMode ? "Edytuj dane pojazdu" : "Dane pojazdu"}
+                    {isEditMode ? t("edit_vehicle_data") : t("vehicle_data")}
                 </CardTitle>
             </CardHeader>
             <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="space-y-2">
                         <Label htmlFor="client_id">
-                            Klient <span className="text-red-500">*</span>
+                            {t("client")} <span className="text-red-500">*</span>
                         </Label>
                         <ClientCombobox
                             options={clients}
@@ -82,7 +84,7 @@ export function VehicleForm({
                     <div className="grid gap-6 md:grid-cols-2">
                         <div className="space-y-2">
                             <Label htmlFor="make">
-                                Marka <span className="text-red-500">*</span>
+                                {t("make")} <span className="text-red-500">*</span>
                             </Label>
                             <Input
                                 id="make"
@@ -101,7 +103,7 @@ export function VehicleForm({
 
                         <div className="space-y-2">
                             <Label htmlFor="model">
-                                Model <span className="text-red-500">*</span>
+                                {t("model")} <span className="text-red-500">*</span>
                             </Label>
                             <Input
                                 id="model"
@@ -121,7 +123,7 @@ export function VehicleForm({
 
                     <div className="space-y-2">
                         <Label htmlFor="year">
-                            Rok produkcji <span className="text-red-500">*</span>
+                            {t("year")} <span className="text-red-500">*</span>
                         </Label>
                         <Input
                             id="year"
@@ -163,7 +165,7 @@ export function VehicleForm({
 
                     <div className="space-y-2">
                         <Label htmlFor="registration_number">
-                            Numer rejestracyjny <span className="text-red-500">*</span>
+                            {t("registration_number")} <span className="text-red-500">*</span>
                         </Label>
                         <Input
                             id="registration_number"
@@ -189,10 +191,10 @@ export function VehicleForm({
                             onClick={() => window.history.back()}
                             disabled={processing}
                         >
-                            Anuluj
+                            {t("cancel")}
                         </Button>
                         <Button type="submit" disabled={processing}>
-                            {processing ? "Zapisywanie..." : "Zapisz"}
+                            {processing ? t("loading") : t("save")}
                         </Button>
                     </div>
                 </form>

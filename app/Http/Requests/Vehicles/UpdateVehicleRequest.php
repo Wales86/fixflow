@@ -41,16 +41,4 @@ class UpdateVehicleRequest extends FormRequest
         ];
     }
 
-    /**
-     * @return array<string, string>
-     */
-    public function messages(): array
-    {
-        return [
-            'client_id.exists' => 'Wybrany klient nie istnieje.',
-            'vin.unique' => 'Pojazd z tym numerem VIN już istnieje w bazie danych.',
-            'year.min' => 'Rok produkcji musi być większy lub równy 1900.',
-            'year.max' => 'Rok produkcji nie może być większy niż 2100.',
-        ];
-    }
 }
