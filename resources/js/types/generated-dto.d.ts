@@ -11,10 +11,6 @@ address_postal_code: string | null;
 address_country: string | null;
 created_at: string;
 };
-export type ClientIndexPagePropsData = {
-clients: any;
-filters: App.Dto.Common.FiltersData;
-};
 export type ClientListItemData = {
 id: number;
 first_name: string;
@@ -49,6 +45,10 @@ address_country?: string;
 };
 }
 declare namespace App.Dto.Common {
+export type FilterableTablePagePropsData = {
+tableData: any;
+filters: App.Dto.Common.FiltersData;
+};
 export type FiltersData = {
 search: string | null;
 sort: string | null;

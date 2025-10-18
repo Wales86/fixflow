@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Log;
 
 class ClientService
 {
-    public function list(array $filters = []): LengthAwarePaginator
+    public function paginatedList(array $filters = []): LengthAwarePaginator
     {
         $query = Client::query()->withCount('vehicles');
 

@@ -27,18 +27,15 @@ import { useMemo } from 'react';
 import { DataTableRowActions } from './data-table-row-actions';
 import { router } from '@inertiajs/react';
 
-interface ClientsDataTableProps {
-    clients: PaginatedResponse<App.Dto.Client.ClientListItemData>;
-    filters: App.Dto.Common.FiltersData;
-}
-
-export function ClientsDataTable({ clients, filters }: ClientsDataTableProps) {
+export function ClientsDataTable({ tableData, filters }: App.Dto.Common.FilterableTablePagePropsData) {
     const { search, handleSearch, handleSort, currentSort, currentDirection } =
         useDataTableFilters(filters);
 
     const handleRowClick = (clientId: number) => {
         router.visit(`/clients/${clientId}`);
     };
+
+    const clients: Array<App.Dto.Client.ClientListItemData> = tableData.data;
 
     const columns = useMemo<
         ColumnDef<App.Dto.Client.ClientListItemData>[]
@@ -80,12 +77,12 @@ export function ClientsDataTable({ clients, filters }: ClientsDataTableProps) {
     }, []);
 
     const table = useReactTable({
-        data: clients.data,
+        data: clients,
         columns,
         getCoreRowModel: getCoreRowModel(),
         manualSorting: true,
         manualPagination: true,
-        pageCount: clients.last_page,
+        pageCount: tableData.last_page,
     });
 
     return (
@@ -194,7 +191,7 @@ export function ClientsDataTable({ clients, filters }: ClientsDataTableProps) {
                         )}
                     </TableBody>
                 </Table>
-                <DataTablePagination table={table} pagination={clients} />
+                <DataTablePagination table={table} pagination={tableData} />
             </CardContent>
         </Card>
     );

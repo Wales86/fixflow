@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Dto\Client\ClientData;
-use App\Dto\Client\ClientIndexPagePropsData;
 use App\Dto\Client\StoreClientData;
 use App\Dto\Client\UpdateClientData;
 use App\Dto\Common\FiltersData;
@@ -16,6 +15,7 @@ use App\Services\ClientService;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Dto\Common\FilterableTablePagePropsData;
 
 class ClientController extends Controller
 {
@@ -25,10 +25,10 @@ class ClientController extends Controller
 
     public function index(IndexClientRequest $request): Response
     {
-        $clients = $this->clientService->list($request->validated());
+        $clientsPaginated = $this->clientService->paginatedList($request->validated());
 
-        $props = ClientIndexPagePropsData::from([
-            'clients' => $clients,
+        $props = FilterableTablePagePropsData::from([
+            'tableData' => $clientsPaginated,
             'filters' => FiltersData::from($request->validated()),
         ]);
 

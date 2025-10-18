@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Dto\Client;
+namespace App\Dto\Common;
 
 use App\Dto\Common\FiltersData;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -8,10 +8,10 @@ use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
-class ClientIndexPagePropsData extends Data
+class FilterableTablePagePropsData extends Data
 {
     public function __construct(
-        public LengthAwarePaginator $clients,
+        public LengthAwarePaginator $tableData,
         public FiltersData $filters,
     ) {}
 }

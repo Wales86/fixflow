@@ -12,12 +12,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-interface ClientsPageProps {
-    clients: PaginatedResponse<App.Dto.Client.ClientListItemData>;
-    filters: App.Dto.Common.FiltersData;
-}
-
-export default function ClientsIndex({ clients, filters }: ClientsPageProps) {
+export default function ClientsIndex({ tableData, filters }: App.Dto.Common.FilterableTablePagePropsData) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Klienci" />
@@ -31,7 +26,7 @@ export default function ClientsIndex({ clients, filters }: ClientsPageProps) {
                         </Link>
                     </Button>
                 </div>
-                <ClientsDataTable clients={clients} filters={filters} />
+                <ClientsDataTable tableData={tableData} filters={filters} />
             </div>
         </AppLayout>
     );

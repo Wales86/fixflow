@@ -60,7 +60,7 @@ test('owner can view clients list', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('clients/index')
-            ->has('clients.data')
+            ->has('tableData.data')
             ->has('filters')
         );
 });
@@ -75,7 +75,7 @@ test('office can view clients list', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('clients/index')
-            ->has('clients.data')
+            ->has('tableData.data')
             ->has('filters')
         );
 });
@@ -92,8 +92,8 @@ test('clients list includes pagination and vehicle count', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('clients/index')
-            ->has('clients.data', 3)
-            ->has('clients.data.0', fn ($client) => $client
+            ->has('tableData.data', 3)
+            ->has('tableData.data.0', fn ($client) => $client
                 ->has('id')
                 ->has('first_name')
                 ->has('last_name')
@@ -101,10 +101,10 @@ test('clients list includes pagination and vehicle count', function () {
                 ->has('email')
                 ->has('vehicles_count')
             )
-            ->has('clients.links')
-            ->has('clients.current_page')
-            ->has('clients.per_page')
-            ->has('clients.total')
+            ->has('tableData.links')
+            ->has('tableData.current_page')
+            ->has('tableData.per_page')
+            ->has('tableData.total')
         );
 });
 
@@ -121,8 +121,8 @@ test('search filters clients by name', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('clients/index')
-            ->has('clients.data', 1)
-            ->where('clients.data.0.first_name', 'John')
+            ->has('tableData.data', 1)
+            ->where('tableData.data.0.first_name', 'John')
             ->where('filters.search', 'John')
         );
 });
@@ -140,8 +140,8 @@ test('search filters clients by email', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('clients/index')
-            ->has('clients.data', 1)
-            ->where('clients.data.0.email', 'john@example.com')
+            ->has('tableData.data', 1)
+            ->where('tableData.data.0.email', 'john@example.com')
         );
 });
 
@@ -159,9 +159,9 @@ test('sort parameter orders clients correctly', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('clients/index')
-            ->where('clients.data.0.first_name', 'Alice')
-            ->where('clients.data.1.first_name', 'Bob')
-            ->where('clients.data.2.first_name', 'Charlie')
+            ->where('tableData.data.0.first_name', 'Alice')
+            ->where('tableData.data.1.first_name', 'Bob')
+            ->where('tableData.data.2.first_name', 'Charlie')
             ->where('filters.sort', 'first_name')
             ->where('filters.direction', 'asc')
         );
@@ -474,6 +474,7 @@ test('client show includes all client vehicles', function () {
                 ->has('registration_number')
                 ->has('vin')
                 ->has('repair_orders_count')
+                ->etc()
             )
         );
 });
