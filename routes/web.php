@@ -21,6 +21,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('clients/{client}', [ClientController::class, 'destroy'])->name('clients.destroy');
 
     Route::get('vehicles', [VehicleController::class, 'index'])->name('vehicles.index');
+    Route::get('vehicles/create', [VehicleController::class, 'create'])->name('vehicles.create');
 });
 
 require __DIR__.'/settings.php';

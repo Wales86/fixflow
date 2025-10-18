@@ -11,6 +11,10 @@ address_postal_code: string | null;
 address_country: string | null;
 created_at: string;
 };
+export type ClientForListData = {
+id: number;
+name: string;
+};
 export type ClientListItemData = {
 id: number;
 first_name: string;
@@ -85,10 +89,6 @@ registration_number: string;
 vin: string;
 repair_orders_count: number | null;
 client: App.Dto.Vehicle.VehicleClientData | null;
-};
-export type VehicleIndexPagePropsData = {
-vehicles: any;
-filters: App.Dto.Common.FiltersData;
 };
 }
 declare namespace App.Enums {

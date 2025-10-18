@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Dto\Client\ClientData;
+use App\Dto\Client\ClientForListData;
 use App\Dto\Client\ClientListItemData;
 use App\Dto\Client\ClientShowPagePropsData;
 use App\Dto\Client\StoreClientData;
@@ -12,6 +13,7 @@ use App\Exceptions\CannotDeleteClientWithVehiclesException;
 use App\Models\Client;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
+use Spatie\LaravelData\DataCollection;
 
 class ClientService
 {
@@ -84,5 +86,16 @@ class ClientService
 
             throw $e;
         }
+    }
+
+    public function getClientsForSelect(): DataCollection
+    {
+        $clients = Client::query()
+            ->select(['id', 'first_name', 'last_name'])
+            ->orderBy('last_name')
+            ->orderBy('first_name')
+            ->get();
+
+        return ClientForListData::collect(items: $clients, into: DataCollection::class);
     }
 }

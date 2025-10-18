@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\BelongsToWorkshop;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -46,8 +47,10 @@ class Client extends Model
         return $this->hasManyThrough(RepairOrder::class, Vehicle::class);
     }
 
-    public function getFullNameAttribute(): string
+    protected function name(): Attribute
     {
-        return trim("{$this->first_name} {$this->last_name}");
+        return Attribute::get(
+            fn () => $this->first_name.' '.$this->last_name
+        );
     }
 }
