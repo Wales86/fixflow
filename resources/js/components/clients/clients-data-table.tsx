@@ -191,7 +191,7 @@ export function ClientsDataTable({ tableData, filters }: App.Dto.Common.Filterab
                         )}
                     </TableBody>
                 </Table>
-                <DataTablePagination table={table} pagination={tableData} />
+                <DataTablePagination pagination={tableData} />
             </CardContent>
         </Card>
     );

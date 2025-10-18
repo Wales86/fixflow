@@ -7,6 +7,7 @@ use App\Dto\Vehicle\StoreVehicleData;
 use App\Dto\Vehicle\UpdateVehicleData;
 use App\Dto\Vehicle\VehicleData;
 use App\Dto\Vehicle\VehicleEditPagePropsData;
+use App\Exceptions\CannotDeleteVehicleWithActiveRepairOrdersException;
 use App\Models\Vehicle;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -69,5 +70,16 @@ class VehicleService
         $vehicle->update($data->all());
 
         return $vehicle->fresh();
+    }
+
+    public function deleteVehicle(Vehicle $vehicle): void
+    {
+        if ($vehicle->repairOrders()->exists()) {
+            throw new CannotDeleteVehicleWithActiveRepairOrdersException(
+                'Cannot delete vehicle with active repair orders.'
+            );
+        }
+
+        $vehicle->delete();
     }
 }

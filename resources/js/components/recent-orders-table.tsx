@@ -17,7 +17,7 @@ import { StatusBadge } from '@/components/status-badge';
 import { format } from 'date-fns';
 
 interface RecentOrdersTableProps {
-    orders: App.Dto.RecentOrderData[];
+    orders: App.Dto.Dashboard.RecentOrderData[];
 }
 
 export function RecentOrdersTable({ orders }: RecentOrdersTableProps) {

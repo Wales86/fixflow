@@ -200,7 +200,7 @@ export function VehiclesDataTable({ tableData, filters }: App.Dto.Common.Filtera
                         )}
                     </TableBody>
                 </Table>
-                <DataTablePagination table={table} pagination={tableData} />
+                <DataTablePagination pagination={tableData} />
             </CardContent>
         </Card>
     );

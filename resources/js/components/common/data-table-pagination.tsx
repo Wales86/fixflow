@@ -1,15 +1,17 @@
 import { Button } from '@/components/ui/button';
 import { router } from '@inertiajs/react';
-import type { Table } from '@tanstack/react-table';
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import {
+    ChevronLeft,
+    ChevronRight,
+    ChevronsLeft,
+    ChevronsRight,
+} from 'lucide-react';
 
 interface DataTablePaginationProps<TData> {
-    table: Table<TData>;
     pagination: PaginatedData<TData>;
 }
 
 export function DataTablePagination<TData>({
-    table,
     pagination,
 }: DataTablePaginationProps<TData>) {
     const handlePageChange = (page: number) => {

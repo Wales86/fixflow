@@ -1,6 +1,10 @@
+import { VehicleDetailsCard } from '@/components/vehicles/vehicle-details-card';
+import { RepairOrdersTable } from '@/components/vehicles/repair-orders-table';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 
 
 interface VehicleShowProps {
@@ -18,81 +22,48 @@ export default function VehicleShow({
             href: '/vehicles',
         },
         {
-            title: `${vehicle.year} ${vehicle.make} ${vehicle.model}`,
+            title: `${vehicle.make} ${vehicle.model} ${vehicle.year}`,
             href: `/vehicles/${vehicle.id}`,
         },
     ];
 
+    const handleEditClick = () => {
+        router.visit(`/vehicles/${vehicle.id}/edit`);
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={`${vehicle.year} ${vehicle.make} ${vehicle.model}`} />
+            <Head
+                title={`${vehicle.make} ${vehicle.model} ${vehicle.year}`}
+            />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="flex items-center justify-between">
                     <h1 className="text-2xl font-bold tracking-tight">
-                        {vehicle.year} {vehicle.make} {vehicle.model}
+                        {vehicle.make} {vehicle.model} {vehicle.year}
                     </h1>
+                    <Button onClick={handleEditClick}>Edytuj pojazd</Button>
                 </div>
 
-                <div className="grid gap-4 md:grid-cols-2">
-                    <div className="rounded-lg border bg-card p-4 text-card-foreground shadow-sm">
-                        <h2 className="mb-4 text-lg font-semibold">
+                <Tabs defaultValue="vehicle-details" className="w-full">
+                    <TabsList>
+                        <TabsTrigger value="vehicle-details">
                             Dane pojazdu
-                        </h2>
-                        <dl className="space-y-2">
-                            <div className="flex justify-between">
-                                <dt className="text-muted-foreground">
-                                    Numer rejestracyjny:
-                                </dt>
-                                <dd className="font-medium">
-                                    {vehicle.registration_number}
-                                </dd>
-                            </div>
-                            <div className="flex justify-between">
-                                <dt className="text-muted-foreground">VIN:</dt>
-                                <dd className="font-medium">{vehicle.vin}</dd>
-                            </div>
-                            <div className="flex justify-between">
-                                <dt className="text-muted-foreground">Rok:</dt>
-                                <dd className="font-medium">{vehicle.year}</dd>
-                            </div>
-                        </dl>
-                    </div>
-
-                    {vehicle.client && (
-                        <div className="rounded-lg border bg-card p-4 text-card-foreground shadow-sm">
-                            <h2 className="mb-4 text-lg font-semibold">
-                                Właściciel
-                            </h2>
-                            <dl className="space-y-2">
-                                <div className="flex justify-between">
-                                    <dt className="text-muted-foreground">
-                                        Imię:
-                                    </dt>
-                                    <dd className="font-medium">
-                                        {vehicle.client.first_name}
-                                    </dd>
-                                </div>
-                                <div className="flex justify-between">
-                                    <dt className="text-muted-foreground">
-                                        Nazwisko:
-                                    </dt>
-                                    <dd className="font-medium">
-                                        {vehicle.client.last_name}
-                                    </dd>
-                                </div>
-                            </dl>
-                        </div>
-                    )}
-                </div>
-
-                <div className="rounded-lg border bg-card p-4 text-card-foreground shadow-sm">
-                    <h2 className="mb-4 text-lg font-semibold">
-                        Historia napraw
-                    </h2>
-                    <p className="text-muted-foreground">
-                        Komponent tabeli napraw będzie tutaj (w następnym kroku)
-                    </p>
-                </div>
+                        </TabsTrigger>
+                        <TabsTrigger value="repair-history">
+                            Historia napraw
+                        </TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="vehicle-details">
+                        <VehicleDetailsCard vehicle={vehicle} />
+                    </TabsContent>
+                    <TabsContent value="repair-history">
+                        <RepairOrdersTable
+                            repairOrders={
+                                repair_orders as PaginatedData<App.Dto.RepairOrder.RepairOrderData>
+                            }
+                        />
+                    </TabsContent>
+                </Tabs>
             </div>
         </AppLayout>
     );

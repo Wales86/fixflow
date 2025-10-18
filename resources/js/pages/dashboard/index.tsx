@@ -1,4 +1,3 @@
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
@@ -14,9 +13,12 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-interface DashboardPageProps extends App.Dto.DashboardData {}
-
-export default function Dashboard({ activeOrdersCount, pendingOrdersCount, todayTimeEntriesTotal, recentOrders }: DashboardPageProps) {
+export default function Dashboard({
+    activeOrdersCount,
+    pendingOrdersCount,
+    todayTimeEntriesTotal,
+    recentOrders,
+}: App.Dto.Dashboard.DashboardData) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>

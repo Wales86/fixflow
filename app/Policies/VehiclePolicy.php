@@ -31,7 +31,8 @@ class VehiclePolicy
 
     public function delete(User $user, Vehicle $vehicle): bool
     {
-        return false;
+        return $user->workshop_id === $vehicle->workshop_id
+            && $user->hasAnyRole(['Owner']);
     }
 
     public function restore(User $user, Vehicle $vehicle): bool

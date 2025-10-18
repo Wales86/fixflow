@@ -8,6 +8,7 @@ use App\Dto\Vehicle\StoreVehicleData;
 use App\Dto\Vehicle\UpdateVehicleData;
 use App\Dto\Vehicle\VehicleData;
 use App\Dto\Vehicle\VehicleShowPagePropsData;
+use App\Exceptions\CannotDeleteVehicleWithActiveRepairOrdersException;
 use App\Http\Requests\Vehicle\VehicleIndexRequest;
 use App\Http\Requests\Vehicles\CreateVehicleRequest;
 use App\Http\Requests\Vehicles\StoreVehicleRequest;
@@ -94,5 +95,24 @@ class VehicleController extends Controller
         return redirect()
             ->route('vehicles.show', $vehicle)
             ->with('success', 'Pojazd został zaktualizowany');
+    }
+
+    public function destroy(Vehicle $vehicle): RedirectResponse
+    {
+        $this->authorize('delete', $vehicle);
+
+        $client = $vehicle->client;
+
+        try {
+            $this->vehicleService->deleteVehicle($vehicle);
+        } catch (CannotDeleteVehicleWithActiveRepairOrdersException) {
+            return redirect()
+                ->back()
+                ->with('error', 'Nie można usunąć pojazdu z aktywnymi zleceniami');
+        }
+
+        return redirect()
+            ->route('clients.show', $client)
+            ->with('success', 'Pojazd został usunięty');
     }
 }
