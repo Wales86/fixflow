@@ -25,7 +25,8 @@ class VehiclePolicy
 
     public function update(User $user, Vehicle $vehicle): bool
     {
-        return false;
+        return $user->workshop_id === $vehicle->workshop_id
+            && $user->hasAnyRole(['Owner', 'Office']);
     }
 
     public function delete(User $user, Vehicle $vehicle): bool

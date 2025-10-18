@@ -2,7 +2,6 @@
 
 namespace App\Dto\Common;
 
-use App\Dto\Common\FiltersData;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;

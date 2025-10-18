@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Dto\Common\FilterableTablePagePropsData;
 use App\Dto\Common\FiltersData;
 use App\Dto\Vehicle\StoreVehicleData;
+use App\Dto\Vehicle\UpdateVehicleData;
 use App\Dto\Vehicle\VehicleData;
 use App\Dto\Vehicle\VehicleShowPagePropsData;
 use App\Http\Requests\Vehicle\VehicleIndexRequest;
 use App\Http\Requests\Vehicles\CreateVehicleRequest;
 use App\Http\Requests\Vehicles\StoreVehicleRequest;
+use App\Http\Requests\Vehicles\UpdateVehicleRequest;
 use App\Models\Vehicle;
 use App\Services\ClientService;
 use App\Services\VehicleService;
@@ -72,5 +74,25 @@ class VehicleController extends Controller
         ]);
 
         return Inertia::render('vehicles/show', $props);
+    }
+
+    public function edit(Vehicle $vehicle): Response
+    {
+        $this->authorize('update', $vehicle);
+
+        $props = $this->vehicleService->prepareEditPageData($vehicle);
+
+        return Inertia::render('vehicles/edit', $props);
+    }
+
+    public function update(UpdateVehicleRequest $request, Vehicle $vehicle): RedirectResponse
+    {
+        $vehicleData = UpdateVehicleData::from($request->validated());
+
+        $this->vehicleService->update($vehicle, $vehicleData);
+
+        return redirect()
+            ->route('vehicles.show', $vehicle)
+            ->with('success', 'Pojazd został zaktualizowany');
     }
 }

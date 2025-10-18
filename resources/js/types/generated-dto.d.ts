@@ -11,10 +11,6 @@ address_postal_code: string | null;
 address_country: string | null;
 created_at: string;
 };
-export type ClientForListData = {
-id: number;
-name: string;
-};
 export type ClientListItemData = {
 id: number;
 first_name: string;
@@ -22,6 +18,10 @@ last_name: string | null;
 phone_number: string;
 email: string | null;
 vehicles_count: number;
+};
+export type ClientSelectOptionData = {
+id: number;
+name: string;
 };
 export type ClientShowPagePropsData = {
 client: App.Dto.Client.ClientData;
@@ -95,6 +95,14 @@ year: number;
 vin: string;
 registration_number: string;
 };
+export type UpdateVehicleData = {
+client_id: number;
+make: string;
+model: string;
+year: number;
+vin: string;
+registration_number: string;
+};
 export type VehicleClientData = {
 id: number;
 first_name: string;
@@ -102,6 +110,7 @@ last_name: string | null;
 };
 export type VehicleData = {
 id: number;
+client_id: number;
 make: string;
 model: string;
 year: number;
@@ -109,6 +118,10 @@ registration_number: string;
 vin: string;
 repair_orders_count: number | null;
 client: App.Dto.Vehicle.VehicleClientData | null;
+};
+export type VehicleEditPagePropsData = {
+vehicle: App.Dto.Vehicle.VehicleData;
+clients: Array<App.Dto.Client.ClientSelectOptionData>;
 };
 export type VehicleShowPagePropsData = {
 vehicle: App.Dto.Vehicle.VehicleData;

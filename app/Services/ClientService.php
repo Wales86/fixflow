@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Dto\Client\ClientData;
-use App\Dto\Client\ClientForListData;
 use App\Dto\Client\ClientListItemData;
+use App\Dto\Client\ClientSelectOptionData;
 use App\Dto\Client\ClientShowPagePropsData;
 use App\Dto\Client\StoreClientData;
 use App\Dto\Client\UpdateClientData;
@@ -93,6 +93,6 @@ class ClientService
             ->orderBy('first_name')
             ->get();
 
-        return ClientForListData::collect(items: $clients, into: DataCollection::class);
+        return ClientSelectOptionData::collect(items: $clients, into: DataCollection::class);
     }
 }

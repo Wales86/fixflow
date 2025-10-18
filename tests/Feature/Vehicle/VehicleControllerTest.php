@@ -826,3 +826,302 @@ test('storing vehicle validates registration_number max length is 20', function 
         ])
         ->assertSessionHasErrors('registration_number');
 });
+
+test('guests cannot access vehicle edit page', function () {
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
+
+    get(route('vehicles.edit', $vehicle))
+        ->assertRedirect(route('login'));
+});
+
+test('owner can access vehicle edit page from their workshop', function () {
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole('Owner');
+
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
+
+    actingAs($user)
+        ->get(route('vehicles.edit', $vehicle))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('vehicles/edit')
+            ->has('vehicle')
+            ->where('vehicle.id', $vehicle->id)
+            ->where('vehicle.client_id', $client->id)
+            ->where('vehicle.make', $vehicle->make)
+            ->where('vehicle.model', $vehicle->model)
+            ->where('vehicle.year', $vehicle->year)
+            ->where('vehicle.registration_number', $vehicle->registration_number)
+            ->where('vehicle.vin', $vehicle->vin)
+            ->has('clients')
+        );
+});
+
+test('office user can access vehicle edit page from their workshop', function () {
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole('Office');
+
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
+
+    actingAs($user)
+        ->get(route('vehicles.edit', $vehicle))
+        ->assertOk();
+});
+
+test('mechanic cannot access vehicle edit page', function () {
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole('Mechanic');
+
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
+
+    actingAs($user)
+        ->get(route('vehicles.edit', $vehicle))
+        ->assertForbidden();
+});
+
+test('user cannot access vehicle edit page from another workshop', function () {
+    $otherWorkshop = Workshop::factory()->create();
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole('Owner');
+
+    $client = Client::factory()->for($otherWorkshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($otherWorkshop)->create();
+
+    expect($user->can('update', $vehicle))->toBeFalse();
+});
+
+test('vehicle edit page includes list of clients from same workshop', function () {
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole('Owner');
+
+    $client1 = Client::factory()->for($this->workshop)->create([
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+    ]);
+    $client2 = Client::factory()->for($this->workshop)->create([
+        'first_name' => 'Jane',
+        'last_name' => 'Smith',
+    ]);
+
+    $vehicle = Vehicle::factory()->for($client1)->for($this->workshop)->create();
+
+    actingAs($user)
+        ->get(route('vehicles.edit', $vehicle))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('vehicles/edit')
+            ->has('clients', 2)
+            ->where('clients.0.id', $client1->id)
+            ->has('clients.0.name')
+        );
+});
+
+test('vehicle edit returns 404 for non-existent vehicle', function () {
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole('Owner');
+
+    actingAs($user)
+        ->get(route('vehicles.edit', 99999))
+        ->assertNotFound();
+});
+
+test('guests cannot update vehicle', function () {
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
+
+    $this->put(route('vehicles.update', $vehicle), [
+        'client_id' => $client->id,
+        'make' => 'Updated',
+        'model' => 'Model',
+        'year' => 2021,
+        'vin' => '1HGBH41JXMN109999',
+        'registration_number' => 'ABC123',
+    ])->assertRedirect(route('login'));
+});
+
+test('mechanic cannot update vehicle', function () {
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole('Mechanic');
+
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
+
+    actingAs($user)
+        ->put(route('vehicles.update', $vehicle), [
+            'client_id' => $client->id,
+            'make' => 'Updated',
+            'model' => 'Model',
+            'year' => 2021,
+            'vin' => '1HGBH41JXMN109999',
+            'registration_number' => 'ABC123',
+        ])
+        ->assertForbidden();
+});
+
+test('owner can update vehicle', function () {
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole('Owner');
+
+    $client1 = Client::factory()->for($this->workshop)->create();
+    $client2 = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client1)->for($this->workshop)->create([
+        'make' => 'Toyota',
+        'model' => 'Corolla',
+        'year' => 2020,
+        'vin' => '1HGBH41JXMN109186',
+        'registration_number' => 'ABC123',
+    ]);
+
+    actingAs($user)
+        ->put(route('vehicles.update', $vehicle), [
+            'client_id' => $client2->id,
+            'make' => 'Honda',
+            'model' => 'Civic',
+            'year' => 2021,
+            'vin' => '2HGFC2F59KH123456',
+            'registration_number' => 'XYZ789',
+        ])
+        ->assertRedirect(route('vehicles.show', $vehicle))
+        ->assertSessionHas('success', 'Pojazd został zaktualizowany');
+
+    $vehicle->refresh();
+    expect($vehicle->client_id)->toBe($client2->id);
+    expect($vehicle->make)->toBe('Honda');
+    expect($vehicle->model)->toBe('Civic');
+    expect($vehicle->year)->toBe(2021);
+    expect($vehicle->vin)->toBe('2HGFC2F59KH123456');
+    expect($vehicle->registration_number)->toBe('XYZ789');
+});
+
+test('office can update vehicle', function () {
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole('Office');
+
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create([
+        'make' => 'Toyota',
+        'model' => 'Corolla',
+    ]);
+
+    actingAs($user)
+        ->put(route('vehicles.update', $vehicle), [
+            'client_id' => $client->id,
+            'make' => 'Honda',
+            'model' => 'Civic',
+            'year' => 2021,
+            'vin' => $vehicle->vin,
+            'registration_number' => $vehicle->registration_number,
+        ])
+        ->assertRedirect(route('vehicles.show', $vehicle))
+        ->assertSessionHas('success');
+
+    expect($vehicle->fresh()->make)->toBe('Honda');
+});
+
+test('updating vehicle validates client_id is required', function () {
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole('Owner');
+
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
+
+    actingAs($user)
+        ->put(route('vehicles.update', $vehicle), [
+            'make' => 'Honda',
+            'model' => 'Civic',
+            'year' => 2021,
+            'vin' => '1HGBH41JXMN109999',
+            'registration_number' => 'ABC123',
+        ])
+        ->assertSessionHasErrors('client_id');
+});
+
+test('updating vehicle validates make is required', function () {
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole('Owner');
+
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
+
+    actingAs($user)
+        ->put(route('vehicles.update', $vehicle), [
+            'client_id' => $client->id,
+            'model' => 'Civic',
+            'year' => 2021,
+            'vin' => '1HGBH41JXMN109999',
+            'registration_number' => 'ABC123',
+        ])
+        ->assertSessionHasErrors('make');
+});
+
+test('updating vehicle validates vin must be unique within workshop', function () {
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole('Owner');
+
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle1 = Vehicle::factory()->for($client)->for($this->workshop)->create([
+        'vin' => '1HGBH41JXMN109186',
+    ]);
+    $vehicle2 = Vehicle::factory()->for($client)->for($this->workshop)->create([
+        'vin' => '2HGFC2F59KH123456',
+    ]);
+
+    actingAs($user)
+        ->put(route('vehicles.update', $vehicle2), [
+            'client_id' => $client->id,
+            'make' => 'Honda',
+            'model' => 'Civic',
+            'year' => 2021,
+            'vin' => '1HGBH41JXMN109186',
+            'registration_number' => 'ABC123',
+        ])
+        ->assertSessionHasErrors('vin');
+});
+
+test('updating vehicle allows keeping same vin', function () {
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole('Owner');
+
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create([
+        'vin' => '1HGBH41JXMN109186',
+        'make' => 'Toyota',
+    ]);
+
+    actingAs($user)
+        ->put(route('vehicles.update', $vehicle), [
+            'client_id' => $client->id,
+            'make' => 'Honda',
+            'model' => $vehicle->model,
+            'year' => $vehicle->year,
+            'vin' => '1HGBH41JXMN109186',
+            'registration_number' => $vehicle->registration_number,
+        ])
+        ->assertRedirect(route('vehicles.show', $vehicle))
+        ->assertSessionHas('success');
+
+    expect($vehicle->fresh()->make)->toBe('Honda');
+    expect($vehicle->fresh()->vin)->toBe('1HGBH41JXMN109186');
+});
+
+test('updating non-existent vehicle returns 404', function () {
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole('Owner');
+
+    $client = Client::factory()->for($this->workshop)->create();
+
+    actingAs($user)
+        ->put(route('vehicles.update', 99999), [
+            'client_id' => $client->id,
+            'make' => 'Honda',
+            'model' => 'Civic',
+            'year' => 2021,
+            'vin' => '1HGBH41JXMN109999',
+            'registration_number' => 'ABC123',
+        ])
+        ->assertNotFound();
+});

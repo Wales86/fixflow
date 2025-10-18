@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Dto\Client\ClientData;
 use App\Dto\Client\StoreClientData;
 use App\Dto\Client\UpdateClientData;
+use App\Dto\Common\FilterableTablePagePropsData;
 use App\Dto\Common\FiltersData;
 use App\Exceptions\CannotDeleteClientWithVehiclesException;
 use App\Http\Requests\Client\IndexClientRequest;
@@ -15,7 +16,6 @@ use App\Services\ClientService;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
-use App\Dto\Common\FilterableTablePagePropsData;
 
 class ClientController extends Controller
 {
