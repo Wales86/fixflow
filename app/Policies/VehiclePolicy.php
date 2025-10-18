@@ -14,7 +14,8 @@ class VehiclePolicy
 
     public function view(User $user, Vehicle $vehicle): bool
     {
-        return false;
+        return $user->workshop_id === $vehicle->workshop_id
+            && $user->hasAnyRole(['Owner', 'Office', 'Mechanic']);
     }
 
     public function create(User $user): bool

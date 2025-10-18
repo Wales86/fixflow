@@ -5,7 +5,7 @@ interface PaginationLink {
     active: boolean;
 }
 
-interface PaginatedResponse<T> {
+interface PaginatedData<T> {
     current_page: number;
     data: T[];
     first_page_url: string;

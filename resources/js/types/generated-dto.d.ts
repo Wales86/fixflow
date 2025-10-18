@@ -74,6 +74,18 @@ status: string;
 created_at: string;
 };
 }
+declare namespace App.Dto.RepairOrder {
+export type RepairOrderData = {
+id: number;
+vehicle_id: number;
+status: App.Enums.RepairOrderStatus;
+problem_description: string;
+started_at: string | null;
+finished_at: string | null;
+total_time_minutes: number;
+created_at: string;
+};
+}
 declare namespace App.Dto.Vehicle {
 export type StoreVehicleData = {
 client_id: number;
@@ -97,6 +109,10 @@ registration_number: string;
 vin: string;
 repair_orders_count: number | null;
 client: App.Dto.Vehicle.VehicleClientData | null;
+};
+export type VehicleShowPagePropsData = {
+vehicle: App.Dto.Vehicle.VehicleData;
+repair_orders: any;
 };
 }
 declare namespace App.Enums {

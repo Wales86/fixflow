@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Dto\RepairOrder\RepairOrderData;
 use App\Dto\Vehicle\StoreVehicleData;
 use App\Dto\Vehicle\VehicleData;
 use App\Models\Vehicle;
@@ -39,5 +40,13 @@ class VehicleService
 
         return $query->paginate(15)
             ->through(fn ($vehicle) => VehicleData::from($vehicle));
+    }
+
+    public function paginatedRepairHistory(Vehicle $vehicle): LengthAwarePaginator
+    {
+        return $vehicle->repairOrders()
+            ->latest('created_at')
+            ->paginate(15)
+            ->through(fn ($repairOrder) => RepairOrderData::from($repairOrder));
     }
 }
