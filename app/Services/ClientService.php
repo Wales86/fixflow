@@ -44,10 +44,7 @@ class ClientService
 
     public function create(StoreClientData $data): Client
     {
-        return Client::create([
-            ...$data->all(),
-            'workshop_id' => auth()->user()->workshop_id,
-        ]);
+        return Client::create($data->all());
     }
 
     public function update(Client $client, UpdateClientData $data): Client

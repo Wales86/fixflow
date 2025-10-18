@@ -22,6 +22,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('vehicles', [VehicleController::class, 'index'])->name('vehicles.index');
     Route::get('vehicles/create', [VehicleController::class, 'create'])->name('vehicles.create');
+    Route::post('vehicles', [VehicleController::class, 'store'])->name('vehicles.store');
 });
 
 require __DIR__.'/settings.php';

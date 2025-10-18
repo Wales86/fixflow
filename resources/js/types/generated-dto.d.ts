@@ -75,6 +75,14 @@ created_at: string;
 };
 }
 declare namespace App.Dto.Vehicle {
+export type StoreVehicleData = {
+client_id: number;
+make: string;
+model: string;
+year: number;
+vin: string;
+registration_number: string;
+};
 export type VehicleClientData = {
 id: number;
 first_name: string;

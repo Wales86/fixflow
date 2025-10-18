@@ -2,12 +2,18 @@
 
 namespace App\Services;
 
+use App\Dto\Vehicle\StoreVehicleData;
 use App\Dto\Vehicle\VehicleData;
 use App\Models\Vehicle;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class VehicleService
 {
+    public function store(StoreVehicleData $data): Vehicle
+    {
+        return Vehicle::create($data->all());
+    }
+
     public function paginatedList(array $filters = []): LengthAwarePaginator
     {
         $query = Vehicle::query()
