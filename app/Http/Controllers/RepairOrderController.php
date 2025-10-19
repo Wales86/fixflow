@@ -9,6 +9,7 @@ use App\Enums\RepairOrderStatus;
 use App\Http\Requests\RepairOrders\CreateRepairOrderRequest;
 use App\Http\Requests\RepairOrders\ListRepairOrdersRequest;
 use App\Http\Requests\RepairOrders\StoreRepairOrderRequest;
+use App\Models\RepairOrder;
 use App\Services\RepairOrderService;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -51,5 +52,14 @@ class RepairOrderController extends Controller
         return redirect()
             ->route('repair-orders.index')
             ->with('success', __('repair_orders.messages.created'));
+    }
+
+    public function edit(RepairOrder $repairOrder): Response
+    {
+        $this->authorize('update', $repairOrder);
+
+        $props = $this->repairOrderService->prepareDataForEditPage($repairOrder);
+
+        return Inertia::render('repair-orders/edit', $props);
     }
 }

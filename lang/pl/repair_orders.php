@@ -14,4 +14,11 @@ return [
     'messages' => [
         'created' => 'Zlecenie naprawy zostało dodane',
     ],
+
+    'pages' => [
+        'edit' => [
+            'title' => 'Edycja zlecenia naprawy',
+            'breadcrumb' => 'Edycja',
+        ],
+    ],
 ];

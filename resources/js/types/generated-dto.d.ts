@@ -58,6 +58,13 @@ search: string | null;
 sort: string | null;
 direction: string | null;
 };
+export type MediaData = {
+id: number;
+name: string;
+url: string;
+mime_type: string;
+size: number;
+};
 export type SelectOptionData = {
 value: string;
 label: string;
@@ -100,11 +107,23 @@ finished_at: string | null;
 total_time_minutes: number;
 created_at: string;
 };
+export type RepairOrderEditPagePropsData = {
+repairOrder: App.Dto.RepairOrder.RepairOrderFormData;
+vehicles: Array<App.Dto.RepairOrder.VehicleSelectionData>;
+statuses: Array<App.Dto.Common.SelectOptionData>;
+};
 export type RepairOrderFiltersData = {
 status: string | null;
 search: string | null;
 sort: string | null;
 direction: string | null;
+};
+export type RepairOrderFormData = {
+id: number;
+vehicle_id: number;
+status: App.Enums.RepairOrderStatus;
+problem_description: string;
+images: Array<App.Dto.Common.MediaData>;
 };
 export type RepairOrderIndexPagePropsData = {
 statusOptions: Array<any>;

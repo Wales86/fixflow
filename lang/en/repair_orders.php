@@ -14,4 +14,11 @@ return [
     'messages' => [
         'created' => 'Repair order has been created',
     ],
+
+    'pages' => [
+        'edit' => [
+            'title' => 'Edit repair order',
+            'breadcrumb' => 'Edit',
+        ],
+    ],
 ];

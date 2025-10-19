@@ -2,8 +2,11 @@
 
 namespace App\Services;
 
+use App\Dto\Common\MediaData;
 use App\Dto\Common\SelectOptionData;
 use App\Dto\RepairOrder\RepairOrderCreatePageData;
+use App\Dto\RepairOrder\RepairOrderEditPagePropsData;
+use App\Dto\RepairOrder\RepairOrderFormData;
 use App\Dto\RepairOrder\RepairOrderListItemData;
 use App\Dto\RepairOrder\StoreRepairOrderData;
 use App\Dto\RepairOrder\VehicleSelectionData;
@@ -74,12 +77,44 @@ class RepairOrderService
             'status' => RepairOrderStatus::New,
         ]);
 
-        if (!empty($data->attachments)) {
+        if (! empty($data->attachments)) {
             foreach ($data->attachments as $attachment) {
                 $repairOrder->addMedia($attachment)->toMediaCollection('images');
             }
         }
 
         return $repairOrder->fresh();
+    }
+
+    public function prepareDataForEditPage(RepairOrder $repairOrder): RepairOrderEditPagePropsData
+    {
+        $vehicles = Vehicle::query()
+            ->with('client')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $images = $repairOrder->getMedia('images')->map(function ($media) {
+            return new MediaData(
+                id: $media->id,
+                name: $media->name,
+                url: $media->getUrl(),
+                mime_type: $media->mime_type,
+                size: $media->size,
+            );
+        });
+
+        $repairOrderForm = new RepairOrderFormData(
+            id: $repairOrder->id,
+            vehicle_id: $repairOrder->vehicle_id,
+            status: $repairOrder->status,
+            problem_description: $repairOrder->problem_description,
+            images: MediaData::collect(items: $images, into: DataCollection::class),
+        );
+
+        return new RepairOrderEditPagePropsData(
+            repairOrder: $repairOrderForm,
+            vehicles: VehicleSelectionData::collect(items: $vehicles, into: DataCollection::class),
+            statuses: SelectOptionData::collect(items: RepairOrderStatus::options(), into: DataCollection::class),
+        );
     }
 }
