@@ -59,6 +59,15 @@ class RepairOrderController extends Controller
             ->with('success', __('repair_orders.messages.created'));
     }
 
+    public function show(RepairOrder $repairOrder): Response
+    {
+        $this->authorize('view', $repairOrder);
+
+        $props = $this->repairOrderService->prepareShowData($repairOrder);
+
+        return Inertia::render('repair-orders/show', $props);
+    }
+
     public function edit(RepairOrder $repairOrder): Response
     {
         $this->authorize('update', $repairOrder);

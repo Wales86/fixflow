@@ -32,6 +32,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('repair-orders', [RepairOrderController::class, 'index'])->name('repair-orders.index');
     Route::get('repair-orders/create', [RepairOrderController::class, 'create'])->name('repair-orders.create');
     Route::post('repair-orders', [RepairOrderController::class, 'store'])->name('repair-orders.store');
+    Route::get('repair-orders/{repairOrder}', [RepairOrderController::class, 'show'])->name('repair-orders.show');
     Route::get('repair-orders/{repairOrder}/edit', [RepairOrderController::class, 'edit'])->name('repair-orders.edit');
     Route::patch('repair-orders/{repairOrder}', [RepairOrderController::class, 'update'])->name('repair-orders.update');
     Route::patch('repair-orders/{repairOrder}/status', [RepairOrderController::class, 'updateStatus'])->name('repair-orders.update-status');

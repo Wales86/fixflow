@@ -49,6 +49,19 @@ address_country?: string;
 };
 }
 declare namespace App.Dto.Common {
+export type ActivityLogCauserData = {
+id: number;
+name: string;
+type: string;
+};
+export type ActivityLogData = {
+id: number;
+description: string;
+event: string | null;
+properties: Array<any> | null;
+created_at: string;
+causer: App.Dto.Common.ActivityLogCauserData | null;
+};
 export type FilterableTablePagePropsData = {
 tableData: any;
 filters: App.Dto.Common.FiltersData;
@@ -83,6 +96,23 @@ vehicle: string;
 client: string;
 status: string;
 created_at: string;
+};
+}
+declare namespace App.Dto.InternalNote {
+export type InternalNoteAuthorData = {
+id: number;
+first_name: string;
+last_name: string;
+type: string;
+};
+export type InternalNoteData = {
+id: number;
+repair_order_id: number;
+content: string;
+author_id: number;
+author_type: string;
+created_at: string;
+author: App.Dto.InternalNote.InternalNoteAuthorData | null;
 };
 }
 declare namespace App.Dto.RepairOrder {
@@ -141,6 +171,27 @@ created_at: string;
 vehicle: App.Dto.RepairOrder.RepairOrderVehicleData;
 client: App.Dto.RepairOrder.RepairOrderClientData;
 };
+export type RepairOrderShowData = {
+id: number;
+vehicle_id: number;
+status: App.Enums.RepairOrderStatus;
+problem_description: string;
+started_at: string | null;
+finished_at: string | null;
+total_time_minutes: number;
+created_at: string;
+vehicle: App.Dto.RepairOrder.RepairOrderVehicleData;
+client: App.Dto.RepairOrder.RepairOrderClientData;
+images: Array<App.Dto.Common.MediaData>;
+};
+export type RepairOrderShowPagePropsData = {
+order: App.Dto.RepairOrder.RepairOrderShowData;
+time_entries: Array<App.Dto.TimeTracking.TimeEntryData>;
+internal_notes: Array<App.Dto.InternalNote.InternalNoteData>;
+activity_log: Array<App.Dto.Common.ActivityLogData>;
+can_edit: boolean;
+can_delete: boolean;
+};
 export type RepairOrderVehicleData = {
 id: number;
 make: string;
@@ -164,6 +215,23 @@ id: number;
 display_name: string;
 registration_number: string;
 client_name: string;
+};
+}
+declare namespace App.Dto.TimeTracking {
+export type TimeEntryData = {
+id: number;
+repair_order_id: number;
+mechanic_id: number;
+duration_minutes: number;
+duration_hours: number;
+description: string | null;
+created_at: string;
+mechanic: App.Dto.TimeTracking.TimeEntryMechanicData | null;
+};
+export type TimeEntryMechanicData = {
+id: number;
+first_name: string;
+last_name: string;
 };
 }
 declare namespace App.Dto.Vehicle {
