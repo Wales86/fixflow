@@ -572,9 +572,9 @@
 
 ### 2.5 RepairOrderController
 
-#### List Active Orders
+#### List Orders
 - **Route:** `GET /repair-orders` → `repair-orders.index` → `RepairOrderController@index`
-- **Description:** List all active orders (filterable by status)
+- **Description:** List all orders (filterable by status)
 - **Proposed Authorization:** `RepairOrderPolicy::viewAny` (all authenticated users)
 - **Proposed React Component:** `pages/repair-orders/index`
 - **Component Props:**
