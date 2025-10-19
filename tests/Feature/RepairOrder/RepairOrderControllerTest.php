@@ -953,3 +953,143 @@ test('user without role cannot update repair order', function () {
         ])
         ->assertForbidden();
 });
+
+test('guests are redirected to login when attempting to update repair order status', function () {
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
+    $repairOrder = RepairOrder::factory()->for($vehicle)->for($this->workshop)->create();
+
+    patch(route('repair-orders.update-status', $repairOrder), [
+        'status' => RepairOrderStatus::InProgress->value,
+    ])->assertRedirect(route('login'));
+});
+
+test('user without proper role cannot update repair order status', function () {
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole('Mechanic');
+
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
+    $repairOrder = RepairOrder::factory()->for($vehicle)->for($this->workshop)->create();
+
+    actingAs($user)
+        ->patch(route('repair-orders.update-status', $repairOrder), [
+            'status' => RepairOrderStatus::InProgress->value,
+        ])
+        ->assertForbidden();
+});
+
+test('owner can update repair order status using dedicated endpoint', function () {
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole('Owner');
+
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
+    $repairOrder = RepairOrder::factory()->for($vehicle)->for($this->workshop)->create([
+        'status' => RepairOrderStatus::New,
+    ]);
+
+    actingAs($user)
+        ->patch(route('repair-orders.update-status', $repairOrder), [
+            'status' => RepairOrderStatus::InProgress->value,
+        ])
+        ->assertRedirect()
+        ->assertSessionHas('success', __('repair_orders.messages.status_updated'));
+
+    assertDatabaseHas('repair_orders', [
+        'id' => $repairOrder->id,
+        'status' => RepairOrderStatus::InProgress->value,
+    ]);
+});
+
+test('office can update repair order status using dedicated endpoint', function () {
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole('Office');
+
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
+    $repairOrder = RepairOrder::factory()->for($vehicle)->for($this->workshop)->create([
+        'status' => RepairOrderStatus::Diagnosis,
+    ]);
+
+    actingAs($user)
+        ->patch(route('repair-orders.update-status', $repairOrder), [
+            'status' => RepairOrderStatus::ReadyForPickup->value,
+        ])
+        ->assertRedirect()
+        ->assertSessionHas('success', __('repair_orders.messages.status_updated'));
+
+    assertDatabaseHas('repair_orders', [
+        'id' => $repairOrder->id,
+        'status' => RepairOrderStatus::ReadyForPickup->value,
+    ]);
+});
+
+test('updating status validates status is required', function () {
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole('Owner');
+
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
+    $repairOrder = RepairOrder::factory()->for($vehicle)->for($this->workshop)->create();
+
+    actingAs($user)
+        ->patch(route('repair-orders.update-status', $repairOrder), [])
+        ->assertSessionHasErrors('status');
+});
+
+test('updating status validates status must be valid enum value', function () {
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole('Owner');
+
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
+    $repairOrder = RepairOrder::factory()->for($vehicle)->for($this->workshop)->create();
+
+    actingAs($user)
+        ->patch(route('repair-orders.update-status', $repairOrder), [
+            'status' => 'invalid_status',
+        ])
+        ->assertSessionHasErrors('status');
+});
+
+test('user cannot update status of repair order from another workshop', function () {
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole('Owner');
+
+    $otherWorkshop = Workshop::factory()->create();
+    $otherClient = Client::factory()->for($otherWorkshop)->create();
+    $otherVehicle = Vehicle::factory()->for($otherClient)->for($otherWorkshop)->create();
+    $otherRepairOrder = RepairOrder::factory()->for($otherVehicle)->for($otherWorkshop)->create();
+
+    actingAs($user)
+        ->patch(route('repair-orders.update-status', $otherRepairOrder), [
+            'status' => RepairOrderStatus::Closed->value,
+        ])
+        ->assertNotFound();
+});
+
+test('update status returns 404 for non-existent repair order', function () {
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole('Owner');
+
+    actingAs($user)
+        ->patch(route('repair-orders.update-status', 99999), [
+            'status' => RepairOrderStatus::Closed->value,
+        ])
+        ->assertNotFound();
+});
+
+test('user without role cannot update repair order status', function () {
+    $user = User::factory()->for($this->workshop)->create();
+
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
+    $repairOrder = RepairOrder::factory()->for($vehicle)->for($this->workshop)->create();
+
+    actingAs($user)
+        ->patch(route('repair-orders.update-status', $repairOrder), [
+            'status' => RepairOrderStatus::InProgress->value,
+        ])
+        ->assertForbidden();
+});

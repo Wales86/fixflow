@@ -35,6 +35,12 @@ class RepairOrderPolicy
             && $user->hasAnyRole(['Owner']);
     }
 
+    public function updateStatus(User $user, RepairOrder $repairOrder): bool
+    {
+        return $user->workshop_id === $repairOrder->workshop_id
+            && $user->hasAnyRole(['Owner', 'Office']);
+    }
+
     public function restore(User $user, RepairOrder $repairOrder): bool
     {
         return false;

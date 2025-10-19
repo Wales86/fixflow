@@ -14,6 +14,8 @@ return [
     'messages' => [
         'created' => 'Zlecenie naprawy zostało dodane',
         'updated' => 'Zlecenie naprawy zostało zaktualizowane',
+        'status_updated' => 'Status zlecenia został zmieniony',
+        'status_update_failed' => 'Nie udało się zmienić statusu',
     ],
 
     'pages' => [

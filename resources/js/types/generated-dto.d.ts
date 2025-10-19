@@ -156,6 +156,9 @@ export type UpdateRepairOrderData = {
 description: string | null;
 status: App.Enums.RepairOrderStatus | null;
 };
+export type UpdateRepairOrderStatusData = {
+status: App.Enums.RepairOrderStatus;
+};
 export type VehicleSelectionData = {
 id: number;
 display_name: string;

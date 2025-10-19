@@ -6,11 +6,13 @@ use App\Dto\RepairOrder\RepairOrderFiltersData;
 use App\Dto\RepairOrder\RepairOrderIndexPagePropsData;
 use App\Dto\RepairOrder\StoreRepairOrderData;
 use App\Dto\RepairOrder\UpdateRepairOrderData;
+use App\Dto\RepairOrder\UpdateRepairOrderStatusData;
 use App\Enums\RepairOrderStatus;
 use App\Http\Requests\RepairOrders\CreateRepairOrderRequest;
 use App\Http\Requests\RepairOrders\ListRepairOrdersRequest;
 use App\Http\Requests\RepairOrders\StoreRepairOrderRequest;
 use App\Http\Requests\RepairOrders\UpdateRepairOrderRequest;
+use App\Http\Requests\RepairOrders\UpdateRepairOrderStatusRequest;
 use App\Models\RepairOrder;
 use App\Services\RepairOrderService;
 use Illuminate\Http\RedirectResponse;
@@ -74,5 +76,16 @@ class RepairOrderController extends Controller
         return redirect()
             ->route('repair-orders.index')
             ->with('success', __('repair_orders.messages.updated'));
+    }
+
+    public function updateStatus(UpdateRepairOrderStatusRequest $request, RepairOrder $repairOrder): RedirectResponse
+    {
+        $statusData = UpdateRepairOrderStatusData::from($request->validated());
+
+        $this->repairOrderService->updateStatus($repairOrder, $statusData);
+
+        return redirect()
+            ->back()
+            ->with('success', __('repair_orders.messages.status_updated'));
     }
 }

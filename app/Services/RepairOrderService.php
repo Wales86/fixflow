@@ -10,6 +10,7 @@ use App\Dto\RepairOrder\RepairOrderFormData;
 use App\Dto\RepairOrder\RepairOrderListItemData;
 use App\Dto\RepairOrder\StoreRepairOrderData;
 use App\Dto\RepairOrder\UpdateRepairOrderData;
+use App\Dto\RepairOrder\UpdateRepairOrderStatusData;
 use App\Dto\RepairOrder\VehicleSelectionData;
 use App\Enums\RepairOrderStatus;
 use App\Models\RepairOrder;
@@ -132,6 +133,15 @@ class RepairOrderService
         }
 
         $repairOrder->update($updateData);
+
+        return $repairOrder->fresh();
+    }
+
+    public function updateStatus(RepairOrder $repairOrder, UpdateRepairOrderStatusData $data): RepairOrder
+    {
+        $repairOrder->update([
+            'status' => $data->status,
+        ]);
 
         return $repairOrder->fresh();
     }

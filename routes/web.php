@@ -34,6 +34,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('repair-orders', [RepairOrderController::class, 'store'])->name('repair-orders.store');
     Route::get('repair-orders/{repairOrder}/edit', [RepairOrderController::class, 'edit'])->name('repair-orders.edit');
     Route::patch('repair-orders/{repairOrder}', [RepairOrderController::class, 'update'])->name('repair-orders.update');
+    Route::patch('repair-orders/{repairOrder}/status', [RepairOrderController::class, 'updateStatus'])->name('repair-orders.update-status');
 });
 
 require __DIR__.'/settings.php';

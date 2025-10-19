@@ -14,6 +14,8 @@ return [
     'messages' => [
         'created' => 'Repair order has been created',
         'updated' => 'Repair order has been updated',
+        'status_updated' => 'Order status has been changed',
+        'status_update_failed' => 'Failed to change status',
     ],
 
     'pages' => [
