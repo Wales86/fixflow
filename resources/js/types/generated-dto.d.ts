@@ -128,6 +128,11 @@ make: string;
 model: string;
 registration_number: string;
 };
+export type StoreRepairOrderData = {
+vehicle_id: number;
+description: string;
+attachments: Array<any> | null;
+};
 export type VehicleSelectionData = {
 id: number;
 display_name: string;

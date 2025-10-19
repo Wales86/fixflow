@@ -10,4 +10,8 @@ return [
         'ready_for_pickup' => 'Ready for Pickup',
         'closed' => 'Closed',
     ],
+
+    'messages' => [
+        'created' => 'Repair order has been created',
+    ],
 ];

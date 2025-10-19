@@ -10,4 +10,8 @@ return [
         'ready_for_pickup' => 'Gotowe do odbioru',
         'closed' => 'Zamknięte',
     ],
+
+    'messages' => [
+        'created' => 'Zlecenie naprawy zostało dodane',
+    ],
 ];

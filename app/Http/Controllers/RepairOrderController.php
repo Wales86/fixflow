@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Dto\RepairOrder\RepairOrderFiltersData;
 use App\Dto\RepairOrder\RepairOrderIndexPagePropsData;
+use App\Dto\RepairOrder\StoreRepairOrderData;
 use App\Enums\RepairOrderStatus;
 use App\Http\Requests\RepairOrders\CreateRepairOrderRequest;
 use App\Http\Requests\RepairOrders\ListRepairOrdersRequest;
+use App\Http\Requests\RepairOrders\StoreRepairOrderRequest;
 use App\Services\RepairOrderService;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -37,5 +40,16 @@ class RepairOrderController extends Controller
         );
 
         return Inertia::render('repair-orders/create', $props);
+    }
+
+    public function store(StoreRepairOrderRequest $request): RedirectResponse
+    {
+        $repairOrderData = StoreRepairOrderData::from($request->validated());
+
+        $this->repairOrderService->store($repairOrderData);
+
+        return redirect()
+            ->route('repair-orders.index')
+            ->with('success', __('repair_orders.messages.created'));
     }
 }

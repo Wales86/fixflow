@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Dto\Common\SelectOptionData;
 use App\Dto\RepairOrder\RepairOrderCreatePageData;
 use App\Dto\RepairOrder\RepairOrderListItemData;
+use App\Dto\RepairOrder\StoreRepairOrderData;
 use App\Dto\RepairOrder\VehicleSelectionData;
 use App\Enums\RepairOrderStatus;
 use App\Models\RepairOrder;
@@ -63,5 +64,22 @@ class RepairOrderService
             statuses: SelectOptionData::collect(items: RepairOrderStatus::options(), into: DataCollection::class),
             preselected_vehicle_id: $preselectedVehicleId,
         );
+    }
+
+    public function store(StoreRepairOrderData $data): RepairOrder
+    {
+        $repairOrder = RepairOrder::create([
+            'vehicle_id' => $data->vehicle_id,
+            'problem_description' => $data->description,
+            'status' => RepairOrderStatus::New,
+        ]);
+
+        if (!empty($data->attachments)) {
+            foreach ($data->attachments as $attachment) {
+                $repairOrder->addMedia($attachment)->toMediaCollection('images');
+            }
+        }
+
+        return $repairOrder->fresh();
     }
 }
