@@ -16,6 +16,8 @@ return [
         'updated' => 'Repair order has been updated',
         'status_updated' => 'Order status has been changed',
         'status_update_failed' => 'Failed to change status',
+        'deleted' => 'Repair order has been deleted',
+        'cannot_delete_with_time_entries' => 'Cannot delete repair order with time entries',
     ],
 
     'pages' => [

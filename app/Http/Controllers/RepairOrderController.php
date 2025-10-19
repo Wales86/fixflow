@@ -8,6 +8,7 @@ use App\Dto\RepairOrder\StoreRepairOrderData;
 use App\Dto\RepairOrder\UpdateRepairOrderData;
 use App\Dto\RepairOrder\UpdateRepairOrderStatusData;
 use App\Enums\RepairOrderStatus;
+use App\Exceptions\CannotDeleteRepairOrderWithTimeEntriesException;
 use App\Http\Requests\RepairOrders\CreateRepairOrderRequest;
 use App\Http\Requests\RepairOrders\ListRepairOrdersRequest;
 use App\Http\Requests\RepairOrders\StoreRepairOrderRequest;
@@ -87,5 +88,22 @@ class RepairOrderController extends Controller
         return redirect()
             ->back()
             ->with('success', __('repair_orders.messages.status_updated'));
+    }
+
+    public function destroy(RepairOrder $repairOrder): RedirectResponse
+    {
+        $this->authorize('delete', $repairOrder);
+
+        try {
+            $this->repairOrderService->deleteRepairOrder($repairOrder);
+        } catch (CannotDeleteRepairOrderWithTimeEntriesException) {
+            return redirect()
+                ->back()
+                ->with('error', __('repair_orders.messages.cannot_delete_with_time_entries'));
+        }
+
+        return redirect()
+            ->route('repair-orders.index')
+            ->with('success', __('repair_orders.messages.deleted'));
     }
 }

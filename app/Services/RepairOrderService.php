@@ -13,6 +13,7 @@ use App\Dto\RepairOrder\UpdateRepairOrderData;
 use App\Dto\RepairOrder\UpdateRepairOrderStatusData;
 use App\Dto\RepairOrder\VehicleSelectionData;
 use App\Enums\RepairOrderStatus;
+use App\Exceptions\CannotDeleteRepairOrderWithTimeEntriesException;
 use App\Models\RepairOrder;
 use App\Models\Vehicle;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -144,5 +145,19 @@ class RepairOrderService
         ]);
 
         return $repairOrder->fresh();
+    }
+
+    /**
+     * @throws CannotDeleteRepairOrderWithTimeEntriesException
+     */
+    public function deleteRepairOrder(RepairOrder $repairOrder): void
+    {
+        if ($repairOrder->timeEntries()->exists()) {
+            throw new CannotDeleteRepairOrderWithTimeEntriesException(
+                'Cannot delete repair order with time entries.'
+            );
+        }
+
+        $repairOrder->delete();
     }
 }

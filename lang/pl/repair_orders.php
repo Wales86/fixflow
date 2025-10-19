@@ -16,6 +16,8 @@ return [
         'updated' => 'Zlecenie naprawy zostało zaktualizowane',
         'status_updated' => 'Status zlecenia został zmieniony',
         'status_update_failed' => 'Nie udało się zmienić statusu',
+        'deleted' => 'Zlecenie naprawy zostało usunięte',
+        'cannot_delete_with_time_entries' => 'Nie można usunąć zlecenia z wpisami czasu',
     ],
 
     'pages' => [
