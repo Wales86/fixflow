@@ -152,6 +152,10 @@ vehicle_id: number;
 description: string;
 attachments: Array<any> | null;
 };
+export type UpdateRepairOrderData = {
+description: string | null;
+status: App.Enums.RepairOrderStatus | null;
+};
 export type VehicleSelectionData = {
 id: number;
 display_name: string;

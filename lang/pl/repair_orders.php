@@ -13,6 +13,7 @@ return [
 
     'messages' => [
         'created' => 'Zlecenie naprawy zostało dodane',
+        'updated' => 'Zlecenie naprawy zostało zaktualizowane',
     ],
 
     'pages' => [

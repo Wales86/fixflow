@@ -13,6 +13,7 @@ return [
 
     'messages' => [
         'created' => 'Repair order has been created',
+        'updated' => 'Repair order has been updated',
     ],
 
     'pages' => [

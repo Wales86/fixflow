@@ -9,6 +9,7 @@ use App\Dto\RepairOrder\RepairOrderEditPagePropsData;
 use App\Dto\RepairOrder\RepairOrderFormData;
 use App\Dto\RepairOrder\RepairOrderListItemData;
 use App\Dto\RepairOrder\StoreRepairOrderData;
+use App\Dto\RepairOrder\UpdateRepairOrderData;
 use App\Dto\RepairOrder\VehicleSelectionData;
 use App\Enums\RepairOrderStatus;
 use App\Models\RepairOrder;
@@ -116,5 +117,22 @@ class RepairOrderService
             vehicles: VehicleSelectionData::collect(items: $vehicles, into: DataCollection::class),
             statuses: SelectOptionData::collect(items: RepairOrderStatus::options(), into: DataCollection::class),
         );
+    }
+
+    public function update(RepairOrder $repairOrder, UpdateRepairOrderData $data): RepairOrder
+    {
+        $updateData = [];
+
+        if ($data->description !== null) {
+            $updateData['problem_description'] = $data->description;
+        }
+
+        if ($data->status !== null) {
+            $updateData['status'] = $data->status;
+        }
+
+        $repairOrder->update($updateData);
+
+        return $repairOrder->fresh();
     }
 }
