@@ -14,15 +14,7 @@ enum RepairOrderStatus: string
 
     public function label(): string
     {
-        return match ($this) {
-            self::New => 'Nowe',
-            self::Diagnosis => 'Diagnoza',
-            self::AwaitingContact => 'Wymaga kontaktu',
-            self::AwaitingParts => 'Czeka na części',
-            self::InProgress => 'W naprawie',
-            self::ReadyForPickup => 'Gotowe do odbioru',
-            self::Closed => 'Zamknięte',
-        };
+        return __("repair_orders.statuses.{$this->value}");
     }
 
     public static function options(): array

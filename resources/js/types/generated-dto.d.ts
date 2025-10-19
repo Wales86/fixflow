@@ -75,6 +75,12 @@ created_at: string;
 };
 }
 declare namespace App.Dto.RepairOrder {
+export type RepairOrderClientData = {
+id: number;
+first_name: string;
+last_name: string | null;
+phone_number: string;
+};
 export type RepairOrderData = {
 id: number;
 vehicle_id: number;
@@ -84,6 +90,34 @@ started_at: string | null;
 finished_at: string | null;
 total_time_minutes: number;
 created_at: string;
+};
+export type RepairOrderFiltersData = {
+status: string | null;
+search: string | null;
+sort: string | null;
+direction: string | null;
+};
+export type RepairOrderIndexPagePropsData = {
+statusOptions: Array<any>;
+tableData: any;
+filters: App.Dto.Common.FiltersData;
+};
+export type RepairOrderListItemData = {
+id: number;
+status: App.Enums.RepairOrderStatus;
+problem_description: string;
+started_at: string | null;
+finished_at: string | null;
+total_time_minutes: number;
+created_at: string;
+vehicle: App.Dto.RepairOrder.RepairOrderVehicleData;
+client: App.Dto.RepairOrder.RepairOrderClientData;
+};
+export type RepairOrderVehicleData = {
+id: number;
+make: string;
+model: string;
+registration_number: string;
 };
 }
 declare namespace App.Dto.Vehicle {
