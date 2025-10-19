@@ -58,6 +58,10 @@ search: string | null;
 sort: string | null;
 direction: string | null;
 };
+export type SelectOptionData = {
+value: string;
+label: string;
+};
 }
 declare namespace App.Dto.Dashboard {
 export type DashboardData = {
@@ -80,6 +84,11 @@ id: number;
 first_name: string;
 last_name: string | null;
 phone_number: string;
+};
+export type RepairOrderCreatePageData = {
+vehicles: Array<App.Dto.RepairOrder.VehicleSelectionData>;
+statuses: Array<App.Dto.Common.SelectOptionData>;
+preselected_vehicle_id: number | null;
 };
 export type RepairOrderData = {
 id: number;
@@ -118,6 +127,12 @@ id: number;
 make: string;
 model: string;
 registration_number: string;
+};
+export type VehicleSelectionData = {
+id: number;
+display_name: string;
+registration_number: string;
+client_name: string;
 };
 }
 declare namespace App.Dto.Vehicle {

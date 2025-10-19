@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Dto\RepairOrder\RepairOrderFiltersData;
 use App\Dto\RepairOrder\RepairOrderIndexPagePropsData;
 use App\Enums\RepairOrderStatus;
+use App\Http\Requests\RepairOrders\CreateRepairOrderRequest;
 use App\Http\Requests\RepairOrders\ListRepairOrdersRequest;
 use App\Services\RepairOrderService;
 use Inertia\Inertia;
@@ -27,5 +28,14 @@ class RepairOrderController extends Controller
         ]);
 
         return Inertia::render('repair-orders/index', $props);
+    }
+
+    public function create(CreateRepairOrderRequest $request): Response
+    {
+        $props = $this->repairOrderService->createFormData(
+            preselectedVehicleId: $request->validated('preselected_vehicle_id')
+        );
+
+        return Inertia::render('repair-orders/create', $props);
     }
 }

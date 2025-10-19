@@ -2,9 +2,15 @@
 
 namespace App\Services;
 
+use App\Dto\Common\SelectOptionData;
+use App\Dto\RepairOrder\RepairOrderCreatePageData;
 use App\Dto\RepairOrder\RepairOrderListItemData;
+use App\Dto\RepairOrder\VehicleSelectionData;
+use App\Enums\RepairOrderStatus;
 use App\Models\RepairOrder;
+use App\Models\Vehicle;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Spatie\LaravelData\DataCollection;
 
 class RepairOrderService
 {
@@ -43,5 +49,19 @@ class RepairOrderService
 
         return $query->paginate(15)
             ->through(fn ($repairOrder) => RepairOrderListItemData::from($repairOrder));
+    }
+
+    public function createFormData(?int $preselectedVehicleId = null): RepairOrderCreatePageData
+    {
+        $vehicles = Vehicle::query()
+            ->with('client')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return new RepairOrderCreatePageData(
+            vehicles: VehicleSelectionData::collect(items: $vehicles, into: DataCollection::class),
+            statuses: SelectOptionData::collect(items: RepairOrderStatus::options(), into: DataCollection::class),
+            preselected_vehicle_id: $preselectedVehicleId,
+        );
     }
 }

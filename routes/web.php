@@ -30,6 +30,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('vehicles/{vehicle}', [VehicleController::class, 'destroy'])->name('vehicles.destroy');
 
     Route::get('repair-orders', [RepairOrderController::class, 'index'])->name('repair-orders.index');
+    Route::get('repair-orders/create', [RepairOrderController::class, 'create'])->name('repair-orders.create');
 });
 
 require __DIR__.'/settings.php';
