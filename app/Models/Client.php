@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Client extends Model
@@ -45,6 +46,11 @@ class Client extends Model
     public function repairOrders(): HasManyThrough
     {
         return $this->hasManyThrough(RepairOrder::class, Vehicle::class);
+    }
+
+    public function internalNotes(): MorphMany
+    {
+        return $this->morphMany(InternalNote::class, 'notable');
     }
 
     protected function name(): Attribute

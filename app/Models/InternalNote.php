@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class InternalNote extends Model
@@ -12,7 +11,8 @@ class InternalNote extends Model
     use HasFactory;
 
     protected $fillable = [
-        'repair_order_id',
+        'notable_type',
+        'notable_id',
         'content',
         'author_id',
         'author_type',
@@ -23,9 +23,9 @@ class InternalNote extends Model
         return [];
     }
 
-    public function repairOrder(): BelongsTo
+    public function notable(): MorphTo
     {
-        return $this->belongsTo(RepairOrder::class);
+        return $this->morphTo();
     }
 
     public function author(): MorphTo

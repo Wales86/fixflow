@@ -106,12 +106,18 @@ type: string;
 };
 export type InternalNoteData = {
 id: number;
-repair_order_id: number;
+notable_type: string;
+notable_id: number;
 content: string;
 author_id: number;
 author_type: string;
 created_at: string;
 author: App.Dto.InternalNote.InternalNoteAuthorData | null;
+};
+export type StoreInternalNoteData = {
+notable_type: string;
+notable_id: number;
+content: string;
 };
 }
 declare namespace App.Dto.RepairOrder {

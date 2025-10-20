@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\InternalNoteController;
 use App\Http\Controllers\RepairOrderController;
 use App\Http\Controllers\VehicleController;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('repair-orders/{repairOrder}', [RepairOrderController::class, 'update'])->name('repair-orders.update');
     Route::patch('repair-orders/{repairOrder}/status', [RepairOrderController::class, 'updateStatus'])->name('repair-orders.update-status');
     Route::delete('repair-orders/{repairOrder}', [RepairOrderController::class, 'destroy'])->name('repair-orders.destroy');
+
+    Route::post('internal-notes', [InternalNoteController::class, 'store'])->name('internal-notes.store');
 });
 
 require __DIR__.'/settings.php';

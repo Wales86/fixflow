@@ -2,6 +2,7 @@ import { InertiaLinkProps } from '@inertiajs/react';
 import { LucideIcon } from 'lucide-react';
 
 export * from './generated-dto';
+export * from './notable-type';
 
 export interface Auth {
     user: User;

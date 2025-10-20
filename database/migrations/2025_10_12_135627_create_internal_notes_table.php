@@ -13,12 +13,10 @@ return new class extends Migration
     {
         Schema::create('internal_notes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('repair_order_id')->constrained('repair_orders');
+            $table->morphs('notable');
             $table->text('content');
             $table->morphs('author');
             $table->timestamps();
-
-            $table->index('repair_order_id');
         });
     }
 

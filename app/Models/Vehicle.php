@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Vehicle extends Model
@@ -43,6 +44,11 @@ class Vehicle extends Model
     public function repairOrders(): HasMany
     {
         return $this->hasMany(RepairOrder::class);
+    }
+
+    public function internalNotes(): MorphMany
+    {
+        return $this->morphMany(InternalNote::class, 'notable');
     }
 
     public function getDisplayNameAttribute(): string

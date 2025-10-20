@@ -11,7 +11,8 @@ class InternalNoteData extends Data
 {
     public function __construct(
         public int $id,
-        public int $repair_order_id,
+        public string $notable_type,
+        public int $notable_id,
         public string $content,
         public int $author_id,
         public string $author_type,
@@ -23,7 +24,8 @@ class InternalNoteData extends Data
     {
         return new self(
             id: $note->id,
-            repair_order_id: $note->repair_order_id,
+            notable_type: $note->notable_type,
+            notable_id: $note->notable_id,
             content: $note->content,
             author_id: $note->author_id,
             author_type: $note->author_type,

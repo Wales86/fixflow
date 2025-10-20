@@ -8,7 +8,7 @@ import { RepairOrderHeader } from '@/components/repair-orders/repair-order-heade
 import { RepairOrderTabs } from '@/components/repair-orders/repair-order-tabs';
 import { UpdateStatusDialog } from '@/components/repair-orders/update-status-dialog';
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem, NotableType } from '@/types';
 
 export default function RepairOrderShow({
     order,
@@ -61,7 +61,8 @@ export default function RepairOrderShow({
             />
 
             <AddNoteDialog
-                repairOrderId={order.id}
+                notableType={NotableType.RepairOrder}
+                notableId={order.id}
                 isOpen={isNoteDialogOpen}
                 onClose={() => setNoteDialogOpen(false)}
             />

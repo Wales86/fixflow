@@ -12,28 +12,33 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { NotableType } from '@/types';
 
 interface AddNoteDialogProps {
-    repairOrderId: number;
+    notableType: NotableType;
+    notableId: number;
     isOpen: boolean;
     onClose: () => void;
 }
 
 export function AddNoteDialog({
-    repairOrderId,
+    notableType,
+    notableId,
     isOpen,
     onClose,
 }: AddNoteDialogProps) {
     const { t } = useLaravelReactI18n();
 
     const { data, setData, post, processing, errors, reset } = useForm({
+        notable_type: notableType,
+        notable_id: notableId,
         content: '',
     });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        post(`/repair-orders/${repairOrderId}/internal-notes`, {
+        post('/internal-notes', {
             preserveScroll: true,
             onSuccess: () => {
                 reset();

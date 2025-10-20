@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -72,9 +73,9 @@ class RepairOrder extends Model implements HasMedia
         return $this->hasMany(TimeEntry::class);
     }
 
-    public function internalNotes(): HasMany
+    public function internalNotes(): MorphMany
     {
-        return $this->hasMany(InternalNote::class);
+        return $this->morphMany(InternalNote::class, 'notable');
     }
 
     public function getTotalTimeMinutesAttribute(): int
