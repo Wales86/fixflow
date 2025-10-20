@@ -1,40 +1,40 @@
 import { Head } from '@inertiajs/react';
+import { useLaravelReactI18n } from 'laravel-react-i18n';
 
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Zlecenia naprawcze',
-        href: '/repair-orders',
-    },
-    {
-        title: 'Nowe zlecenie',
-        href: '/repair-orders/create',
-    },
-];
+import { RepairOrderForm } from '@/components/repair-orders/repair-order-form';
 
 export default function RepairOrdersCreate({
     vehicles,
     statuses,
     preselected_vehicle_id,
 }: App.Dto.RepairOrder.RepairOrderCreatePageData) {
+    const { t } = useLaravelReactI18n();
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: t('repair_orders'),
+            href: '/repair-orders',
+        },
+        {
+            title: t('new_repair_order'),
+            href: '/repair-orders/create',
+        },
+    ];
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Dodaj Nowe Zlecenie Naprawcze" />
+            <Head title={t('new_repair_order')} />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <h1 className="text-2xl font-bold tracking-tight">
-                    Dodaj Nowe Zlecenie Naprawcze
+                    {t('new_repair_order')}
                 </h1>
-                <div>
-                    <p className="text-muted-foreground">
-                        Komponent w budowie. Otrzymane dane: {vehicles.length}{' '}
-                        pojazdów, {statuses.length} opcji statusów
-                        {preselected_vehicle_id &&
-                            `, preselekcja pojazdu #${preselected_vehicle_id}`}
-                        .
-                    </p>
-                </div>
+                <RepairOrderForm
+                    vehicles={vehicles}
+                    statuses={statuses}
+                    preselectedVehicleId={preselected_vehicle_id}
+                />
             </div>
         </AppLayout>
     );
