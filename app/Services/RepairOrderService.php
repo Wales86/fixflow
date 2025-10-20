@@ -51,7 +51,13 @@ class RepairOrderService
 
         if (! empty($filters['sort'])) {
             $direction = $filters['direction'] ?? 'asc';
-            $query->orderBy($filters['sort'], $direction);
+
+            if ($filters['sort'] === 'total_time_minutes') {
+                $query->withSum('timeEntries as total_time_minutes', 'duration_minutes')
+                    ->orderBy('total_time_minutes', $direction);
+            } else {
+                $query->orderBy($filters['sort'], $direction);
+            }
         } else {
             $query->latest('created_at');
         }

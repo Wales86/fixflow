@@ -6,6 +6,48 @@ interface DataTableFilters {
     search: string | null;
     sort: string | null;
     direction: string | null;
+    [key: string]: string | null;
+}
+
+function buildQueryParams(
+    search: string,
+    sort: string | null,
+    direction: string | null,
+    additionalFilters: Record<string, string | null>
+): Record<string, string> {
+    const params: Record<string, string> = {};
+
+    if (search) {
+        params.search = search;
+    }
+
+    if (sort) {
+        params.sort = sort;
+    }
+
+    if (direction) {
+        params.direction = direction;
+    }
+
+    for (const [key, value] of Object.entries(additionalFilters)) {
+        if (value) {
+            params[key] = value;
+        }
+    }
+
+    return params;
+}
+
+function extractAdditionalFilters(filters: DataTableFilters): Record<string, string | null> {
+    const additionalFilters: Record<string, string | null> = {};
+
+    for (const [key, value] of Object.entries(filters)) {
+        if (key !== 'search' && key !== 'sort' && key !== 'direction') {
+            additionalFilters[key] = value;
+        }
+    }
+
+    return additionalFilters;
 }
 
 export function useDataTableFilters(initialFilters: DataTableFilters) {
@@ -14,20 +56,17 @@ export function useDataTableFilters(initialFilters: DataTableFilters) {
     const [currentDirection, setCurrentDirection] = useState(
         initialFilters.direction,
     );
+    const [additionalFilters, setAdditionalFilters] = useState<Record<string, string | null>>(
+        extractAdditionalFilters(initialFilters)
+    );
 
-    const debouncedSearch = useDebouncedCallback((value: string) => {
-        router.get(
-            window.location.pathname,
-            {
-                search: value || undefined,
-                sort: currentSort || undefined,
-                direction: currentDirection || undefined,
-            },
-            {
-                preserveState: true,
-                replace: true,
-            },
-        );
+    const debouncedSearch = useDebouncedCallback((searchValue: string) => {
+        const params = buildQueryParams(searchValue, currentSort, currentDirection, additionalFilters);
+
+        router.get(window.location.pathname, params, {
+            preserveState: true,
+            replace: true,
+        });
     }, 300);
 
     const handleSearch = (value: string) => {
@@ -45,18 +84,28 @@ export function useDataTableFilters(initialFilters: DataTableFilters) {
         setCurrentSort(columnId);
         setCurrentDirection(newDirection);
 
-        router.get(
-            window.location.pathname,
-            {
-                search: search || undefined,
-                sort: columnId,
-                direction: newDirection,
-            },
-            {
-                preserveState: true,
-                replace: true,
-            },
-        );
+        const params = buildQueryParams(search, columnId, newDirection, additionalFilters);
+
+        router.get(window.location.pathname, params, {
+            preserveState: true,
+            replace: true,
+        });
+    };
+
+    const handleFilterChange = (key: string, value: string | null) => {
+        const updatedFilters = {
+            ...additionalFilters,
+            [key]: value,
+        };
+
+        setAdditionalFilters(updatedFilters);
+
+        const params = buildQueryParams(search, currentSort, currentDirection, updatedFilters);
+
+        router.get(window.location.pathname, params, {
+            preserveState: true,
+            replace: true,
+        });
     };
 
     return {
@@ -65,5 +114,7 @@ export function useDataTableFilters(initialFilters: DataTableFilters) {
         handleSort,
         currentSort,
         currentDirection,
+        additionalFilters,
+        handleFilterChange,
     };
 }

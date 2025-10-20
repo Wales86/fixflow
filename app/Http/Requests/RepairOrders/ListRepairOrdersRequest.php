@@ -22,7 +22,7 @@ class ListRepairOrdersRequest extends FormRequest
         return [
             'status' => ['nullable', 'string', Rule::in(array_column(RepairOrderStatus::cases(), 'value'))],
             'search' => ['nullable', 'string', 'max:255'],
-            'sort' => ['nullable', 'string', 'in:created_at,status,started_at,finished_at'],
+            'sort' => ['nullable', 'string', 'in:id,created_at,status,started_at,finished_at,total_time_minutes'],
             'direction' => ['nullable', 'string', 'in:asc,desc'],
         ];
     }
