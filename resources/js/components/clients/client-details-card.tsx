@@ -1,9 +1,4 @@
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface ClientDetailsCardProps {
     client: App.Dto.Client.ClientData;
@@ -22,16 +17,14 @@ export function ClientDetailsCard({ client }: ClientDetailsCardProps) {
             <CardContent>
                 <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
-                        <dt className="text-muted-foreground text-sm font-medium">
+                        <dt className="text-sm font-medium text-muted-foreground">
                             Imię
                         </dt>
-                        <dd className="mt-1 text-sm">
-                            {client.first_name}
-                        </dd>
+                        <dd className="mt-1 text-sm">{client.first_name}</dd>
                     </div>
 
                     <div>
-                        <dt className="text-muted-foreground text-sm font-medium">
+                        <dt className="text-sm font-medium text-muted-foreground">
                             Nazwisko
                         </dt>
                         <dd className="mt-1 text-sm">
@@ -40,16 +33,14 @@ export function ClientDetailsCard({ client }: ClientDetailsCardProps) {
                     </div>
 
                     <div>
-                        <dt className="text-muted-foreground text-sm font-medium">
+                        <dt className="text-sm font-medium text-muted-foreground">
                             Numer telefonu
                         </dt>
-                        <dd className="mt-1 text-sm">
-                            {client.phone_number}
-                        </dd>
+                        <dd className="mt-1 text-sm">{client.phone_number}</dd>
                     </div>
 
                     <div>
-                        <dt className="text-muted-foreground text-sm font-medium">
+                        <dt className="text-sm font-medium text-muted-foreground">
                             Email
                         </dt>
                         <dd className="mt-1 text-sm">
@@ -58,7 +49,7 @@ export function ClientDetailsCard({ client }: ClientDetailsCardProps) {
                     </div>
 
                     <div className="sm:col-span-2">
-                        <dt className="text-muted-foreground text-sm font-medium">
+                        <dt className="text-sm font-medium text-muted-foreground">
                             Adres
                         </dt>
                         <dd className="mt-1 text-sm">

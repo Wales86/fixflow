@@ -1,7 +1,7 @@
+import { type SharedData } from '@/types';
 import { usePage } from '@inertiajs/react';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
-import { type SharedData } from '@/types';
 
 export function useFlashMessages() {
     const { flash } = usePage<SharedData>().props;

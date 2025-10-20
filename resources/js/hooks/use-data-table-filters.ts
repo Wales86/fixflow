@@ -13,7 +13,7 @@ function buildQueryParams(
     search: string,
     sort: string | null,
     direction: string | null,
-    additionalFilters: Record<string, string | null>
+    additionalFilters: Record<string, string | null>,
 ): Record<string, string> {
     const params: Record<string, string> = {};
 
@@ -38,7 +38,9 @@ function buildQueryParams(
     return params;
 }
 
-function extractAdditionalFilters(filters: DataTableFilters): Record<string, string | null> {
+function extractAdditionalFilters(
+    filters: DataTableFilters,
+): Record<string, string | null> {
     const additionalFilters: Record<string, string | null> = {};
 
     for (const [key, value] of Object.entries(filters)) {
@@ -56,12 +58,17 @@ export function useDataTableFilters(initialFilters: DataTableFilters) {
     const [currentDirection, setCurrentDirection] = useState(
         initialFilters.direction,
     );
-    const [additionalFilters, setAdditionalFilters] = useState<Record<string, string | null>>(
-        extractAdditionalFilters(initialFilters)
-    );
+    const [additionalFilters, setAdditionalFilters] = useState<
+        Record<string, string | null>
+    >(extractAdditionalFilters(initialFilters));
 
     const debouncedSearch = useDebouncedCallback((searchValue: string) => {
-        const params = buildQueryParams(searchValue, currentSort, currentDirection, additionalFilters);
+        const params = buildQueryParams(
+            searchValue,
+            currentSort,
+            currentDirection,
+            additionalFilters,
+        );
 
         router.get(window.location.pathname, params, {
             preserveState: true,
@@ -84,7 +91,12 @@ export function useDataTableFilters(initialFilters: DataTableFilters) {
         setCurrentSort(columnId);
         setCurrentDirection(newDirection);
 
-        const params = buildQueryParams(search, columnId, newDirection, additionalFilters);
+        const params = buildQueryParams(
+            search,
+            columnId,
+            newDirection,
+            additionalFilters,
+        );
 
         router.get(window.location.pathname, params, {
             preserveState: true,
@@ -100,7 +112,12 @@ export function useDataTableFilters(initialFilters: DataTableFilters) {
 
         setAdditionalFilters(updatedFilters);
 
-        const params = buildQueryParams(search, currentSort, currentDirection, updatedFilters);
+        const params = buildQueryParams(
+            search,
+            currentSort,
+            currentDirection,
+            updatedFilters,
+        );
 
         router.get(window.location.pathname, params, {
             preserveState: true,

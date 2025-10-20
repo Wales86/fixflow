@@ -1,9 +1,9 @@
-import { useRef, useState, DragEvent, ChangeEvent } from "react";
-import { useLaravelReactI18n } from "laravel-react-i18n";
-import { Upload, X, Image as ImageIcon } from "lucide-react";
+import { useLaravelReactI18n } from 'laravel-react-i18n';
+import { Image as ImageIcon, Upload, X } from 'lucide-react';
+import { ChangeEvent, DragEvent, useRef, useState } from 'react';
 
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 interface ImageUploaderProps {
     value: File[] | null;
@@ -33,17 +33,15 @@ export function ImageUploader({
 
         // Sprawdź liczbę plików
         if (files.length + fileArray.length > maxFiles) {
-            setError(
-                t("max_files_exceeded", { max: maxFiles.toString() })
-            );
+            setError(t('max_files_exceeded', { max: maxFiles.toString() }));
             return null;
         }
 
         // Walidacja każdego pliku
         for (const file of fileArray) {
             // Sprawdź typ pliku
-            if (!file.type.startsWith("image/")) {
-                setError(t("only_images_allowed"));
+            if (!file.type.startsWith('image/')) {
+                setError(t('only_images_allowed'));
                 return null;
             }
 
@@ -51,10 +49,10 @@ export function ImageUploader({
             const fileSizeInMB = file.size / (1024 * 1024);
             if (fileSizeInMB > maxSizeInMB) {
                 setError(
-                    t("file_too_large", {
+                    t('file_too_large', {
                         name: file.name,
                         max: maxSizeInMB.toString(),
-                    })
+                    }),
                 );
                 return null;
             }
@@ -75,7 +73,7 @@ export function ImageUploader({
         }
         // Reset input aby umożliwić ponowne wybranie tego samego pliku
         if (fileInputRef.current) {
-            fileInputRef.current.value = "";
+            fileInputRef.current.value = '';
         }
     };
 
@@ -129,11 +127,11 @@ export function ImageUploader({
                 onDrop={handleDrop}
                 onClick={handleClick}
                 className={cn(
-                    "relative cursor-pointer rounded-lg border-2 border-dashed p-8 transition-colors",
+                    'relative cursor-pointer rounded-lg border-2 border-dashed p-8 transition-colors',
                     isDragging && !disabled
-                        ? "border-primary bg-primary/5"
-                        : "border-border hover:border-primary/50 hover:bg-muted/50",
-                    disabled && "cursor-not-allowed opacity-50"
+                        ? 'border-primary bg-primary/5'
+                        : 'border-border hover:border-primary/50 hover:bg-muted/50',
+                    disabled && 'cursor-not-allowed opacity-50',
                 )}
             >
                 <input
@@ -153,14 +151,14 @@ export function ImageUploader({
 
                     <div className="space-y-1">
                         <p className="text-sm font-medium">
-                            {t("click_or_drag_to_upload")}
+                            {t('click_or_drag_to_upload')}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                            {t("supported_formats")}: PNG, JPG, JPEG, GIF, WEBP
+                            {t('supported_formats')}: PNG, JPG, JPEG, GIF, WEBP
                         </p>
                         <p className="text-xs text-muted-foreground">
-                            {t("max_file_size")}: {maxSizeInMB}MB •{" "}
-                            {t("max_files")}: {maxFiles}
+                            {t('max_file_size')}: {maxSizeInMB}MB •{' '}
+                            {t('max_files')}: {maxFiles}
                         </p>
                     </div>
                 </div>
@@ -177,7 +175,7 @@ export function ImageUploader({
             {files.length > 0 && (
                 <div className="space-y-2">
                     <p className="text-sm font-medium">
-                        {t("selected_files")} ({files.length}/{maxFiles})
+                        {t('selected_files')} ({files.length}/{maxFiles})
                     </p>
 
                     <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
@@ -216,9 +214,9 @@ function FilePreview({ file, onRemove, disabled }: FilePreviewProps) {
     });
 
     const formatFileSize = (bytes: number): string => {
-        if (bytes < 1024) return bytes + " B";
-        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
-        return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+        return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
     };
 
     return (
@@ -252,10 +250,10 @@ function FilePreview({ file, onRemove, disabled }: FilePreviewProps) {
                     variant="destructive"
                     size="icon"
                     onClick={onRemove}
-                    className="absolute right-2 top-2 h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
+                    className="absolute top-2 right-2 h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
                 >
                     <X className="h-4 w-4" />
-                    <span className="sr-only">{t("remove_file")}</span>
+                    <span className="sr-only">{t('remove_file')}</span>
                 </Button>
             )}
         </div>

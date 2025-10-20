@@ -36,7 +36,7 @@ export function ClientVehiclesTable({ vehicles }: ClientVehiclesTableProps) {
                 </CardHeader>
                 <CardContent>
                     <div className="flex flex-col items-center justify-center gap-4 py-8">
-                        <p className="text-muted-foreground text-sm">
+                        <p className="text-sm text-muted-foreground">
                             Ten klient nie ma jeszcze przypisanych żadnych
                             pojazdów.
                         </p>

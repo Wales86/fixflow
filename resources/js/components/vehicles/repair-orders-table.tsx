@@ -1,3 +1,5 @@
+import { DataTablePagination } from '@/components/common/data-table-pagination';
+import { StatusBadge } from '@/components/status-badge';
 import {
     Card,
     CardContent,
@@ -13,8 +15,6 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { StatusBadge } from '@/components/status-badge';
-import { DataTablePagination } from '@/components/common/data-table-pagination';
 import { router } from '@inertiajs/react';
 import { format } from 'date-fns';
 
@@ -48,7 +48,7 @@ export function RepairOrdersTable({ repairOrders }: RepairOrdersTableProps) {
                 </CardHeader>
                 <CardContent>
                     <div className="flex flex-col items-center justify-center gap-4 py-8">
-                        <p className="text-muted-foreground text-sm">
+                        <p className="text-sm text-muted-foreground">
                             Ten pojazd nie ma jeszcze żadnych zleceń naprawy.
                         </p>
                     </div>

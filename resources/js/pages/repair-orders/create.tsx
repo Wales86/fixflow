@@ -1,9 +1,9 @@
 import { Head } from '@inertiajs/react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
 
+import { RepairOrderForm } from '@/components/repair-orders/repair-order-form';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { RepairOrderForm } from '@/components/repair-orders/repair-order-form';
 
 export default function RepairOrdersCreate({
     vehicles,

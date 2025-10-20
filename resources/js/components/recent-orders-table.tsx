@@ -1,3 +1,11 @@
+import { StatusBadge } from '@/components/status-badge';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import {
     Table,
     TableBody,
@@ -6,14 +14,6 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
-import { StatusBadge } from '@/components/status-badge';
 import { format } from 'date-fns';
 
 interface RecentOrdersTableProps {
@@ -64,10 +64,7 @@ export function RecentOrdersTable({ orders }: RecentOrdersTableProps) {
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell
-                                    colSpan={4}
-                                    className="text-center"
-                                >
+                                <TableCell colSpan={4} className="text-center">
                                     Brak ostatnich zleceń do wyświetlenia.
                                 </TableCell>
                             </TableRow>

@@ -17,13 +17,18 @@ export function DataTablePagination<TData>({
     const handlePageChange = (page: number) => {
         const url = new URL(window.location.href);
         url.searchParams.set('page', page.toString());
-        router.get(url.pathname + url.search, {}, { preserveState: true, replace: true });
+        router.get(
+            url.pathname + url.search,
+            {},
+            { preserveState: true, replace: true },
+        );
     };
 
     return (
         <div className="flex items-center justify-between px-2 py-4">
             <div className="text-sm text-muted-foreground">
-                Wyświetlanie {pagination.from} do {pagination.to} z {pagination.total} wyników
+                Wyświetlanie {pagination.from} do {pagination.to} z{' '}
+                {pagination.total} wyników
             </div>
             <div className="flex items-center gap-2">
                 <Button
@@ -37,7 +42,9 @@ export function DataTablePagination<TData>({
                 <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handlePageChange(pagination.current_page - 1)}
+                    onClick={() =>
+                        handlePageChange(pagination.current_page - 1)
+                    }
                     disabled={pagination.current_page === 1}
                 >
                     <ChevronLeft className="size-4" />
@@ -51,7 +58,9 @@ export function DataTablePagination<TData>({
                 <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handlePageChange(pagination.current_page + 1)}
+                    onClick={() =>
+                        handlePageChange(pagination.current_page + 1)
+                    }
                     disabled={pagination.current_page === pagination.last_page}
                 >
                     <ChevronRight className="size-4" />

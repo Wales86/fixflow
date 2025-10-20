@@ -1,5 +1,13 @@
 import { Button } from '@/components/ui/button';
 import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
+import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
@@ -8,23 +16,17 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { router } from '@inertiajs/react';
+import { useLaravelReactI18n } from 'laravel-react-i18n';
 import { Eye, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from '@/components/ui/dialog';
-import { useLaravelReactI18n } from 'laravel-react-i18n';
 
 interface RepairOrdersTableActionsProps {
     order: App.Dto.RepairOrder.RepairOrderListItemData;
 }
 
-export function RepairOrdersTableActions({ order }: RepairOrdersTableActionsProps) {
+export function RepairOrdersTableActions({
+    order,
+}: RepairOrdersTableActionsProps) {
     const { t } = useLaravelReactI18n();
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
@@ -77,13 +79,18 @@ export function RepairOrdersTableActions({ order }: RepairOrdersTableActionsProp
             <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>{t('delete_repair_order_title')}</DialogTitle>
+                        <DialogTitle>
+                            {t('delete_repair_order_title')}
+                        </DialogTitle>
                         <DialogDescription>
                             {t('delete_repair_order_description')}{' '}
-                            <strong>#{order.id}</strong> {t('delete_repair_order_vehicle_info')}{' '}
+                            <strong>#{order.id}</strong>{' '}
+                            {t('delete_repair_order_vehicle_info')}{' '}
                             <strong>
-                                {order.vehicle.make} {order.vehicle.model} ({order.vehicle.registration_number})
-                            </strong>.
+                                {order.vehicle.make} {order.vehicle.model} (
+                                {order.vehicle.registration_number})
+                            </strong>
+                            .
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>

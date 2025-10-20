@@ -1,11 +1,4 @@
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
+import { DataTablePagination } from '@/components/common/data-table-pagination';
 import {
     Card,
     CardContent,
@@ -14,19 +7,29 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
-import { DataTablePagination } from '@/components/common/data-table-pagination';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 import { useDataTableFilters } from '@/hooks/use-data-table-filters';
+import { router } from '@inertiajs/react';
 import {
     type ColumnDef,
     flexRender,
     getCoreRowModel,
     useReactTable,
 } from '@tanstack/react-table';
+import { Search } from 'lucide-react';
 import { useMemo } from 'react';
-import { router } from '@inertiajs/react';
 
-export function VehiclesDataTable({ tableData, filters }: App.Dto.Common.FilterableTablePagePropsData) {
+export function VehiclesDataTable({
+    tableData,
+    filters,
+}: App.Dto.Common.FilterableTablePagePropsData) {
     const { search, handleSearch, handleSort, currentSort, currentDirection } =
         useDataTableFilters(filters);
 
@@ -36,9 +39,7 @@ export function VehiclesDataTable({ tableData, filters }: App.Dto.Common.Filtera
 
     const vehicles: Array<App.Dto.Vehicle.VehicleData> = tableData.data;
 
-    const columns = useMemo<
-        ColumnDef<App.Dto.Vehicle.VehicleData>[]
-    >(() => {
+    const columns = useMemo<ColumnDef<App.Dto.Vehicle.VehicleData>[]>(() => {
         return [
             {
                 accessorKey: 'registration_number',
@@ -113,7 +114,7 @@ export function VehiclesDataTable({ tableData, filters }: App.Dto.Common.Filtera
                         </CardDescription>
                     </div>
                     <div className="relative w-64">
-                        <Search className="absolute left-2 top-2.5 size-4 text-muted-foreground" />
+                        <Search className="absolute top-2.5 left-2 size-4 text-muted-foreground" />
                         <Input
                             placeholder="Szukaj pojazdów..."
                             value={search}
@@ -142,7 +143,9 @@ export function VehiclesDataTable({ tableData, filters }: App.Dto.Common.Filtera
                                                     : undefined
                                             }
                                             className={
-                                                canSort ? 'cursor-pointer select-none' : ''
+                                                canSort
+                                                    ? 'cursor-pointer select-none'
+                                                    : ''
                                             }
                                         >
                                             {header.isPlaceholder
@@ -173,7 +176,9 @@ export function VehiclesDataTable({ tableData, filters }: App.Dto.Common.Filtera
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
                                     key={row.id}
-                                    onClick={() => handleRowClick(row.original.id)}
+                                    onClick={() =>
+                                        handleRowClick(row.original.id)
+                                    }
                                     className="cursor-pointer"
                                 >
                                     {row.getVisibleCells().map((cell) => (

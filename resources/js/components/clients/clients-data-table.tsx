@@ -1,11 +1,4 @@
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
+import { DataTablePagination } from '@/components/common/data-table-pagination';
 import {
     Card,
     CardContent,
@@ -14,20 +7,30 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
-import { DataTablePagination } from '@/components/common/data-table-pagination';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 import { useDataTableFilters } from '@/hooks/use-data-table-filters';
+import { router } from '@inertiajs/react';
 import {
     type ColumnDef,
     flexRender,
     getCoreRowModel,
     useReactTable,
 } from '@tanstack/react-table';
+import { Search } from 'lucide-react';
 import { useMemo } from 'react';
 import { DataTableRowActions } from './data-table-row-actions';
-import { router } from '@inertiajs/react';
 
-export function ClientsDataTable({ tableData, filters }: App.Dto.Common.FilterableTablePagePropsData) {
+export function ClientsDataTable({
+    tableData,
+    filters,
+}: App.Dto.Common.FilterableTablePagePropsData) {
     const { search, handleSearch, handleSort, currentSort, currentDirection } =
         useDataTableFilters(filters);
 
@@ -71,7 +74,9 @@ export function ClientsDataTable({ tableData, filters }: App.Dto.Common.Filterab
             },
             {
                 id: 'actions',
-                cell: ({ row }) => <DataTableRowActions client={row.original} />,
+                cell: ({ row }) => (
+                    <DataTableRowActions client={row.original} />
+                ),
             },
         ];
     }, []);
@@ -96,7 +101,7 @@ export function ClientsDataTable({ tableData, filters }: App.Dto.Common.Filterab
                         </CardDescription>
                     </div>
                     <div className="relative w-64">
-                        <Search className="absolute left-2 top-2.5 size-4 text-muted-foreground" />
+                        <Search className="absolute top-2.5 left-2 size-4 text-muted-foreground" />
                         <Input
                             placeholder="Szukaj klientów..."
                             value={search}
@@ -125,7 +130,9 @@ export function ClientsDataTable({ tableData, filters }: App.Dto.Common.Filterab
                                                     : undefined
                                             }
                                             className={
-                                                canSort ? 'cursor-pointer select-none' : ''
+                                                canSort
+                                                    ? 'cursor-pointer select-none'
+                                                    : ''
                                             }
                                         >
                                             {header.isPlaceholder

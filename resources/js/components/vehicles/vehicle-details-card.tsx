@@ -1,9 +1,4 @@
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Link } from '@inertiajs/react';
 
 interface VehicleDetailsCardProps {
@@ -30,28 +25,32 @@ export function VehicleDetailsCard({ vehicle }: VehicleDetailsCardProps) {
             <CardContent>
                 <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
-                        <dt className="text-muted-foreground text-sm font-medium">
+                        <dt className="text-sm font-medium text-muted-foreground">
                             Marka
                         </dt>
-                        <dd className="mt-1 text-sm">{formatValue(vehicle.make)}</dd>
+                        <dd className="mt-1 text-sm">
+                            {formatValue(vehicle.make)}
+                        </dd>
                     </div>
 
                     <div>
-                        <dt className="text-muted-foreground text-sm font-medium">
+                        <dt className="text-sm font-medium text-muted-foreground">
                             Model
                         </dt>
-                        <dd className="mt-1 text-sm">{formatValue(vehicle.model)}</dd>
+                        <dd className="mt-1 text-sm">
+                            {formatValue(vehicle.model)}
+                        </dd>
                     </div>
 
                     <div>
-                        <dt className="text-muted-foreground text-sm font-medium">
+                        <dt className="text-sm font-medium text-muted-foreground">
                             Rok produkcji
                         </dt>
                         <dd className="mt-1 text-sm">{vehicle.year}</dd>
                     </div>
 
                     <div>
-                        <dt className="text-muted-foreground text-sm font-medium">
+                        <dt className="text-sm font-medium text-muted-foreground">
                             Numer rejestracyjny
                         </dt>
                         <dd className="mt-1 text-sm">
@@ -60,7 +59,7 @@ export function VehicleDetailsCard({ vehicle }: VehicleDetailsCardProps) {
                     </div>
 
                     <div className="sm:col-span-2">
-                        <dt className="text-muted-foreground text-sm font-medium">
+                        <dt className="text-sm font-medium text-muted-foreground">
                             VIN
                         </dt>
                         <dd className="mt-1 font-mono text-xs">
@@ -69,7 +68,7 @@ export function VehicleDetailsCard({ vehicle }: VehicleDetailsCardProps) {
                     </div>
 
                     <div className="sm:col-span-2">
-                        <dt className="text-muted-foreground text-sm font-medium">
+                        <dt className="text-sm font-medium text-muted-foreground">
                             Właściciel
                         </dt>
                         <dd className="mt-1 text-sm">

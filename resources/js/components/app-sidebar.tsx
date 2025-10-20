@@ -12,13 +12,13 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import clients from '@/routes/clients';
-import vehicles from '@/routes/vehicles';
 import repairOrders from '@/routes/repair-orders';
+import vehicles from '@/routes/vehicles';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
+import { useLaravelReactI18n } from 'laravel-react-i18n';
 import { BookOpen, Car, Folder, LayoutGrid, Users, Wrench } from 'lucide-react';
 import AppLogo from './app-logo';
-import { useLaravelReactI18n } from 'laravel-react-i18n';
 
 export function AppSidebar() {
     const { t } = useLaravelReactI18n();

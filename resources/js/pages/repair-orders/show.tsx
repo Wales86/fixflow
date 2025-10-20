@@ -1,11 +1,14 @@
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Head } from '@inertiajs/react';
+import { useLaravelReactI18n } from 'laravel-react-i18n';
+import { useState } from 'react';
+
+import { AddNoteDialog } from '@/components/internal-notes/add-note-dialog';
+import { RepairOrderDetailsCard } from '@/components/repair-orders/repair-order-details-card';
+import { RepairOrderHeader } from '@/components/repair-orders/repair-order-header';
+import { RepairOrderTabs } from '@/components/repair-orders/repair-order-tabs';
+import { UpdateStatusDialog } from '@/components/repair-orders/update-status-dialog';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, router } from '@inertiajs/react';
-
-interface RepairOrderShowProps
-    extends App.Dto.RepairOrder.RepairOrderShowPagePropsData {}
 
 export default function RepairOrderShow({
     order,
@@ -13,90 +16,55 @@ export default function RepairOrderShow({
     internal_notes,
     activity_log,
     can_edit,
-}: RepairOrderShowProps) {
+    can_delete,
+}: App.Dto.RepairOrder.RepairOrderShowPagePropsData) {
+    const { t } = useLaravelReactI18n();
+    const [isStatusDialogOpen, setStatusDialogOpen] = useState(false);
+    const [isNoteDialogOpen, setNoteDialogOpen] = useState(false);
+
     const breadcrumbs: BreadcrumbItem[] = [
         {
-            title: 'Zlecenia naprawy',
+            title: t('repair_orders'),
             href: '/repair-orders',
         },
         {
-            title: `Zlecenie #${order.id}`,
+            title: `#${order.id}`,
             href: `/repair-orders/${order.id}`,
         },
     ];
 
-    const handleEditClick = () => {
-        router.visit(`/repair-orders/${order.id}/edit`);
-    };
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={`Zlecenie naprawy #${order.id}`} />
+            <Head title={`${t('repair_order')} #${order.id}`} />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-2xl font-bold tracking-tight">
-                            Zlecenie naprawy #{order.id}
-                        </h1>
-                        <p className="text-muted-foreground">
-                            {order.vehicle.make} {order.vehicle.model} (
-                            {order.vehicle.registration_number})
-                        </p>
-                    </div>
-                    {can_edit && (
-                        <Button onClick={handleEditClick}>
-                            Edytuj zlecenie
-                        </Button>
-                    )}
-                </div>
+                <RepairOrderHeader
+                    order={order}
+                    can_edit={can_edit}
+                    can_delete={can_delete}
+                    onStatusChange={() => setStatusDialogOpen(true)}
+                    onAddNote={() => setNoteDialogOpen(true)}
+                />
 
-                <Tabs defaultValue="details" className="w-full">
-                    <TabsList>
-                        <TabsTrigger value="details">Szczegóły</TabsTrigger>
-                        <TabsTrigger value="time-entries">
-                            Czas pracy ({time_entries.length})
-                        </TabsTrigger>
-                        <TabsTrigger value="notes">
-                            Notatki ({internal_notes.length})
-                        </TabsTrigger>
-                        <TabsTrigger value="history">
-                            Historia zmian ({activity_log.length})
-                        </TabsTrigger>
-                    </TabsList>
+                <RepairOrderDetailsCard order={order} />
 
-                    <TabsContent value="details">
-                        <div className="rounded-lg border bg-card p-6">
-                            <p className="text-muted-foreground">
-                                Szczegóły zlecenia - do zaimplementowania
-                            </p>
-                        </div>
-                    </TabsContent>
-
-                    <TabsContent value="time-entries">
-                        <div className="rounded-lg border bg-card p-6">
-                            <p className="text-muted-foreground">
-                                Wpisy czasu pracy - do zaimplementowania
-                            </p>
-                        </div>
-                    </TabsContent>
-
-                    <TabsContent value="notes">
-                        <div className="rounded-lg border bg-card p-6">
-                            <p className="text-muted-foreground">
-                                Notatki wewnętrzne - do zaimplementowania
-                            </p>
-                        </div>
-                    </TabsContent>
-
-                    <TabsContent value="history">
-                        <div className="rounded-lg border bg-card p-6">
-                            <p className="text-muted-foreground">
-                                Historia zmian - do zaimplementowania
-                            </p>
-                        </div>
-                    </TabsContent>
-                </Tabs>
+                <RepairOrderTabs
+                    time_entries={time_entries}
+                    internal_notes={internal_notes}
+                    activity_log={activity_log}
+                />
             </div>
+
+            <UpdateStatusDialog
+                order={order}
+                isOpen={isStatusDialogOpen}
+                onClose={() => setStatusDialogOpen(false)}
+            />
+
+            <AddNoteDialog
+                repairOrderId={order.id}
+                isOpen={isNoteDialogOpen}
+                onClose={() => setNoteDialogOpen(false)}
+            />
         </AppLayout>
     );
 }

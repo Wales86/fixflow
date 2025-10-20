@@ -1,10 +1,10 @@
-import AppLayout from '@/layouts/app-layout';
-import { Head, Link } from '@inertiajs/react';
-import { type BreadcrumbItem } from '@/types';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
 import { RepairOrdersDataTable } from '@/components/repair-orders/repair-orders-data-table';
+import { Button } from '@/components/ui/button';
+import AppLayout from '@/layouts/app-layout';
+import { type BreadcrumbItem } from '@/types';
+import { Head, Link } from '@inertiajs/react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
+import { Plus } from 'lucide-react';
 
 export default function RepairOrdersIndex({
     tableData,
@@ -25,7 +25,9 @@ export default function RepairOrdersIndex({
             <Head title={t('repair_orders')} />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="flex items-center justify-between">
-                    <h1 className="text-2xl font-bold tracking-tight">{t('repair_orders')}</h1>
+                    <h1 className="text-2xl font-bold tracking-tight">
+                        {t('repair_orders')}
+                    </h1>
                     <Button asChild>
                         <Link href="/repair-orders/create">
                             <Plus className="mr-2 size-4" />

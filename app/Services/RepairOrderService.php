@@ -174,22 +174,33 @@ class RepairOrderService
             'size' => $media->size,
         ]));
 
-        $internalNotes = $repairOrder->internalNotes->map(fn ($note) => array_merge(
-            $note->toArray(),
-            ['author' => $note->author ? array_merge(
-                $note->author->toArray(),
-                ['type' => class_basename($note->author_type)]
-            ) : null]
-        ));
+        $internalNotes = $repairOrder->internalNotes
+            ->sortByDesc('created_at')
+            ->values()
+            ->map(fn ($note) => array_merge(
+                $note->toArray(),
+                ['author' => $note->author ? [
+                    'id' => $note->author->id,
+                    'name' => $note->author->name,
+                    'type' => class_basename($note->author_type),
+                ] : null]
+            ));
 
-        $activityLog = $repairOrder->activities->map(fn ($activity) => [
-            'id' => $activity->id,
-            'description' => $activity->description,
-            'event' => $activity->event,
-            'properties' => $activity->properties?->toArray(),
-            'created_at' => $activity->created_at,
-            'causer' => $activity->causer,
-        ]);
+        $activityLog = $repairOrder->activities
+            ->sortByDesc('created_at')
+            ->values()
+            ->map(fn ($activity) => [
+                'id' => $activity->id,
+                'description' => $activity->description,
+                'event' => $activity->event,
+                'properties' => $activity->properties?->toArray(),
+                'created_at' => $activity->created_at,
+                'causer' => $activity->causer ? [
+                    'id' => $activity->causer->id,
+                    'name' => $activity->causer->name,
+                    'type' => class_basename($activity->causer_type),
+                ] : null,
+            ]);
 
         return RepairOrderShowPagePropsData::from([
             'order' => [

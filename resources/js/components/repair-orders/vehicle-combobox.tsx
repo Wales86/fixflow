@@ -1,9 +1,8 @@
-import { useState } from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { useLaravelReactI18n } from "laravel-react-i18n";
+import { useLaravelReactI18n } from 'laravel-react-i18n';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { useState } from 'react';
 
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
     Command,
     CommandEmpty,
@@ -11,12 +10,13 @@ import {
     CommandInput,
     CommandItem,
     CommandList,
-} from "@/components/ui/command";
+} from '@/components/ui/command';
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-} from "@/components/ui/popover";
+} from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 
 interface VehicleComboboxProps {
     options: App.Dto.RepairOrder.VehicleSelectionData[];
@@ -59,7 +59,7 @@ export function VehicleCombobox({
                             </span>
                         </span>
                     ) : (
-                        t("select_vehicle")
+                        t('select_vehicle')
                     )}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -69,9 +69,9 @@ export function VehicleCombobox({
                 align="start"
             >
                 <Command>
-                    <CommandInput placeholder={t("search_vehicle")} />
+                    <CommandInput placeholder={t('search_vehicle')} />
                     <CommandList>
-                        <CommandEmpty>{t("no_vehicle_found")}</CommandEmpty>
+                        <CommandEmpty>{t('no_vehicle_found')}</CommandEmpty>
                         <CommandGroup>
                             {options.map((vehicle) => (
                                 <CommandItem
@@ -84,10 +84,10 @@ export function VehicleCombobox({
                                 >
                                     <Check
                                         className={cn(
-                                            "mr-2 h-4 w-4",
+                                            'mr-2 h-4 w-4',
                                             value === vehicle.id
-                                                ? "opacity-100"
-                                                : "opacity-0",
+                                                ? 'opacity-100'
+                                                : 'opacity-0',
                                         )}
                                     />
                                     <div className="flex flex-col">

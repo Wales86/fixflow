@@ -26,7 +26,9 @@ export default function Register() {
                     <>
                         <div className="grid gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="workshop_name">Nazwa warsztatu</Label>
+                                <Label htmlFor="workshop_name">
+                                    Nazwa warsztatu
+                                </Label>
                                 <Input
                                     id="workshop_name"
                                     type="text"
@@ -44,7 +46,9 @@ export default function Register() {
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="owner_name">Imię i nazwisko właściciela</Label>
+                                <Label htmlFor="owner_name">
+                                    Imię i nazwisko właściciela
+                                </Label>
                                 <Input
                                     id="owner_name"
                                     type="text"

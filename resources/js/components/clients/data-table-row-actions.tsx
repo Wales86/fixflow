@@ -1,5 +1,13 @@
 import { Button } from '@/components/ui/button';
 import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
+import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
@@ -10,14 +18,6 @@ import {
 import { router } from '@inertiajs/react';
 import { Eye, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from '@/components/ui/dialog';
 
 interface DataTableRowActionsProps {
     client: App.Dto.Client.ClientListItemData;
@@ -75,7 +75,9 @@ export function DataTableRowActions({ client }: DataTableRowActionsProps) {
             <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Czy na pewno chcesz usunąć tego klienta?</DialogTitle>
+                        <DialogTitle>
+                            Czy na pewno chcesz usunąć tego klienta?
+                        </DialogTitle>
                         <DialogDescription>
                             Ta akcja jest nieodwracalna. Klient{' '}
                             <strong>

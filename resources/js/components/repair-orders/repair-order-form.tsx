@@ -1,21 +1,21 @@
-import { FormEventHandler } from "react";
-import { useForm } from "@inertiajs/react";
-import { useLaravelReactI18n } from "laravel-react-i18n";
+import { useForm } from '@inertiajs/react';
+import { useLaravelReactI18n } from 'laravel-react-i18n';
+import { FormEventHandler } from 'react';
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select";
-import { VehicleCombobox } from "./vehicle-combobox";
-import { ImageUploader } from "./image-uploader";
-import { toast } from "sonner";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { toast } from 'sonner';
+import { ImageUploader } from './image-uploader';
+import { VehicleCombobox } from './vehicle-combobox';
 
 interface RepairOrderFormProps {
     isEditMode?: boolean;
@@ -38,7 +38,7 @@ export function RepairOrderForm({
     const { data, setData, post, patch, processing, errors, clearErrors } =
         useForm({
             vehicle_id: initialData?.vehicle_id ?? preselectedVehicleId ?? null,
-            description: initialData?.problem_description ?? "",
+            description: initialData?.problem_description ?? '',
             status: initialData?.status ?? null,
             attachments: null as File[] | null,
         });
@@ -51,15 +51,15 @@ export function RepairOrderForm({
             patch(`/repair-orders/${initialData.id}`, {
                 preserveScroll: true,
                 onError: () => {
-                    toast.error(t("an_error_occurred"));
+                    toast.error(t('an_error_occurred'));
                 },
             });
         } else {
             // W trybie tworzenia backend oczekuje vehicle_id, description i attachments
-            post("/repair-orders", {
+            post('/repair-orders', {
                 preserveScroll: true,
                 onError: () => {
-                    toast.error(t("an_error_occurred"));
+                    toast.error(t('an_error_occurred'));
                 },
             });
         }
@@ -70,8 +70,8 @@ export function RepairOrderForm({
             <CardHeader>
                 <CardTitle>
                     {isEditMode
-                        ? t("edit_repair_order_data")
-                        : t("repair_order_data")}
+                        ? t('edit_repair_order_data')
+                        : t('repair_order_data')}
                 </CardTitle>
             </CardHeader>
             <CardContent>
@@ -80,15 +80,15 @@ export function RepairOrderForm({
                     {!isEditMode && (
                         <div className="space-y-2">
                             <Label htmlFor="vehicle_id">
-                                {t("vehicle")}{" "}
+                                {t('vehicle')}{' '}
                                 <span className="text-red-500">*</span>
                             </Label>
                             <VehicleCombobox
                                 options={vehicles}
                                 value={data.vehicle_id}
                                 onChange={(value) => {
-                                    setData("vehicle_id", value);
-                                    clearErrors("vehicle_id");
+                                    setData('vehicle_id', value);
+                                    clearErrors('vehicle_id');
                                 }}
                                 disabled={processing}
                             />
@@ -103,22 +103,22 @@ export function RepairOrderForm({
                     {/* Problem Description */}
                     <div className="space-y-2">
                         <Label htmlFor="description">
-                            {t("problem_description")}{" "}
+                            {t('problem_description')}{' '}
                             <span className="text-red-500">*</span>
                         </Label>
                         <Textarea
                             id="description"
                             value={data.description}
                             onChange={(e) => {
-                                setData("description", e.target.value);
-                                clearErrors("description");
+                                setData('description', e.target.value);
+                                clearErrors('description');
                             }}
                             disabled={processing}
                             className={
-                                errors.description ? "border-red-500" : ""
+                                errors.description ? 'border-red-500' : ''
                             }
                             rows={5}
-                            placeholder={t("describe_the_problem")}
+                            placeholder={t('describe_the_problem')}
                         />
                         {errors.description && (
                             <p className="text-sm text-red-500">
@@ -131,27 +131,27 @@ export function RepairOrderForm({
                     {isEditMode && (
                         <div className="space-y-2">
                             <Label htmlFor="status">
-                                {t("status")}{" "}
+                                {t('status')}{' '}
                                 <span className="text-red-500">*</span>
                             </Label>
                             <Select
                                 value={data.status || undefined}
                                 onValueChange={(value) => {
                                     setData(
-                                        "status",
+                                        'status',
                                         value as App.Enums.RepairOrderStatus,
                                     );
-                                    clearErrors("status");
+                                    clearErrors('status');
                                 }}
                                 disabled={processing}
                             >
                                 <SelectTrigger
                                     className={
-                                        errors.status ? "border-red-500" : ""
+                                        errors.status ? 'border-red-500' : ''
                                     }
                                 >
                                     <SelectValue
-                                        placeholder={t("select_status")}
+                                        placeholder={t('select_status')}
                                     />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -176,12 +176,12 @@ export function RepairOrderForm({
                     {/* Image Uploader - Only in Create Mode */}
                     {!isEditMode && (
                         <div className="space-y-2">
-                            <Label>{t("attachments")}</Label>
+                            <Label>{t('attachments')}</Label>
                             <ImageUploader
                                 value={data.attachments}
                                 onChange={(files) => {
-                                    setData("attachments", files);
-                                    clearErrors("attachments");
+                                    setData('attachments', files);
+                                    clearErrors('attachments');
                                 }}
                                 disabled={processing}
                                 maxFiles={10}
@@ -196,25 +196,27 @@ export function RepairOrderForm({
                     )}
 
                     {/* Existing Images Display - In Edit Mode */}
-                    {isEditMode && initialData && initialData.images.length > 0 && (
-                        <div className="space-y-2">
-                            <Label>{t("existing_attachments")}</Label>
-                            <div className="grid grid-cols-3 gap-4">
-                                {initialData.images.map((image) => (
-                                    <div
-                                        key={image.id}
-                                        className="relative aspect-square overflow-hidden rounded-lg border"
-                                    >
-                                        <img
-                                            src={image.url}
-                                            alt={image.name}
-                                            className="h-full w-full object-cover"
-                                        />
-                                    </div>
-                                ))}
+                    {isEditMode &&
+                        initialData &&
+                        initialData.images.length > 0 && (
+                            <div className="space-y-2">
+                                <Label>{t('existing_attachments')}</Label>
+                                <div className="grid grid-cols-3 gap-4">
+                                    {initialData.images.map((image) => (
+                                        <div
+                                            key={image.id}
+                                            className="relative aspect-square overflow-hidden rounded-lg border"
+                                        >
+                                            <img
+                                                src={image.url}
+                                                alt={image.name}
+                                                className="h-full w-full object-cover"
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
                     {/* Form Actions */}
                     <div className="flex justify-end gap-4">
@@ -224,10 +226,10 @@ export function RepairOrderForm({
                             onClick={() => window.history.back()}
                             disabled={processing}
                         >
-                            {t("cancel")}
+                            {t('cancel')}
                         </Button>
                         <Button type="submit" disabled={processing}>
-                            {processing ? t("loading") : t("save")}
+                            {processing ? t('loading') : t('save')}
                         </Button>
                     </div>
                 </form>

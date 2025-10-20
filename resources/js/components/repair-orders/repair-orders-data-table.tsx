@@ -1,11 +1,5 @@
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
+import { DataTablePagination } from '@/components/common/data-table-pagination';
+import { StatusBadge } from '@/components/status-badge';
 import {
     Card,
     CardContent,
@@ -14,19 +8,6 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
-import { DataTablePagination } from '@/components/common/data-table-pagination';
-import { useDataTableFilters } from '@/hooks/use-data-table-filters';
-import {
-    type ColumnDef,
-    flexRender,
-    getCoreRowModel,
-    useReactTable,
-} from '@tanstack/react-table';
-import { useMemo } from 'react';
-import { RepairOrdersTableActions } from './repair-orders-table-actions';
-import { router } from '@inertiajs/react';
-import { StatusBadge } from '@/components/status-badge';
 import {
     Select,
     SelectContent,
@@ -34,7 +15,26 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
+import { useDataTableFilters } from '@/hooks/use-data-table-filters';
+import { router } from '@inertiajs/react';
+import {
+    type ColumnDef,
+    flexRender,
+    getCoreRowModel,
+    useReactTable,
+} from '@tanstack/react-table';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
+import { Search } from 'lucide-react';
+import { useMemo } from 'react';
+import { RepairOrdersTableActions } from './repair-orders-table-actions';
 
 interface RepairOrdersDataTableProps {
     tableData: PaginatedData<App.Dto.RepairOrder.RepairOrderListItemData>;
@@ -65,7 +65,8 @@ export function RepairOrdersDataTable({
         router.visit(`/repair-orders/${orderId}`);
     };
 
-    const orders: Array<App.Dto.RepairOrder.RepairOrderListItemData> = tableData.data;
+    const orders: Array<App.Dto.RepairOrder.RepairOrderListItemData> =
+        tableData.data;
 
     const columns = useMemo<
         ColumnDef<App.Dto.RepairOrder.RepairOrderListItemData>[]
@@ -100,7 +101,8 @@ export function RepairOrdersDataTable({
                 header: t('client'),
                 cell: ({ row }) => {
                     const client = row.original.client;
-                    const fullName = `${client.first_name} ${client.last_name || ''}`.trim();
+                    const fullName =
+                        `${client.first_name} ${client.last_name || ''}`.trim();
                     return (
                         <div className="flex flex-col">
                             <span className="font-medium">{fullName}</span>
@@ -160,7 +162,9 @@ export function RepairOrdersDataTable({
             },
             {
                 id: 'actions',
-                cell: ({ row }) => <RepairOrdersTableActions order={row.original} />,
+                cell: ({ row }) => (
+                    <RepairOrdersTableActions order={row.original} />
+                ),
             },
         ];
     }, [t]);
@@ -188,23 +192,31 @@ export function RepairOrdersDataTable({
                         <Select
                             value={additionalFilters.status || 'all'}
                             onValueChange={(value) =>
-                                handleFilterChange('status', value === 'all' ? null : value)
+                                handleFilterChange(
+                                    'status',
+                                    value === 'all' ? null : value,
+                                )
                             }
                         >
                             <SelectTrigger className="w-48">
                                 <SelectValue placeholder={t('all_statuses')} />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="all">{t('all_statuses')}</SelectItem>
+                                <SelectItem value="all">
+                                    {t('all_statuses')}
+                                </SelectItem>
                                 {statusOptions.map((option) => (
-                                    <SelectItem key={option.value} value={option.value}>
+                                    <SelectItem
+                                        key={option.value}
+                                        value={option.value}
+                                    >
                                         {option.label}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
                         <div className="relative w-64">
-                            <Search className="absolute left-2 top-2.5 size-4 text-muted-foreground" />
+                            <Search className="absolute top-2.5 left-2 size-4 text-muted-foreground" />
                             <Input
                                 placeholder={t('search_repair_orders')}
                                 value={search}
@@ -234,7 +246,9 @@ export function RepairOrdersDataTable({
                                                     : undefined
                                             }
                                             className={
-                                                canSort ? 'cursor-pointer select-none' : ''
+                                                canSort
+                                                    ? 'cursor-pointer select-none'
+                                                    : ''
                                             }
                                         >
                                             {header.isPlaceholder
@@ -293,7 +307,9 @@ export function RepairOrdersDataTable({
                                     className="h-24 text-center"
                                 >
                                     {search || additionalFilters.status
-                                        ? t('no_repair_orders_matching_criteria')
+                                        ? t(
+                                              'no_repair_orders_matching_criteria',
+                                          )
                                         : t('no_repair_orders_found')}
                                 </TableCell>
                             </TableRow>

@@ -1,9 +1,9 @@
+import { RecentOrdersTable } from '@/components/recent-orders-table';
+import { StatCard } from '@/components/stat-card';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
-import { StatCard } from '@/components/stat-card';
-import { RecentOrdersTable } from '@/components/recent-orders-table';
 import { Activity, PackageCheck, Timer } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -19,7 +19,6 @@ export default function Dashboard({
     todayTimeEntriesTotal,
     recentOrders,
 }: App.Dto.Dashboard.DashboardData) {
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />

@@ -5,7 +5,7 @@ import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { store, update } from '@/routes/clients'
+import { store, update } from '@/routes/clients';
 
 interface ClientFormProps {
     client?: App.Dto.Client.ClientData;
@@ -81,7 +81,9 @@ export default function ClientForm({ client }: ClientFormProps) {
                             id="last_name"
                             name="last_name"
                             value={data.last_name}
-                            onChange={(e) => setData('last_name', e.target.value)}
+                            onChange={(e) =>
+                                setData('last_name', e.target.value)
+                            }
                             required
                             autoComplete="family-name"
                             placeholder="Kowalski"
@@ -168,7 +170,9 @@ export default function ClientForm({ client }: ClientFormProps) {
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="address_postal_code">Kod pocztowy</Label>
+                        <Label htmlFor="address_postal_code">
+                            Kod pocztowy
+                        </Label>
                         <Input
                             id="address_postal_code"
                             name="address_postal_code"

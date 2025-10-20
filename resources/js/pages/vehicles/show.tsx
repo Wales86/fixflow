@@ -1,11 +1,10 @@
-import { VehicleDetailsCard } from '@/components/vehicles/vehicle-details-card';
-import { RepairOrdersTable } from '@/components/vehicles/repair-orders-table';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { RepairOrdersTable } from '@/components/vehicles/repair-orders-table';
+import { VehicleDetailsCard } from '@/components/vehicles/vehicle-details-card';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/react';
-
 
 interface VehicleShowProps {
     vehicle: App.Dto.Vehicle.VehicleData;
@@ -33,9 +32,7 @@ export default function VehicleShow({
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head
-                title={`${vehicle.make} ${vehicle.model} ${vehicle.year}`}
-            />
+            <Head title={`${vehicle.make} ${vehicle.model} ${vehicle.year}`} />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="flex items-center justify-between">
                     <h1 className="text-2xl font-bold tracking-tight">

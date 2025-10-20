@@ -1,8 +1,7 @@
-import { useState } from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { useState } from 'react';
 
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
     Command,
     CommandEmpty,
@@ -10,12 +9,13 @@ import {
     CommandInput,
     CommandItem,
     CommandList,
-} from "@/components/ui/command";
+} from '@/components/ui/command';
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-} from "@/components/ui/popover";
+} from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 
 interface ClientComboboxProps {
     options: App.Dto.Client.ClientSelectOptionData[];
@@ -44,11 +44,16 @@ export function ClientCombobox({
                     className="w-full justify-between"
                     disabled={disabled}
                 >
-                    {selectedClient ? selectedClient.name : "Wybierz klienta..."}
+                    {selectedClient
+                        ? selectedClient.name
+                        : 'Wybierz klienta...'}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
+            <PopoverContent
+                className="w-[var(--radix-popover-trigger-width)] p-0"
+                align="start"
+            >
                 <Command>
                     <CommandInput placeholder="Szukaj klienta..." />
                     <CommandList>
@@ -65,8 +70,10 @@ export function ClientCombobox({
                                 >
                                     <Check
                                         className={cn(
-                                            "mr-2 h-4 w-4",
-                                            value === client.id ? "opacity-100" : "opacity-0"
+                                            'mr-2 h-4 w-4',
+                                            value === client.id
+                                                ? 'opacity-100'
+                                                : 'opacity-0',
                                         )}
                                     />
                                     {client.name}
