@@ -2,12 +2,15 @@
 
 namespace App\Services;
 
+use App\Dto\Common\ActivityLogData;
 use App\Dto\Common\MediaData;
 use App\Dto\Common\SelectOptionData;
+use App\Dto\InternalNote\InternalNoteData;
 use App\Dto\RepairOrder\RepairOrderCreatePageData;
 use App\Dto\RepairOrder\RepairOrderEditPagePropsData;
 use App\Dto\RepairOrder\RepairOrderFormData;
 use App\Dto\RepairOrder\RepairOrderListItemData;
+use App\Dto\RepairOrder\RepairOrderShowData;
 use App\Dto\RepairOrder\RepairOrderShowPagePropsData;
 use App\Dto\RepairOrder\StoreRepairOrderData;
 use App\Dto\RepairOrder\UpdateRepairOrderData;
@@ -166,56 +169,18 @@ class RepairOrderService
 
         $user = Auth::user();
 
-        $images = $repairOrder->getMedia('images')->map(fn ($media) => MediaData::from([
-            'id' => $media->id,
-            'name' => $media->name,
-            'url' => $media->getUrl(),
-            'mime_type' => $media->mime_type,
-            'size' => $media->size,
-        ]));
-
         $internalNotes = $repairOrder->internalNotes
             ->sortByDesc('created_at')
             ->values()
-            ->map(fn ($note) => array_merge(
-                $note->toArray(),
-                ['author' => $note->author ? [
-                    'id' => $note->author->id,
-                    'name' => $note->author->name,
-                    'type' => class_basename($note->author_type),
-                ] : null]
-            ));
+            ->map(fn ($note) => InternalNoteData::fromInternalNote($note));
 
         $activityLog = $repairOrder->activities
             ->sortByDesc('created_at')
             ->values()
-            ->map(fn ($activity) => [
-                'id' => $activity->id,
-                'description' => $activity->description,
-                'event' => $activity->event,
-                'properties' => $activity->properties?->toArray(),
-                'created_at' => $activity->created_at,
-                'causer' => $activity->causer ? [
-                    'id' => $activity->causer->id,
-                    'name' => $activity->causer->name,
-                    'type' => class_basename($activity->causer_type),
-                ] : null,
-            ]);
+            ->map(fn ($activity) => ActivityLogData::fromActivity($activity));
 
         return RepairOrderShowPagePropsData::from([
-            'order' => [
-                'id' => $repairOrder->id,
-                'vehicle_id' => $repairOrder->vehicle_id,
-                'status' => $repairOrder->status,
-                'problem_description' => $repairOrder->problem_description,
-                'started_at' => $repairOrder->started_at,
-                'finished_at' => $repairOrder->finished_at,
-                'total_time_minutes' => $repairOrder->total_time_minutes,
-                'created_at' => $repairOrder->created_at,
-                'vehicle' => $repairOrder->vehicle,
-                'client' => $repairOrder->client,
-                'images' => $images,
-            ],
+            'order' => RepairOrderShowData::fromRepairOrder($repairOrder),
             'time_entries' => $repairOrder->timeEntries,
             'internal_notes' => $internalNotes,
             'activity_log' => $activityLog,
