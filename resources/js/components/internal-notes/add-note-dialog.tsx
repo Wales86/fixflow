@@ -12,10 +12,9 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { NotableType } from '@/types';
 
 interface AddNoteDialogProps {
-    notableType: NotableType;
+    notableType: App.Enums.NotableType;
     notableId: number;
     isOpen: boolean;
     onClose: () => void;

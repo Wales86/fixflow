@@ -2,10 +2,8 @@
 
 namespace App\Http\Requests\InternalNotes;
 
-use App\Models\Client;
+use App\Enums\NotableType;
 use App\Models\InternalNote;
-use App\Models\RepairOrder;
-use App\Models\Vehicle;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -24,11 +22,15 @@ class StoreInternalNoteRequest extends FormRequest
         return [
             'notable_type' => [
                 'required',
-                'string',
-                Rule::in([RepairOrder::class, Client::class, Vehicle::class]),
+                Rule::enum(NotableType::class),
             ],
             'notable_id' => ['required', 'integer'],
             'content' => ['required', 'string', 'max:5000'],
         ];
+    }
+
+    public function getNotableModelClass(): string
+    {
+        return NotableType::from($this->input('notable_type'))->modelClass();
     }
 }

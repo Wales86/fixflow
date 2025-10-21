@@ -1,11 +1,11 @@
-interface PaginationLink {
+export interface PaginationLink {
     url: string | null;
     label: string;
     page: number | null;
     active: boolean;
 }
 
-interface PaginatedData<T> {
+export interface PaginatedData<T> {
     current_page: number;
     data: T[];
     first_page_url: string;

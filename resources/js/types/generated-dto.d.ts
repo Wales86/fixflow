@@ -282,6 +282,7 @@ repair_orders: any;
 };
 }
 declare namespace App.Enums {
+export type NotableType = 'repair_order' | 'client' | 'vehicle';
 export type RepairOrderStatus = 'new' | 'diagnosis' | 'awaiting_contact' | 'awaiting_parts' | 'in_progress' | 'ready_for_pickup' | 'closed';
 export type UserRole = 'Owner' | 'Office' | 'Mechanic';
 }

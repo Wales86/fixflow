@@ -6,7 +6,6 @@ use App\Dto\InternalNote\StoreInternalNoteData;
 use App\Http\Requests\InternalNotes\StoreInternalNoteRequest;
 use App\Services\InternalNoteService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Gate;
 
 class InternalNoteController extends Controller
 {
@@ -17,12 +16,15 @@ class InternalNoteController extends Controller
     public function store(StoreInternalNoteRequest $request): RedirectResponse
     {
         $validated = $request->validated();
+        $modelClass = $request->getNotableModelClass();
 
-        $notable = $validated['notable_type']::withoutGlobalScopes()->findOrFail($validated['notable_id']);
+        $modelClass::findOrFail($validated['notable_id']);
 
-        Gate::authorize('view', $notable);
-
-        $storeData = StoreInternalNoteData::from($validated);
+        $storeData = StoreInternalNoteData::from([
+            'notable_type' => $modelClass,
+            'notable_id' => $validated['notable_id'],
+            'content' => $validated['content'],
+        ]);
 
         $this->internalNoteService->store($storeData, $request->user());
 

@@ -27,7 +27,7 @@ test('guests are redirected to login when attempting to store internal note', fu
     $repairOrder = RepairOrder::factory()->for($vehicle)->for($this->workshop)->create();
 
     post(route('internal-notes.store'), [
-        'notable_type' => RepairOrder::class,
+        'notable_type' => 'repair_order',
         'notable_id' => $repairOrder->id,
         'content' => 'Internal note content',
     ])->assertRedirect(route('login'));
@@ -43,7 +43,7 @@ test('user without proper role cannot store internal note', function () {
 
     actingAs($user)
         ->post(route('internal-notes.store'), [
-            'notable_type' => RepairOrder::class,
+            'notable_type' => 'repair_order',
             'notable_id' => $repairOrder->id,
             'content' => 'Internal note content',
         ])
@@ -60,7 +60,7 @@ test('owner can store an internal note for repair order', function () {
 
     actingAs($user)
         ->post(route('internal-notes.store'), [
-            'notable_type' => RepairOrder::class,
+            'notable_type' => 'repair_order',
             'notable_id' => $repairOrder->id,
             'content' => 'This is an internal note for the repair order',
         ])
@@ -86,7 +86,7 @@ test('office can store an internal note for repair order', function () {
 
     actingAs($user)
         ->post(route('internal-notes.store'), [
-            'notable_type' => RepairOrder::class,
+            'notable_type' => 'repair_order',
             'notable_id' => $repairOrder->id,
             'content' => 'Office note about the order',
         ])
@@ -112,7 +112,7 @@ test('storing internal note validates content is required', function () {
 
     actingAs($user)
         ->post(route('internal-notes.store'), [
-            'notable_type' => RepairOrder::class,
+            'notable_type' => 'repair_order',
             'notable_id' => $repairOrder->id,
         ])
         ->assertSessionHasErrors('content');
@@ -128,7 +128,7 @@ test('storing internal note validates content has max length of 5000 characters'
 
     actingAs($user)
         ->post(route('internal-notes.store'), [
-            'notable_type' => RepairOrder::class,
+            'notable_type' => 'repair_order',
             'notable_id' => $repairOrder->id,
             'content' => str_repeat('a', 5001),
         ])
@@ -146,11 +146,11 @@ test('user cannot store internal note for repair order from another workshop', f
 
     actingAs($user)
         ->post(route('internal-notes.store'), [
-            'notable_type' => RepairOrder::class,
+            'notable_type' => 'repair_order',
             'notable_id' => $otherRepairOrder->id,
             'content' => 'Trying to create note for another workshop',
         ])
-        ->assertForbidden();
+        ->assertNotFound();
 });
 
 test('storing internal note validates notable_type is required', function () {
@@ -175,7 +175,7 @@ test('storing internal note validates notable_id is required', function () {
 
     actingAs($user)
         ->post(route('internal-notes.store'), [
-            'notable_type' => RepairOrder::class,
+            'notable_type' => 'repair_order',
             'content' => 'Some content',
         ])
         ->assertSessionHasErrors('notable_id');
@@ -187,7 +187,7 @@ test('storing internal note returns 404 for non-existent repair order', function
 
     actingAs($user)
         ->post(route('internal-notes.store'), [
-            'notable_type' => RepairOrder::class,
+            'notable_type' => 'repair_order',
             'notable_id' => 99999,
             'content' => 'Some content',
         ])
@@ -204,7 +204,7 @@ test('storing internal note validates content must be string', function () {
 
     actingAs($user)
         ->post(route('internal-notes.store'), [
-            'notable_type' => RepairOrder::class,
+            'notable_type' => 'repair_order',
             'notable_id' => $repairOrder->id,
             'content' => 12345,
         ])
@@ -220,7 +220,7 @@ test('user without role cannot store internal note', function () {
 
     actingAs($user)
         ->post(route('internal-notes.store'), [
-            'notable_type' => RepairOrder::class,
+            'notable_type' => 'repair_order',
             'notable_id' => $repairOrder->id,
             'content' => 'Some content',
         ])
