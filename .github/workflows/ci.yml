@@ -76,6 +76,12 @@ jobs:
       - name: Copy Environment File
         run: cp .env.example .env
 
+      - name: Configure Polish Locale
+        run: |
+          sed -i 's/APP_LOCALE=en/APP_LOCALE=pl/g' .env
+          sed -i 's/APP_FALLBACK_LOCALE=en/APP_FALLBACK_LOCALE=pl/g' .env
+          sed -i 's/APP_FAKER_LOCALE=en_US/APP_FAKER_LOCALE=pl_PL/g' .env
+
       - name: Create SQLite Database
         run: touch testing
 
