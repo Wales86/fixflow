@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Dto\InternalNote\StoreInternalNoteData;
+use App\Dto\InternalNote\UpdateInternalNoteData;
 use App\Models\InternalNote;
 use App\Models\User;
 
@@ -17,6 +18,13 @@ class InternalNoteService
             'author_id' => $author->id,
             'author_type' => get_class($author),
         ]);
+
+        return $internalNote->fresh();
+    }
+
+    public function update(InternalNote $internalNote, UpdateInternalNoteData $data): InternalNote
+    {
+        $internalNote->update($data->all());
 
         return $internalNote->fresh();
     }

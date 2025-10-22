@@ -40,6 +40,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('repair-orders/{repairOrder}', [RepairOrderController::class, 'destroy'])->name('repair-orders.destroy');
 
     Route::post('internal-notes', [InternalNoteController::class, 'store'])->name('internal-notes.store');
+    Route::patch('internal-notes/{internalNote}', [InternalNoteController::class, 'update'])->name('internal-notes.update');
 });
 
 require __DIR__.'/settings.php';
