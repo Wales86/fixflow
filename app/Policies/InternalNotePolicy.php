@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\UserPermission;
 use App\Models\InternalNote;
 use App\Models\User;
 
@@ -9,7 +10,7 @@ class InternalNotePolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->can('view internal notes');
+        return $user->can(UserPermission::VIEW_INTERNAL_NOTES->value);
     }
 
     public function view(User $user, InternalNote $internalNote): bool
@@ -27,12 +28,12 @@ class InternalNotePolicy
 
         // Owner and Office can view via permission
         // Mechanics can view notes on items they work on
-        return $user->can('view internal notes') || $user->hasRole('Mechanic');
+        return $user->can(UserPermission::VIEW_INTERNAL_NOTES->value) || $user->hasRole('Mechanic');
     }
 
     public function create(User $user): bool
     {
-        return $user->can('create internal notes');
+        return $user->can(UserPermission::CREATE_INTERNAL_NOTES->value);
     }
 
     public function update(User $user, InternalNote $internalNote): bool
@@ -44,7 +45,7 @@ class InternalNotePolicy
         }
 
         return $user->workshop_id === $notable->workshop_id
-            && $user->can('update internal notes');
+            && $user->can(UserPermission::UPDATE_INTERNAL_NOTES->value);
     }
 
     public function delete(User $user, InternalNote $internalNote): bool
@@ -56,7 +57,7 @@ class InternalNotePolicy
         }
 
         return $user->workshop_id === $notable->workshop_id
-            && $user->can('delete internal notes');
+            && $user->can(UserPermission::DELETE_INTERNAL_NOTES->value);
     }
 
     public function restore(User $user, InternalNote $internalNote): bool

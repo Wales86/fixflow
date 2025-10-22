@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\UserPermission;
 use App\Models\RepairOrder;
 use App\Models\User;
 
@@ -9,7 +10,7 @@ class RepairOrderPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->can('view repair orders');
+        return $user->can(UserPermission::VIEW_REPAIR_ORDERS->value);
     }
 
     public function view(User $user, RepairOrder $repairOrder): bool
@@ -21,30 +22,30 @@ class RepairOrderPolicy
 
         // Owner and Office can view via permission
         // Mechanics can view repair orders they work on
-        return $user->can('view repair orders') || $user->hasRole('Mechanic');
+        return $user->can(UserPermission::VIEW_REPAIR_ORDERS->value) || $user->hasRole('Mechanic');
     }
 
     public function create(User $user): bool
     {
-        return $user->can('create repair orders');
+        return $user->can(UserPermission::CREATE_REPAIR_ORDERS->value);
     }
 
     public function update(User $user, RepairOrder $repairOrder): bool
     {
         return $user->workshop_id === $repairOrder->workshop_id
-            && $user->can('update repair orders');
+            && $user->can(UserPermission::UPDATE_REPAIR_ORDERS->value);
     }
 
     public function delete(User $user, RepairOrder $repairOrder): bool
     {
         return $user->workshop_id === $repairOrder->workshop_id
-            && $user->can('delete repair orders');
+            && $user->can(UserPermission::DELETE_REPAIR_ORDERS->value);
     }
 
     public function updateStatus(User $user, RepairOrder $repairOrder): bool
     {
         return $user->workshop_id === $repairOrder->workshop_id
-            && $user->can('update repair order status');
+            && $user->can(UserPermission::UPDATE_REPAIR_ORDER_STATUS->value);
     }
 
     public function restore(User $user, RepairOrder $repairOrder): bool

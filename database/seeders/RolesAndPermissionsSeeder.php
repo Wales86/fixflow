@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserPermission;
 use App\Enums\UserRole;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
@@ -16,32 +17,7 @@ class RolesAndPermissionsSeeder extends Seeder
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         // Create permissions
-        $permissions = [
-            // Client permissions
-            'view clients',
-            'create clients',
-            'update clients',
-            'delete clients',
-
-            // Vehicle permissions
-            'view vehicles',
-            'create vehicles',
-            'update vehicles',
-            'delete vehicles',
-
-            // Repair Order permissions
-            'view repair orders',
-            'create repair orders',
-            'update repair orders',
-            'delete repair orders',
-            'update repair order status',
-
-            // Internal Note permissions
-            'view internal notes',
-            'create internal notes',
-            'update internal notes',
-            'delete internal notes',
-        ];
+        $permissions = UserPermission::all();
 
         foreach ($permissions as $permission) {
             Permission::create(['name' => $permission]);
@@ -57,22 +33,22 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // Office can view, create, and update (but not delete)
         $officeRole->givePermissionTo([
-            'view clients',
-            'create clients',
-            'update clients',
+            UserPermission::VIEW_CLIENTS->value,
+            UserPermission::CREATE_CLIENTS->value,
+            UserPermission::UPDATE_CLIENTS->value,
 
-            'view vehicles',
-            'create vehicles',
-            'update vehicles',
+            UserPermission::VIEW_VEHICLES->value,
+            UserPermission::CREATE_VEHICLES->value,
+            UserPermission::UPDATE_VEHICLES->value,
 
-            'view repair orders',
-            'create repair orders',
-            'update repair orders',
-            'update repair order status',
+            UserPermission::VIEW_REPAIR_ORDERS->value,
+            UserPermission::CREATE_REPAIR_ORDERS->value,
+            UserPermission::UPDATE_REPAIR_ORDERS->value,
+            UserPermission::UPDATE_REPAIR_ORDER_STATUS->value,
 
-            'view internal notes',
-            'create internal notes',
-            'update internal notes',
+            UserPermission::VIEW_INTERNAL_NOTES->value,
+            UserPermission::CREATE_INTERNAL_NOTES->value,
+            UserPermission::UPDATE_INTERNAL_NOTES->value,
         ]);
 
         // Mechanic has no list/index permissions
