@@ -31,6 +31,6 @@ class UsersSeeder extends Seeder
         ]);
 
         // Assign Office role
-        $office->assignRole(UserRole::Office->value);
+        $office->assignRole(UserRole::OFFICE->value);
     }
 }

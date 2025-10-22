@@ -4,16 +4,16 @@ namespace App\Enums;
 
 enum UserRole: string
 {
-    case Owner = 'Owner';
-    case Office = 'Office';
-    case Mechanic = 'Mechanic';
+    case OWNER = 'Owner';
+    case OFFICE = 'Office';
+    case MECHANIC = 'Mechanic';
 
     public function label(): string
     {
         return match ($this) {
-            self::Owner => 'Właściciel',
-            self::Office => 'Biuro',
-            self::Mechanic => 'Mechanik',
+            self::OWNER => 'Właściciel',
+            self::OFFICE => 'Biuro',
+            self::MECHANIC => 'Mechanik',
         };
     }
 

@@ -9,7 +9,7 @@ class InternalNotePolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->hasAnyRole(['Owner', 'Office']);
+        return $user->can('view internal notes');
     }
 
     public function view(User $user, InternalNote $internalNote): bool
@@ -20,13 +20,19 @@ class InternalNotePolicy
             return false;
         }
 
-        return $user->workshop_id === $notable->workshop_id
-            && $user->hasAnyRole(['Owner', 'Office', 'Mechanic']);
+        // Must be from same workshop
+        if ($user->workshop_id !== $notable->workshop_id) {
+            return false;
+        }
+
+        // Owner and Office can view via permission
+        // Mechanics can view notes on items they work on
+        return $user->can('view internal notes') || $user->hasRole('Mechanic');
     }
 
     public function create(User $user): bool
     {
-        return $user->hasAnyRole(['Owner', 'Office']);
+        return $user->can('create internal notes');
     }
 
     public function update(User $user, InternalNote $internalNote): bool
@@ -38,7 +44,7 @@ class InternalNotePolicy
         }
 
         return $user->workshop_id === $notable->workshop_id
-            && $user->hasAnyRole(['Owner', 'Office']);
+            && $user->can('update internal notes');
     }
 
     public function delete(User $user, InternalNote $internalNote): bool
@@ -50,7 +56,7 @@ class InternalNotePolicy
         }
 
         return $user->workshop_id === $notable->workshop_id
-            && $user->hasRole('Owner');
+            && $user->can('delete internal notes');
     }
 
     public function restore(User $user, InternalNote $internalNote): bool

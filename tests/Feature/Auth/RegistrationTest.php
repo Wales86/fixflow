@@ -11,9 +11,6 @@ test('registration screen can be rendered', function () {
 });
 
 test('new workshop and owner can register', function () {
-    // Create Owner role (normally done in seeding)
-    Role::create(['name' => 'Owner']);
-
     $response = $this->post(route('register'), [
         'workshop_name' => 'Test Workshop',
         'owner_name' => 'Test Owner',

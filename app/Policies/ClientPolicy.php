@@ -9,27 +9,27 @@ class ClientPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->hasAnyRole(['Owner', 'Office']);
+        return $user->can('view clients');
     }
 
     public function view(User $user, Client $client): bool
     {
-        return $user->hasAnyRole(['Owner', 'Office']);
+        return $user->can('view clients');
     }
 
     public function create(User $user): bool
     {
-        return $user->hasAnyRole(['Owner', 'Office']);
+        return $user->can('create clients');
     }
 
     public function update(User $user, Client $client): bool
     {
-        return $user->hasAnyRole(['Owner', 'Office']);
+        return $user->can('update clients');
     }
 
     public function delete(User $user, Client $client): bool
     {
-        return $user->hasRole('Owner');
+        return $user->can('delete clients');
     }
 
     public function restore(User $user, Client $client): bool

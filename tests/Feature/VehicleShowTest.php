@@ -1,18 +1,10 @@
 <?php
 
-use App\Enums\UserRole;
 use App\Models\Client;
 use App\Models\RepairOrder;
 use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\Workshop;
-use Spatie\Permission\Models\Role;
-
-beforeEach(function () {
-    foreach (UserRole::cases() as $role) {
-        Role::create(['name' => $role->value]);
-    }
-});
 
 test('guests cannot view vehicle details', function () {
     $workshop = Workshop::factory()->create();
