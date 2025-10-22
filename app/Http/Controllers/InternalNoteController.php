@@ -42,4 +42,17 @@ class InternalNoteController extends Controller
 
         return back()->with('success', __('internal_notes.messages.updated'));
     }
+
+    public function destroy(InternalNote $internalNote): RedirectResponse
+    {
+        $this->authorize('delete', $internalNote);
+
+        try {
+            $this->internalNoteService->delete($internalNote);
+        } catch (\Exception) {
+            return back()->with('error', 'Nie udało się usunąć notatki');
+        }
+
+        return back()->with('success', __('internal_notes.messages.deleted'));
+    }
 }

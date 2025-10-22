@@ -6,6 +6,7 @@ use App\Dto\InternalNote\StoreInternalNoteData;
 use App\Dto\InternalNote\UpdateInternalNoteData;
 use App\Models\InternalNote;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class InternalNoteService
 {
@@ -27,5 +28,16 @@ class InternalNoteService
         $internalNote->update($data->all());
 
         return $internalNote->fresh();
+    }
+
+    public function delete(InternalNote $internalNote): void
+    {
+        try {
+            $internalNote->delete();
+        } catch (\Exception $e) {
+            Log::error('Error deleting internal note: '.$e->getMessage());
+
+            throw $e;
+        }
     }
 }

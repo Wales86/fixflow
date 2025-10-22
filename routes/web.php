@@ -41,6 +41,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('internal-notes', [InternalNoteController::class, 'store'])->name('internal-notes.store');
     Route::patch('internal-notes/{internalNote}', [InternalNoteController::class, 'update'])->name('internal-notes.update');
+    Route::delete('internal-notes/{internalNote}', [InternalNoteController::class, 'destroy'])->name('internal-notes.destroy');
 });
 
 require __DIR__.'/settings.php';
