@@ -51,6 +51,8 @@ export default function RepairOrderShow({
                     time_entries={time_entries}
                     internal_notes={internal_notes}
                     activity_log={activity_log}
+                    can_edit={can_edit}
+                    can_delete={can_delete}
                 />
             </div>
 

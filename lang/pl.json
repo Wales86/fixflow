@@ -153,5 +153,9 @@
     "add_internal_note": "Dodaj notatkę wewnętrzną",
     "add_internal_note_description": "Dodaj prywatną notatkę widoczną tylko dla Twojego zespołu",
     "note_content": "Treść notatki",
-    "note_content_placeholder": "Wpisz treść notatki..."
+    "note_content_placeholder": "Wpisz treść notatki...",
+    "edit_note": "Edytuj notatkę",
+    "delete_note": "Usuń notatkę",
+    "delete_note_confirm_title": "Usuń notatkę",
+    "delete_note_confirm_description": "Czy na pewno chcesz usunąć tę notatkę? Tej operacji nie można cofnąć."
 }
