@@ -21,7 +21,5 @@ class RepairOrderShowPagePropsData extends Data
         public DataCollection $internal_notes,
         #[DataCollectionOf(ActivityLogData::class)]
         public DataCollection $activity_log,
-        public bool $can_edit,
-        public bool $can_delete,
     ) {}
 }

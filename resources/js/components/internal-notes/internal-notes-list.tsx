@@ -16,19 +16,16 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
+import { usePermission } from '@/lib/permissions';
 
 interface InternalNotesListProps {
     notes: App.Dto.InternalNote.InternalNoteData[];
-    can_edit: boolean;
-    can_delete: boolean;
 }
 
-export function InternalNotesList({
-    notes,
-    can_edit,
-    can_delete,
-}: InternalNotesListProps) {
+export function InternalNotesList({ notes }: InternalNotesListProps) {
     const { t } = useLaravelReactI18n();
+    const canEdit = usePermission('update_internal_notes');
+    const canDelete = usePermission('delete_internal_notes');
     const [editingNoteId, setEditingNoteId] = useState<number | null>(null);
     const [editContent, setEditContent] = useState('');
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -130,7 +127,7 @@ export function InternalNotesList({
 
                                         {!isEditing && (
                                             <div className="flex gap-1">
-                                                {can_edit && (
+                                                {canEdit && (
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
@@ -147,7 +144,7 @@ export function InternalNotesList({
                                                         </span>
                                                     </Button>
                                                 )}
-                                                {can_delete && (
+                                                {canDelete && (
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"

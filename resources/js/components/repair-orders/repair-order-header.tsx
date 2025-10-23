@@ -9,24 +9,25 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { usePermission } from '@/lib/permissions';
 import { Edit, FileText, MoreVertical, RefreshCw, Trash2 } from 'lucide-react';
 
 interface RepairOrderHeaderProps {
     order: App.Dto.RepairOrder.RepairOrderShowData;
-    can_edit: boolean;
-    can_delete: boolean;
     onStatusChange: () => void;
     onAddNote: () => void;
 }
 
 export function RepairOrderHeader({
     order,
-    can_edit,
-    can_delete,
     onStatusChange,
     onAddNote,
 }: RepairOrderHeaderProps) {
     const { t } = useLaravelReactI18n();
+    const canUpdateStatus = usePermission('update_repair_order_status');
+    const canCreateNotes = usePermission('create_internal_notes');
+    const canEdit = usePermission('update_repair_orders');
+    const canDelete = usePermission('delete_repair_orders');
 
     const handleEdit = () => {
         router.visit(`/repair-orders/${order.id}/edit`);
@@ -37,6 +38,9 @@ export function RepairOrderHeader({
             router.delete(`/repair-orders/${order.id}`);
         }
     };
+
+    const hasAnyAction =
+        canUpdateStatus || canCreateNotes || canEdit || canDelete;
 
     return (
         <div className="flex items-start justify-between">
@@ -53,40 +57,48 @@ export function RepairOrderHeader({
                 </p>
             </div>
 
-            {can_edit && (
+            {hasAnyAction && (
                 <div className="flex gap-2">
-                    <Button variant="outline" onClick={onStatusChange}>
-                        <RefreshCw className="mr-2 h-4 w-4" />
-                        {t('change_status')}
-                    </Button>
+                    {canUpdateStatus && (
+                        <Button variant="outline" onClick={onStatusChange}>
+                            <RefreshCw className="mr-2 h-4 w-4" />
+                            {t('change_status')}
+                        </Button>
+                    )}
 
-                    <Button variant="outline" onClick={onAddNote}>
-                        <FileText className="mr-2 h-4 w-4" />
-                        {t('add_note')}
-                    </Button>
+                    {canCreateNotes && (
+                        <Button variant="outline" onClick={onAddNote}>
+                            <FileText className="mr-2 h-4 w-4" />
+                            {t('add_note')}
+                        </Button>
+                    )}
 
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="outline" size="icon">
-                                <MoreVertical className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={handleEdit}>
-                                <Edit className="mr-2 h-4 w-4" />
-                                {t('edit')}
-                            </DropdownMenuItem>
-                            {can_delete && (
-                                <DropdownMenuItem
-                                    onClick={handleDelete}
-                                    className="text-red-600"
-                                >
-                                    <Trash2 className="mr-2 h-4 w-4" />
-                                    {t('delete')}
-                                </DropdownMenuItem>
-                            )}
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    {(canEdit || canDelete) && (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" size="icon">
+                                    <MoreVertical className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                {canEdit && (
+                                    <DropdownMenuItem onClick={handleEdit}>
+                                        <Edit className="mr-2 h-4 w-4" />
+                                        {t('edit')}
+                                    </DropdownMenuItem>
+                                )}
+                                {canDelete && (
+                                    <DropdownMenuItem
+                                        onClick={handleDelete}
+                                        className="text-red-600"
+                                    >
+                                        <Trash2 className="mr-2 h-4 w-4" />
+                                        {t('delete')}
+                                    </DropdownMenuItem>
+                                )}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    )}
                 </div>
             )}
         </div>

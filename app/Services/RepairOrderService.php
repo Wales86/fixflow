@@ -23,7 +23,6 @@ use App\Models\RepairOrder;
 use App\Models\User;
 use App\Models\Vehicle;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Auth;
 use Spatie\LaravelData\DataCollection;
 
 class RepairOrderService
@@ -169,8 +168,6 @@ class RepairOrderService
             'activities.causer',
         ]);
 
-        $user = Auth::user();
-
         $internalNotes = $repairOrder->internalNotes
             ->sortByDesc('created_at')
             ->values()
@@ -186,8 +183,6 @@ class RepairOrderService
             'time_entries' => $repairOrder->timeEntries,
             'internal_notes' => $internalNotes,
             'activity_log' => $activityLog,
-            'can_edit' => $user?->can('update', $repairOrder) ?? false,
-            'can_delete' => $user?->can('delete', $repairOrder) ?? false,
         ]);
     }
 

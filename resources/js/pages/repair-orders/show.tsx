@@ -16,8 +16,6 @@ export default function RepairOrderShow({
     time_entries,
     internal_notes,
     activity_log,
-    can_edit,
-    can_delete,
 }: App.Dto.RepairOrder.RepairOrderShowPagePropsData) {
     const { t } = useLaravelReactI18n();
     const [isStatusDialogOpen, setStatusDialogOpen] = useState(false);
@@ -41,8 +39,6 @@ export default function RepairOrderShow({
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <RepairOrderHeader
                     order={order}
-                    can_edit={can_edit}
-                    can_delete={can_delete}
                     onStatusChange={() => setStatusDialogOpen(true)}
                     onAddNote={() => setNoteDialogOpen(true)}
                 />
@@ -53,8 +49,6 @@ export default function RepairOrderShow({
                     time_entries={time_entries}
                     internal_notes={internal_notes}
                     activity_log={activity_log}
-                    can_edit={can_edit}
-                    can_delete={can_delete}
                 />
             </div>
 

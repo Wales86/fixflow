@@ -30,16 +30,13 @@ test('guests are redirected to login page when accessing index', function () {
     get(route('repair-orders.index'))->assertRedirect(route('login'));
 });
 
-test('mechanic can view repair orders index', function () {
+test('mechanic cannot view repair orders index', function () {
     $user = User::factory()->for($this->workshop)->create();
     $user->assignRole('Mechanic');
 
     actingAs($user)
         ->get(route('repair-orders.index'))
-        ->assertOk()
-        ->assertInertia(fn ($page) => $page
-            ->component('repair-orders/index')
-        );
+        ->assertForbidden();
 });
 
 test('owner can view repair orders list', function () {
@@ -304,8 +301,6 @@ test('owner can view repair order details', function () {
             ->has('time_entries')
             ->has('internal_notes')
             ->has('activity_log')
-            ->has('can_edit')
-            ->has('can_delete')
         );
 });
 
@@ -326,8 +321,6 @@ test('office can view repair order details', function () {
             ->has('time_entries')
             ->has('internal_notes')
             ->has('activity_log')
-            ->where('can_edit', true)
-            ->where('can_delete', false)
         );
 });
 
@@ -345,8 +338,6 @@ test('mechanic can view repair order details', function () {
         ->assertInertia(fn ($page) => $page
             ->component('repair-orders/show')
             ->has('order')
-            ->where('can_edit', false)
-            ->where('can_delete', false)
         );
 });
 
@@ -1391,28 +1382,22 @@ test('mechanic can view active repair orders', function () {
         );
 });
 
-test('owner can view mechanic index', function () {
+test('owner cannot view mechanic index', function () {
     $user = User::factory()->for($this->workshop)->create();
     $user->assignRole('Owner');
 
     actingAs($user)
         ->get(route('repair-orders.mechanic'))
-        ->assertOk()
-        ->assertInertia(fn ($page) => $page
-            ->component('repair-orders/mechanic-index')
-        );
+        ->assertForbidden();
 });
 
-test('office can view mechanic index', function () {
+test('office cannot view mechanic index', function () {
     $user = User::factory()->for($this->workshop)->create();
     $user->assignRole('Office');
 
     actingAs($user)
         ->get(route('repair-orders.mechanic'))
-        ->assertOk()
-        ->assertInertia(fn ($page) => $page
-            ->component('repair-orders/mechanic-index')
-        );
+        ->assertForbidden();
 });
 
 test('mechanic index excludes closed repair orders', function () {

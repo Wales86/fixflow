@@ -9,16 +9,12 @@ interface RepairOrderTabsProps {
     time_entries: App.Dto.TimeTracking.TimeEntryData[];
     internal_notes: App.Dto.InternalNote.InternalNoteData[];
     activity_log: App.Dto.Common.ActivityLogData[];
-    can_edit: boolean;
-    can_delete: boolean;
 }
 
 export function RepairOrderTabs({
     time_entries,
     internal_notes,
     activity_log,
-    can_edit,
-    can_delete,
 }: RepairOrderTabsProps) {
     const { t } = useLaravelReactI18n();
 
@@ -41,11 +37,7 @@ export function RepairOrderTabs({
             </TabsContent>
 
             <TabsContent value="notes">
-                <InternalNotesList
-                    notes={internal_notes}
-                    can_edit={can_edit}
-                    can_delete={can_delete}
-                />
+                <InternalNotesList notes={internal_notes} />
             </TabsContent>
 
             <TabsContent value="history">
