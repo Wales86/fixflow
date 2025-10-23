@@ -8,6 +8,7 @@ import { RepairOrderHeader } from '@/components/repair-orders/repair-order-heade
 import { RepairOrderTabs } from '@/components/repair-orders/repair-order-tabs';
 import { UpdateStatusDialog } from '@/components/repair-orders/update-status-dialog';
 import AppLayout from '@/layouts/app-layout';
+import { useRepairOrdersListUrl } from '@/lib/permissions';
 import { type BreadcrumbItem } from '@/types';
 
 export default function RepairOrderShow({
@@ -21,11 +22,12 @@ export default function RepairOrderShow({
     const { t } = useLaravelReactI18n();
     const [isStatusDialogOpen, setStatusDialogOpen] = useState(false);
     const [isNoteDialogOpen, setNoteDialogOpen] = useState(false);
+    const repairOrdersListUrl = useRepairOrdersListUrl();
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: t('repair_orders'),
-            href: '/repair-orders',
+            href: repairOrdersListUrl,
         },
         {
             title: `#${order.id}`,

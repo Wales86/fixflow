@@ -1,6 +1,6 @@
+import { router } from '@inertiajs/react';
 import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
-import { router } from '@inertiajs/react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
 import { Check, FileText, Pencil, Trash2, User, X } from 'lucide-react';
 import { useState } from 'react';
@@ -135,7 +135,9 @@ export function InternalNotesList({
                                                         variant="ghost"
                                                         size="sm"
                                                         onClick={() =>
-                                                            handleStartEdit(note)
+                                                            handleStartEdit(
+                                                                note,
+                                                            )
                                                         }
                                                         className="h-8 w-8 p-0"
                                                     >

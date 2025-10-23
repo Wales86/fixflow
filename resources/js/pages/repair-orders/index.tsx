@@ -1,6 +1,7 @@
 import { RepairOrdersDataTable } from '@/components/repair-orders/repair-orders-data-table';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
+import { useRepairOrdersListUrl } from '@/lib/permissions';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
@@ -12,11 +13,12 @@ export default function RepairOrdersIndex({
     statusOptions,
 }: App.Dto.RepairOrder.RepairOrderIndexPagePropsData) {
     const { t } = useLaravelReactI18n();
+    const repairOrdersListUrl = useRepairOrdersListUrl();
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: t('repair_orders'),
-            href: '/repair-orders',
+            href: repairOrdersListUrl,
         },
     ];
 

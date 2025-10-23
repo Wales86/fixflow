@@ -163,7 +163,7 @@ Route::get('/users', function () {
 
 ## Do Things the Laravel Way
 
-- Use `sail artisan make:` commands to create new files (i.e. migrations, controllers, models, etc.). You can list available Artisan commands using the `list-artisan-commands` tool.
+- Use `./vendor/bin/sail artisan make:` commands to create new files (i.e. migrations, controllers, models, etc.). You can list available Artisan commands using the `list-artisan-commands` tool.
 - If you're creating a generic PHP class, use `artisan make:class`.
 - Pass `--no-interaction` to all Artisan commands to ensure they work without user input. You should also pass the correct `--options` to ensure correct behavior.
 
@@ -208,7 +208,7 @@ public function store(StoreProjectRequest $request)
 ### Testing
 - When creating models for tests, use the factories for the models. Check if the factory has custom states that can be used before manually setting up the model.
 - Faker: Use methods such as `$this->faker->word()` or `fake()->randomDigit()`. Follow existing conventions whether to use `$this->faker` or `fake()`.
-- When creating tests, make use of `sail artisan make:test [options] <name>` to create a feature test, and pass `--unit` to create a unit test. Most tests should be feature tests.
+- When creating tests, make use of `./vendor/bin/sail artisan make:test [options] <name>` to create a feature test, and pass `--unit` to create a unit test. Most tests should be feature tests.
 
 ### Vite Error
 - If you receive an "Illuminate\Foundation\ViteException: Unable to locate file in Vite manifest" error, you can run `npm run build` or ask the user to run `npm run dev` or `composer run dev`.
@@ -249,7 +249,7 @@ public function store(StoreProjectRequest $request)
 - use spatie/laravel-data package for Request -> Service data flow
 - use spatie relevant packages to resolve problems that they handle
 - use context7 to get spatie packages documentation
-- always use 'sail' for commands to run it in docker container. For example: `sail php artisan make:migration create_vehicles_table`
+- always use './vendor/bin/sail' for commands to run it in docker container. For example: `./vendor/bin/sail php artisan make:migration create_vehicles_table`
 
 === pint/core rules ===
 
@@ -280,9 +280,9 @@ it('is true', function () {
 
 ### Running Tests
 - Run the minimal number of tests using an appropriate filter before finalizing code edits.
-- To run all tests: `sail artisan test`.
-- To run all tests in a file: `sail artisan test tests/Feature/ExampleTest.php`.
-- To filter on a particular test name: `sail artisan test --filter=testName` (recommended after making a change to a related file).
+- To run all tests: `./vendor/bin/sail artisan test`.
+- To run all tests in a file: `./vendor/bin/sail artisan test tests/Feature/ExampleTest.php`.
+- To filter on a particular test name: `./vendor/bin/sail artisan test --filter=testName` (recommended after making a change to a related file).
 - When the tests relating to your changes are passing, ask the user if they would like to run the entire test suite to ensure everything is still passing.
 
 ### Pest Assertions
@@ -475,5 +475,5 @@ export default () => (
 ## Test Enforcement
 
 - Every change must be programmatically tested. Write a new test or update an existing test, then run the affected tests to make sure they pass.
-- Run the minimum number of tests needed to ensure code quality and speed. Use `sail artisan test` with a specific filename or filter.
+- Run the minimum number of tests needed to ensure code quality and speed. Use `./vendor/bin/sail artisan test` with a specific filename or filter.
 </laravel-boost-guidelines>
