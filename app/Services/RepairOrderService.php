@@ -6,6 +6,7 @@ use App\Dto\Common\ActivityLogData;
 use App\Dto\Common\MediaData;
 use App\Dto\Common\SelectOptionData;
 use App\Dto\InternalNote\InternalNoteData;
+use App\Dto\RepairOrder\MechanicRepairOrderCardData;
 use App\Dto\RepairOrder\RepairOrderCreatePageData;
 use App\Dto\RepairOrder\RepairOrderEditPagePropsData;
 use App\Dto\RepairOrder\RepairOrderFormData;
@@ -19,6 +20,7 @@ use App\Dto\RepairOrder\VehicleSelectionData;
 use App\Enums\RepairOrderStatus;
 use App\Exceptions\CannotDeleteRepairOrderWithTimeEntriesException;
 use App\Models\RepairOrder;
+use App\Models\User;
 use App\Models\Vehicle;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
@@ -187,6 +189,42 @@ class RepairOrderService
             'can_edit' => $user?->can('update', $repairOrder) ?? false,
             'can_delete' => $user?->can('delete', $repairOrder) ?? false,
         ]);
+    }
+
+    /**
+     * Get active (non-closed) repair orders for mechanic view.
+     *
+     * @return DataCollection<int, MechanicRepairOrderCardData>
+     */
+    public function getMechanicActiveOrders(User $user, ?string $search = null): DataCollection
+    {
+        $query = RepairOrder::query()
+            ->with([
+                'vehicle',
+                'client',
+            ])
+            ->where('workshop_id', $user->workshop_id)
+            ->where('status', '!=', RepairOrderStatus::Closed);
+
+        if (! empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('problem_description', 'like', "%{$search}%")
+                    ->orWhereHas('vehicle', function ($vehicleQuery) use ($search) {
+                        $vehicleQuery->where('registration_number', 'like', "%{$search}%")
+                            ->orWhere('make', 'like', "%{$search}%")
+                            ->orWhere('model', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('client', function ($clientQuery) use ($search) {
+                        $clientQuery->where('last_name', 'like', "%{$search}%")
+                            ->orWhere('first_name', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        return MechanicRepairOrderCardData::collect(
+            $query->latest('created_at')->get(),
+            DataCollection::class
+        );
     }
 
     /**

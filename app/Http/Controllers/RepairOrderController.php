@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Dto\RepairOrder\MechanicRepairOrderIndexPagePropsData;
 use App\Dto\RepairOrder\RepairOrderFiltersData;
 use App\Dto\RepairOrder\RepairOrderIndexPagePropsData;
 use App\Dto\RepairOrder\StoreRepairOrderData;
@@ -10,6 +11,7 @@ use App\Dto\RepairOrder\UpdateRepairOrderStatusData;
 use App\Enums\RepairOrderStatus;
 use App\Exceptions\CannotDeleteRepairOrderWithTimeEntriesException;
 use App\Http\Requests\RepairOrders\CreateRepairOrderRequest;
+use App\Http\Requests\RepairOrders\ListMechanicRepairOrdersRequest;
 use App\Http\Requests\RepairOrders\ListRepairOrdersRequest;
 use App\Http\Requests\RepairOrders\StoreRepairOrderRequest;
 use App\Http\Requests\RepairOrders\UpdateRepairOrderRequest;
@@ -37,6 +39,21 @@ class RepairOrderController extends Controller
         ]);
 
         return Inertia::render('repair-orders/index', $props);
+    }
+
+    public function mechanicIndex(ListMechanicRepairOrdersRequest $request): Response
+    {
+        $orders = $this->repairOrderService->getMechanicActiveOrders(
+            $request->user(),
+            $request->validated('search')
+        );
+
+        $props = MechanicRepairOrderIndexPagePropsData::from([
+            'orders' => $orders,
+            'search' => $request->validated('search'),
+        ]);
+
+        return Inertia::render('repair-orders/mechanic-index', $props);
     }
 
     public function create(CreateRepairOrderRequest $request): Response

@@ -119,8 +119,24 @@ notable_type: string;
 notable_id: number;
 content: string;
 };
+export type UpdateInternalNoteData = {
+content: string;
+};
 }
 declare namespace App.Dto.RepairOrder {
+export type MechanicRepairOrderCardData = {
+id: number;
+status: App.Enums.RepairOrderStatus;
+problem_description: string;
+total_time_minutes: number;
+created_at: string;
+vehicle: App.Dto.RepairOrder.RepairOrderVehicleData;
+client: App.Dto.RepairOrder.RepairOrderClientData;
+};
+export type MechanicRepairOrderIndexPagePropsData = {
+orders: Array<App.Dto.RepairOrder.MechanicRepairOrderCardData>;
+search: string | null;
+};
 export type RepairOrderClientData = {
 id: number;
 first_name: string;
@@ -284,5 +300,6 @@ repair_orders: any;
 declare namespace App.Enums {
 export type NotableType = 'repair_order' | 'client' | 'vehicle';
 export type RepairOrderStatus = 'new' | 'diagnosis' | 'awaiting_contact' | 'awaiting_parts' | 'in_progress' | 'ready_for_pickup' | 'closed';
+export type UserPermission = 'view_dashboard' | 'view_clients' | 'create_clients' | 'update_clients' | 'delete_clients' | 'view_vehicles' | 'create_vehicles' | 'update_vehicles' | 'delete_vehicles' | 'view_repair_orders' | 'view_repair_orders_mechanic' | 'create_repair_orders' | 'update_repair_orders' | 'delete_repair_orders' | 'update_repair_order_status' | 'view_internal_notes' | 'create_internal_notes' | 'update_internal_notes' | 'delete_internal_notes';
 export type UserRole = 'Owner' | 'Office' | 'Mechanic';
 }

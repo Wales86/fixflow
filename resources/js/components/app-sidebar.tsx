@@ -23,26 +23,37 @@ import AppLogo from './app-logo';
 export function AppSidebar() {
     const { t } = useLaravelReactI18n();
 
+    // Wszystkie możliwe NavItems w jednej tablicy z permissions
     const mainNavItems: NavItem[] = [
         {
             title: t('dashboard'),
             href: dashboard(),
             icon: LayoutGrid,
+            permission: 'view_dashboard',
         },
         {
             title: t('clients'),
             href: clients.index(),
             icon: Users,
+            permission: 'view_clients',
         },
         {
             title: t('vehicles'),
             href: vehicles.index(),
             icon: Car,
+            permission: 'view_vehicles',
         },
         {
             title: t('repair_orders'),
             href: repairOrders.index(),
             icon: Wrench,
+            permission: 'view_repair_orders',
+        },
+        {
+            title: t('active_repair_orders'),
+            href: repairOrders.mechanic(),
+            icon: Wrench,
+            permission: 'view_repair_orders_mechanic',
         },
     ];
 

@@ -157,5 +157,7 @@
     "edit_note": "Edytuj notatkę",
     "delete_note": "Usuń notatkę",
     "delete_note_confirm_title": "Usuń notatkę",
-    "delete_note_confirm_description": "Czy na pewno chcesz usunąć tę notatkę? Tej operacji nie można cofnąć."
+    "delete_note_confirm_description": "Czy na pewno chcesz usunąć tę notatkę? Tej operacji nie można cofnąć.",
+    "active_repair_orders": "Aktywne zlecenia",
+    "no_active_repair_orders": "Brak aktywnych zleceń"
 }

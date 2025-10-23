@@ -28,11 +28,20 @@ class RolesAndPermissionsSeeder extends Seeder
         $officeRole = Role::create(['name' => UserRole::OFFICE->value]);
         $mechanicRole = Role::create(['name' => UserRole::MECHANIC->value]);
 
-        // Owner has all permissions
-        $ownerRole->givePermissionTo(Permission::all());
+        // Owner has all permissions except specific ones
+        $excludedForOwner = [
+            UserPermission::VIEW_REPAIR_ORDERS_MECHANIC->value,
+        ];
+
+        $ownerPermissions = Permission::all()
+            ->whereNotIn('name', $excludedForOwner);
+
+        $ownerRole->givePermissionTo($ownerPermissions);
 
         // Office can view, create, and update (but not delete)
         $officeRole->givePermissionTo([
+            UserPermission::VIEW_DASHBOARD->value,
+
             UserPermission::VIEW_CLIENTS->value,
             UserPermission::CREATE_CLIENTS->value,
             UserPermission::UPDATE_CLIENTS->value,
@@ -51,8 +60,10 @@ class RolesAndPermissionsSeeder extends Seeder
             UserPermission::UPDATE_INTERNAL_NOTES->value,
         ]);
 
-        // Mechanic has no list/index permissions
-        // They can only view individual items assigned to them (handled in policies)
+        // Mechanic can view repair orders list (mechanic view only)
+        $mechanicRole->givePermissionTo([
+            UserPermission::VIEW_REPAIR_ORDERS_MECHANIC->value,
+        ]);
 
         // Update cache to know about the newly created permissions and roles
         app()[PermissionRegistrar::class]->forgetCachedPermissions();

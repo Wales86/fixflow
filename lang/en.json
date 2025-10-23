@@ -157,5 +157,7 @@
     "edit_note": "Edit note",
     "delete_note": "Delete note",
     "delete_note_confirm_title": "Delete Note",
-    "delete_note_confirm_description": "Are you sure you want to delete this note? This action cannot be undone."
+    "delete_note_confirm_description": "Are you sure you want to delete this note? This action cannot be undone.",
+    "active_repair_orders": "Active Repair Orders",
+    "no_active_repair_orders": "No active repair orders found"
 }

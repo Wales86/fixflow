@@ -38,5 +38,4 @@ class StoreVehicleRequest extends FormRequest
             'registration_number' => ['required', 'string', 'max:20'],
         ];
     }
-
 }

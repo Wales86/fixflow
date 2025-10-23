@@ -15,6 +15,7 @@ use Inertia\Response;
 
 class RegisteredUserController extends Controller
 {
+    use RedirectsUsers;
     /**
      * Show the registration page.
      */
@@ -48,6 +49,6 @@ class RegisteredUserController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->intended($this->redirectPath($user));
     }
 }

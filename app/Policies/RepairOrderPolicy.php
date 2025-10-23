@@ -13,6 +13,11 @@ class RepairOrderPolicy
         return $user->can(UserPermission::VIEW_REPAIR_ORDERS->value);
     }
 
+    public function viewAnyMechanic(User $user): bool
+    {
+        return $user->can(UserPermission::VIEW_REPAIR_ORDERS_MECHANIC->value);
+    }
+
     public function view(User $user, RepairOrder $repairOrder): bool
     {
         // Must be from same workshop

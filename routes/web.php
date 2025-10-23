@@ -31,6 +31,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('vehicles/{vehicle}', [VehicleController::class, 'destroy'])->name('vehicles.destroy');
 
     Route::get('repair-orders', [RepairOrderController::class, 'index'])->name('repair-orders.index');
+    Route::get('repair-orders/mechanic', [RepairOrderController::class, 'mechanicIndex'])->name('repair-orders.mechanic');
     Route::get('repair-orders/create', [RepairOrderController::class, 'create'])->name('repair-orders.create');
     Route::post('repair-orders', [RepairOrderController::class, 'store'])->name('repair-orders.store');
     Route::get('repair-orders/{repairOrder}', [RepairOrderController::class, 'show'])->name('repair-orders.show');

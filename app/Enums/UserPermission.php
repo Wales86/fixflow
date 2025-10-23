@@ -4,6 +4,9 @@ namespace App\Enums;
 
 enum UserPermission: string
 {
+    // Dashboard permissions
+    case VIEW_DASHBOARD = 'view_dashboard';
+
     // Client permissions
     case VIEW_CLIENTS = 'view_clients';
     case CREATE_CLIENTS = 'create_clients';
@@ -18,6 +21,7 @@ enum UserPermission: string
 
     // Repair Order permissions
     case VIEW_REPAIR_ORDERS = 'view_repair_orders';
+    case VIEW_REPAIR_ORDERS_MECHANIC = 'view_repair_orders_mechanic';
     case CREATE_REPAIR_ORDERS = 'create_repair_orders';
     case UPDATE_REPAIR_ORDERS = 'update_repair_orders';
     case DELETE_REPAIR_ORDERS = 'delete_repair_orders';
