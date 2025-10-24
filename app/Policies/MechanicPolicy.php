@@ -25,7 +25,8 @@ class MechanicPolicy
 
     public function update(User $user, Mechanic $mechanic): bool
     {
-        return false;
+        return $user->workshop_id === $mechanic->workshop_id
+            && $user->can(UserPermission::UPDATE_MECHANICS->value);
     }
 
     public function delete(User $user, Mechanic $mechanic): bool

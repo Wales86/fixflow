@@ -138,6 +138,11 @@ first_name: string;
 last_name: string;
 is_active: boolean;
 };
+export type UpdateMechanicData = {
+first_name: string;
+last_name: string;
+is_active: boolean;
+};
 }
 declare namespace App.Dto.RepairOrder {
 export type MechanicRepairOrderCardData = {

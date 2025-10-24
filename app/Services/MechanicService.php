@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Dto\Mechanic\GetMechanicsData;
 use App\Dto\Mechanic\MechanicData;
 use App\Dto\Mechanic\StoreMechanicData;
+use App\Dto\Mechanic\UpdateMechanicData;
 use App\Dto\TimeTracking\MechanicSelectOptionData;
 use App\Models\Mechanic;
 use App\Models\User;
@@ -52,5 +53,12 @@ class MechanicService
     public function create(StoreMechanicData $data): Mechanic
     {
         return Mechanic::create($data->all());
+    }
+
+    public function update(Mechanic $mechanic, UpdateMechanicData $data): Mechanic
+    {
+        $mechanic->update($data->all());
+
+        return $mechanic->fresh();
     }
 }
