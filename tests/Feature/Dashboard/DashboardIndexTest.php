@@ -13,10 +13,14 @@ use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
 beforeEach(function () {
+    /** @var Workshop $this->workshop1 */
     $this->workshop1 = Workshop::factory()->create(['name' => 'Workshop 1']);
+    /** @var Workshop $this->workshop2 */
     $this->workshop2 = Workshop::factory()->create(['name' => 'Workshop 2']);
 
+    /** @var User $this->user1 */
     $this->user1 = User::factory()->create(['workshop_id' => $this->workshop1->id]);
+    /** @var User $this->user2 */
     $this->user2 = User::factory()->create(['workshop_id' => $this->workshop2->id]);
 });
 
