@@ -2,7 +2,4 @@
 
 namespace App\Dto\TimeTracking;
 
-class UpdateTimeEntryData extends CreateTimeEntryData
-{
-
-}
+class UpdateTimeEntryData extends CreateTimeEntryData {}

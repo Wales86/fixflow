@@ -124,6 +124,16 @@ export type UpdateInternalNoteData = {
 content: string;
 };
 }
+declare namespace App.Dto.Mechanic {
+export type MechanicData = {
+id: number;
+first_name: string;
+last_name: string;
+is_active: boolean;
+time_entries_count: number | null;
+created_at: string;
+};
+}
 declare namespace App.Dto.RepairOrder {
 export type MechanicRepairOrderCardData = {
 id: number;
@@ -311,6 +321,6 @@ repair_orders: any;
 declare namespace App.Enums {
 export type NotableType = 'repair_order' | 'client' | 'vehicle';
 export type RepairOrderStatus = 'new' | 'diagnosis' | 'awaiting_contact' | 'awaiting_parts' | 'in_progress' | 'ready_for_pickup' | 'closed';
-export type UserPermission = 'view_dashboard' | 'view_clients' | 'create_clients' | 'update_clients' | 'delete_clients' | 'view_vehicles' | 'create_vehicles' | 'update_vehicles' | 'delete_vehicles' | 'view_repair_orders' | 'view_repair_orders_mechanic' | 'create_repair_orders' | 'update_repair_orders' | 'delete_repair_orders' | 'update_repair_order_status' | 'view_internal_notes' | 'create_internal_notes' | 'update_internal_notes' | 'delete_internal_notes' | 'create_time_entries' | 'update_time_entries' | 'delete_time_entries';
+export type UserPermission = 'view_dashboard' | 'view_clients' | 'create_clients' | 'update_clients' | 'delete_clients' | 'view_vehicles' | 'create_vehicles' | 'update_vehicles' | 'delete_vehicles' | 'view_repair_orders' | 'view_repair_orders_mechanic' | 'create_repair_orders' | 'update_repair_orders' | 'delete_repair_orders' | 'update_repair_order_status' | 'view_internal_notes' | 'create_internal_notes' | 'update_internal_notes' | 'delete_internal_notes' | 'create_time_entries' | 'update_time_entries' | 'delete_time_entries' | 'view_mechanics' | 'create_mechanics' | 'update_mechanics' | 'delete_mechanics';
 export type UserRole = 'Owner' | 'Office' | 'Mechanic';
 }

@@ -13,22 +13,18 @@ class RolesAndPermissionsSeeder extends Seeder
 {
     public function run(): void
     {
-        // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // Create permissions
         $permissions = UserPermission::all();
 
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+            Permission::firstOrCreate(['name' => $permission]);
         }
 
-        // Create roles and assign permissions
-        $ownerRole = Role::create(['name' => UserRole::OWNER->value]);
-        $officeRole = Role::create(['name' => UserRole::OFFICE->value]);
-        $mechanicRole = Role::create(['name' => UserRole::MECHANIC->value]);
+        $ownerRole = Role::firstOrCreate(['name' => UserRole::OWNER->value]);
+        $officeRole = Role::firstOrCreate(['name' => UserRole::OFFICE->value]);
+        $mechanicRole = Role::firstOrCreate(['name' => UserRole::MECHANIC->value]);
 
-        // Owner has all permissions except specific ones
         $excludedForOwner = [
             UserPermission::VIEW_REPAIR_ORDERS_MECHANIC->value,
         ];
@@ -36,10 +32,9 @@ class RolesAndPermissionsSeeder extends Seeder
         $ownerPermissions = Permission::all()
             ->whereNotIn('name', $excludedForOwner);
 
-        $ownerRole->givePermissionTo($ownerPermissions);
+        $ownerRole->syncPermissions($ownerPermissions);
 
-        // Office can view, create, and update (but not delete)
-        $officeRole->givePermissionTo([
+        $officeRole->syncPermissions([
             UserPermission::VIEW_DASHBOARD->value,
 
             UserPermission::VIEW_CLIENTS->value,
@@ -58,17 +53,17 @@ class RolesAndPermissionsSeeder extends Seeder
             UserPermission::VIEW_INTERNAL_NOTES->value,
             UserPermission::CREATE_INTERNAL_NOTES->value,
             UserPermission::UPDATE_INTERNAL_NOTES->value,
+
+            UserPermission::VIEW_MECHANICS->value,
         ]);
 
-        // Mechanic can view repair orders list (mechanic view only)
-        $mechanicRole->givePermissionTo([
+        $mechanicRole->syncPermissions([
             UserPermission::VIEW_REPAIR_ORDERS_MECHANIC->value,
             UserPermission::CREATE_TIME_ENTRIES->value,
             UserPermission::UPDATE_TIME_ENTRIES->value,
             UserPermission::CREATE_INTERNAL_NOTES->value,
         ]);
 
-        // Update cache to know about the newly created permissions and roles
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
     }
 }

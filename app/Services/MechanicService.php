@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
+use App\Dto\Mechanic\GetMechanicsData;
+use App\Dto\Mechanic\MechanicData;
 use App\Dto\TimeTracking\MechanicSelectOptionData;
 use App\Models\Mechanic;
 use App\Models\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Spatie\LaravelData\DataCollection;
 
 class MechanicService
@@ -27,5 +30,21 @@ class MechanicService
             ->get();
 
         return MechanicSelectOptionData::collect($mechanics, DataCollection::class);
+    }
+
+    public function getMechanics(GetMechanicsData $data): LengthAwarePaginator
+    {
+        $query = Mechanic::query()
+            ->withCount('timeEntries');
+
+        if ($data->active !== null) {
+            $query->where('is_active', $data->active);
+        }
+
+        $query->orderBy('first_name')
+            ->orderBy('last_name');
+
+        return $query->paginate(15)
+            ->through(fn ($mechanic) => MechanicData::from($mechanic));
     }
 }
