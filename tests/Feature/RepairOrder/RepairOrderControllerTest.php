@@ -114,7 +114,7 @@ test('status filter filters repair orders by status', function () {
 
     $client = Client::factory()->for($this->workshop)->create();
     $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
-    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::New]);
+    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::NEW]);
     RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::InProgress]);
 
     actingAs($user)
@@ -599,7 +599,7 @@ test('owner can store a repair order', function () {
         'workshop_id' => $this->workshop->id,
         'vehicle_id' => $vehicle->id,
         'problem_description' => 'Engine not starting properly',
-        'status' => RepairOrderStatus::New->value,
+        'status' => RepairOrderStatus::NEW->value,
     ]);
 });
 
@@ -622,7 +622,7 @@ test('office can store a repair order', function () {
         'workshop_id' => $this->workshop->id,
         'vehicle_id' => $vehicle->id,
         'problem_description' => 'Brake pads replacement needed',
-        'status' => RepairOrderStatus::New->value,
+        'status' => RepairOrderStatus::NEW->value,
     ]);
 });
 
@@ -961,7 +961,7 @@ test('owner can update repair order status', function () {
     $client = Client::factory()->for($this->workshop)->create();
     $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
     $repairOrder = RepairOrder::factory()->for($vehicle)->for($this->workshop)->create([
-        'status' => RepairOrderStatus::New,
+        'status' => RepairOrderStatus::NEW,
     ]);
 
     actingAs($user)
@@ -985,7 +985,7 @@ test('owner can update both description and status', function () {
     $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
     $repairOrder = RepairOrder::factory()->for($vehicle)->for($this->workshop)->create([
         'problem_description' => 'Original description',
-        'status' => RepairOrderStatus::New,
+        'status' => RepairOrderStatus::NEW,
     ]);
 
     actingAs($user)
@@ -1035,7 +1035,7 @@ test('partial update with only status works', function () {
     $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
     $repairOrder = RepairOrder::factory()->for($vehicle)->for($this->workshop)->create([
         'problem_description' => 'Original description',
-        'status' => RepairOrderStatus::New,
+        'status' => RepairOrderStatus::NEW,
     ]);
 
     actingAs($user)
@@ -1154,7 +1154,7 @@ test('owner can update repair order status using dedicated endpoint', function (
     $client = Client::factory()->for($this->workshop)->create();
     $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
     $repairOrder = RepairOrder::factory()->for($vehicle)->for($this->workshop)->create([
-        'status' => RepairOrderStatus::New,
+        'status' => RepairOrderStatus::NEW,
     ]);
 
     actingAs($user)
@@ -1368,7 +1368,7 @@ test('mechanic can view active repair orders', function () {
 
     $client = Client::factory()->for($this->workshop)->create();
     $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
-    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::New]);
+    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::NEW]);
     RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::InProgress]);
     RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::Closed]);
 
@@ -1406,7 +1406,7 @@ test('mechanic index excludes closed repair orders', function () {
 
     $client = Client::factory()->for($this->workshop)->create();
     $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
-    $activeOrder = RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::New]);
+    $activeOrder = RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::NEW]);
     $closedOrder = RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::Closed]);
 
     actingAs($user)
@@ -1432,7 +1432,7 @@ test('mechanic index includes vehicle and client data', function () {
         'model' => 'Corolla',
         'registration_number' => 'ABC123',
     ]);
-    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::New]);
+    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::NEW]);
 
     actingAs($user)
         ->get(route('repair-orders.mechanic'))
@@ -1455,8 +1455,8 @@ test('mechanic index search filters by vehicle registration', function () {
     $client = Client::factory()->for($this->workshop)->create();
     $vehicle1 = Vehicle::factory()->for($client)->for($this->workshop)->create(['registration_number' => 'ABC123']);
     $vehicle2 = Vehicle::factory()->for($client)->for($this->workshop)->create(['registration_number' => 'XYZ789']);
-    RepairOrder::factory()->for($vehicle1)->for($this->workshop)->create(['status' => RepairOrderStatus::New]);
-    RepairOrder::factory()->for($vehicle2)->for($this->workshop)->create(['status' => RepairOrderStatus::New]);
+    RepairOrder::factory()->for($vehicle1)->for($this->workshop)->create(['status' => RepairOrderStatus::NEW]);
+    RepairOrder::factory()->for($vehicle2)->for($this->workshop)->create(['status' => RepairOrderStatus::NEW]);
 
     actingAs($user)
         ->get(route('repair-orders.mechanic', ['search' => 'ABC']))
@@ -1477,8 +1477,8 @@ test('mechanic index search filters by client name', function () {
     $client2 = Client::factory()->for($this->workshop)->create(['last_name' => 'Johnson']);
     $vehicle1 = Vehicle::factory()->for($client1)->for($this->workshop)->create();
     $vehicle2 = Vehicle::factory()->for($client2)->for($this->workshop)->create();
-    RepairOrder::factory()->for($vehicle1)->for($this->workshop)->create(['status' => RepairOrderStatus::New]);
-    RepairOrder::factory()->for($vehicle2)->for($this->workshop)->create(['status' => RepairOrderStatus::New]);
+    RepairOrder::factory()->for($vehicle1)->for($this->workshop)->create(['status' => RepairOrderStatus::NEW]);
+    RepairOrder::factory()->for($vehicle2)->for($this->workshop)->create(['status' => RepairOrderStatus::NEW]);
 
     actingAs($user)
         ->get(route('repair-orders.mechanic', ['search' => 'Smith']))
@@ -1497,11 +1497,11 @@ test('mechanic index search filters by problem description', function () {
     $client = Client::factory()->for($this->workshop)->create();
     $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
     RepairOrder::factory()->for($vehicle)->for($this->workshop)->create([
-        'status' => RepairOrderStatus::New,
+        'status' => RepairOrderStatus::NEW,
         'problem_description' => 'Engine problem',
     ]);
     RepairOrder::factory()->for($vehicle)->for($this->workshop)->create([
-        'status' => RepairOrderStatus::New,
+        'status' => RepairOrderStatus::NEW,
         'problem_description' => 'Brake issue',
     ]);
 
@@ -1525,8 +1525,8 @@ test('mechanic index orders are scoped to current workshop', function () {
     $vehicle1 = Vehicle::factory()->for($client1)->for($this->workshop)->create();
     $vehicle2 = Vehicle::factory()->for($client2)->for($otherWorkshop)->create();
 
-    RepairOrder::factory()->for($vehicle1)->for($this->workshop)->create(['status' => RepairOrderStatus::New]);
-    RepairOrder::factory()->for($vehicle2)->for($otherWorkshop)->create(['status' => RepairOrderStatus::New]);
+    RepairOrder::factory()->for($vehicle1)->for($this->workshop)->create(['status' => RepairOrderStatus::NEW]);
+    RepairOrder::factory()->for($vehicle2)->for($otherWorkshop)->create(['status' => RepairOrderStatus::NEW]);
 
     actingAs($user)
         ->get(route('repair-orders.mechanic'))
@@ -1543,7 +1543,7 @@ test('mechanic index returns all active statuses except closed', function () {
 
     $client = Client::factory()->for($this->workshop)->create();
     $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
-    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::New]);
+    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::NEW]);
     RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::Diagnosis]);
     RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::AwaitingContact]);
     RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::AwaitingParts]);

@@ -7,6 +7,7 @@ use App\Dto\InternalNote\UpdateInternalNoteData;
 use App\Http\Requests\InternalNotes\StoreInternalNoteRequest;
 use App\Http\Requests\InternalNotes\UpdateInternalNoteRequest;
 use App\Models\InternalNote;
+use App\Models\Mechanic;
 use App\Services\InternalNoteService;
 use Illuminate\Http\RedirectResponse;
 
@@ -27,9 +28,15 @@ class InternalNoteController extends Controller
             'notable_type' => $modelClass,
             'notable_id' => $validated['notable_id'],
             'content' => $validated['content'],
+            'mechanic_id' => $validated['mechanic_id'] ?? null,
         ]);
 
-        $this->internalNoteService->store($storeData, $request->user());
+        // If mechanic_id is provided, use Mechanic as author, otherwise use User
+        $author = isset($validated['mechanic_id'])
+            ? Mechanic::findOrFail($validated['mechanic_id'])
+            : $request->user();
+
+        $this->internalNoteService->store($storeData, $author);
 
         return back()->with('success', __('internal_notes.messages.created'));
     }

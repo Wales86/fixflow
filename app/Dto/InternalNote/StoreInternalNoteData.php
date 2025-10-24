@@ -19,5 +19,7 @@ class StoreInternalNoteData extends Data
         public int $notable_id,
         #[Required, StringType, Max(5000)]
         public string $content,
+        #[IntegerType]
+        public ?int $mechanic_id = null,
     ) {}
 }

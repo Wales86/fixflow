@@ -118,6 +118,7 @@ export type StoreInternalNoteData = {
 notable_type: string;
 notable_id: number;
 content: string;
+mechanic_id: number | null;
 };
 export type UpdateInternalNoteData = {
 content: string;

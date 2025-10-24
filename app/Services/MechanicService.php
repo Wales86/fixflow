@@ -11,11 +11,11 @@ class MechanicService
 {
     /**
      * Get active mechanics for sharing in Inertia middleware.
-     * Returns null if user doesn't have permission to create time entries.
+     * Returns null if user doesn't have permission to create time entries or internal notes.
      */
     public function getActiveMechanicsForSharing(?User $user): ?DataCollection
     {
-        if (! $user || ! $user->can('create_time_entries')) {
+        if (! $user || ! ($user->can('create_time_entries') || $user->can('create_internal_notes'))) {
             return null;
         }
 

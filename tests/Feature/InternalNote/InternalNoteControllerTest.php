@@ -37,9 +37,13 @@ test('guests are redirected to login when attempting to store internal note', fu
     ])->assertRedirect(route('login'));
 });
 
-test('user without proper role cannot store internal note', function () {
+test('mechanic cannot store internal note with inactive mechanic', function () {
     $user = User::factory()->for($this->workshop)->create();
     $user->assignRole('Mechanic');
+
+    $inactiveMechanic = \App\Models\Mechanic::factory()->for($this->workshop)->create([
+        'is_active' => false,
+    ]);
 
     $client = Client::factory()->for($this->workshop)->create();
     $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
@@ -50,8 +54,9 @@ test('user without proper role cannot store internal note', function () {
             'notable_type' => 'repair_order',
             'notable_id' => $repairOrder->id,
             'content' => 'Internal note content',
+            'mechanic_id' => $inactiveMechanic->id,
         ])
-        ->assertForbidden();
+        ->assertSessionHasErrors('mechanic_id');
 });
 
 test('owner can store an internal note for repair order', function () {
@@ -103,6 +108,37 @@ test('office can store an internal note for repair order', function () {
         'content' => 'Office note about the order',
         'author_id' => $user->id,
         'author_type' => get_class($user),
+    ]);
+});
+
+test('mechanic can store an internal note for repair order', function () {
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole('Mechanic');
+
+    $mechanic = \App\Models\Mechanic::factory()->for($this->workshop)->create([
+        'is_active' => true,
+    ]);
+
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
+    $repairOrder = RepairOrder::factory()->for($vehicle)->for($this->workshop)->create();
+
+    actingAs($user)
+        ->post(route('internal-notes.store'), [
+            'notable_type' => 'repair_order',
+            'notable_id' => $repairOrder->id,
+            'content' => 'Mechanic note about the repair work',
+            'mechanic_id' => $mechanic->id,
+        ])
+        ->assertRedirect()
+        ->assertSessionHas('success', __('internal_notes.messages.created'));
+
+    assertDatabaseHas('internal_notes', [
+        'notable_type' => RepairOrder::class,
+        'notable_id' => $repairOrder->id,
+        'content' => 'Mechanic note about the repair work',
+        'author_id' => $mechanic->id,
+        'author_type' => \App\Models\Mechanic::class,
     ]);
 });
 

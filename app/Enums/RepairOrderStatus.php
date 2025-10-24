@@ -4,13 +4,13 @@ namespace App\Enums;
 
 enum RepairOrderStatus: string
 {
-    case New = 'new';
-    case Diagnosis = 'diagnosis';
-    case AwaitingContact = 'awaiting_contact';
-    case AwaitingParts = 'awaiting_parts';
-    case InProgress = 'in_progress';
-    case ReadyForPickup = 'ready_for_pickup';
-    case Closed = 'closed';
+    case NEW = 'new';
+    case DIAGNOSIS = 'diagnosis';
+    case AWAITING_CONTACT = 'awaiting_contact';
+    case AWAITING_PARTS = 'awaiting_parts';
+    case IN_PROGRESS = 'in_progress';
+    case READY_FOR_PICKUP = 'ready_for_pickup';
+    case CLOSED = 'closed';
 
     public function label(): string
     {

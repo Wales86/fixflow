@@ -155,7 +155,7 @@ test('active orders count includes all non-closed statuses', function () {
     ]);
 
     $nonClosedStatuses = [
-        RepairOrderStatus::New,
+        RepairOrderStatus::NEW,
         RepairOrderStatus::Diagnosis,
         RepairOrderStatus::AwaitingContact,
         RepairOrderStatus::AwaitingParts,

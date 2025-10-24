@@ -3,8 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\Client;
+use App\Models\RepairOrder;
 use App\Models\Vehicle;
 use App\Models\Workshop;
+use App\Enums\RepairOrderStatus;
 use Illuminate\Database\Seeder;
 
 class VehiclesSeeder extends Seeder
@@ -50,9 +52,14 @@ class VehiclesSeeder extends Seeder
         ];
 
         foreach ($vehicles as $vehicleData) {
-            Vehicle::create([
+            $vehicle = Vehicle::create([
                 'workshop_id' => $workshop->id,
                 ...$vehicleData,
+            ]);
+
+            // Create one repair order for each vehicle
+            RepairOrder::factory()->for($vehicle)->for($workshop)->create([
+                'status' => RepairOrderStatus::NEW->value,
             ]);
         }
     }

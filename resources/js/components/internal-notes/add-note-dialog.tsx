@@ -1,4 +1,4 @@
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
 
 import { Button } from '@/components/ui/button';
@@ -11,7 +11,15 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { type SharedData } from '@/types';
 
 interface AddNoteDialogProps {
     notableType: App.Enums.NotableType;
@@ -27,11 +35,13 @@ export function AddNoteDialog({
     onClose,
 }: AddNoteDialogProps) {
     const { t } = useLaravelReactI18n();
+    const { mechanics } = usePage<SharedData>().props as any;
 
     const { data, setData, post, processing, errors, reset } = useForm({
         notable_type: notableType,
         notable_id: notableId,
         content: '',
+        mechanic_id: null as number | null,
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -65,6 +75,44 @@ export function AddNoteDialog({
 
                 <form onSubmit={handleSubmit}>
                     <div className="space-y-4 py-4">
+                        {mechanics && mechanics.length > 0 && (
+                            <div className="space-y-2">
+                                <Label htmlFor="mechanic_id">
+                                    {t('select_mechanic')}
+                                </Label>
+                                <Select
+                                    value={data.mechanic_id?.toString() ?? ''}
+                                    onValueChange={(value) =>
+                                        setData(
+                                            'mechanic_id',
+                                            value ? parseInt(value) : null,
+                                        )
+                                    }
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue
+                                            placeholder={t('select_mechanic')}
+                                        />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {mechanics?.map((mechanic: any) => (
+                                            <SelectItem
+                                                key={mechanic.id}
+                                                value={mechanic.id.toString()}
+                                            >
+                                                {mechanic.full_name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                {errors.mechanic_id && (
+                                    <p className="text-sm text-red-500">
+                                        {errors.mechanic_id}
+                                    </p>
+                                )}
+                            </div>
+                        )}
+
                         <div className="space-y-2">
                             <Label htmlFor="content">{t('note_content')}</Label>
                             <Textarea

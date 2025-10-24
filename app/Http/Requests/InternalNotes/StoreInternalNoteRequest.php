@@ -19,6 +19,8 @@ class StoreInternalNoteRequest extends FormRequest
      */
     public function rules(): array
     {
+        $workshopId = $this->user()->workshop_id;
+
         return [
             'notable_type' => [
                 'required',
@@ -26,6 +28,11 @@ class StoreInternalNoteRequest extends FormRequest
             ],
             'notable_id' => ['required', 'integer'],
             'content' => ['required', 'string', 'max:5000'],
+            'mechanic_id' => [
+                'nullable',
+                'integer',
+                "exists:mechanics,id,workshop_id,{$workshopId},is_active,1",
+            ],
         ];
     }
 

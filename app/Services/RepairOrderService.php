@@ -89,7 +89,7 @@ class RepairOrderService
         $repairOrder = RepairOrder::create([
             'vehicle_id' => $data->vehicle_id,
             'problem_description' => $data->description,
-            'status' => RepairOrderStatus::New,
+            'status' => RepairOrderStatus::NEW,
         ]);
 
         if (! empty($data->attachments)) {

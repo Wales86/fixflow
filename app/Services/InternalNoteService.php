@@ -5,12 +5,13 @@ namespace App\Services;
 use App\Dto\InternalNote\StoreInternalNoteData;
 use App\Dto\InternalNote\UpdateInternalNoteData;
 use App\Models\InternalNote;
+use App\Models\Mechanic;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
 class InternalNoteService
 {
-    public function store(StoreInternalNoteData $data, User $author): InternalNote
+    public function store(StoreInternalNoteData $data, User|Mechanic $author): InternalNote
     {
         $internalNote = InternalNote::create([
             'notable_type' => $data->notable_type,

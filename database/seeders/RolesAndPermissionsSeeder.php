@@ -65,6 +65,7 @@ class RolesAndPermissionsSeeder extends Seeder
             UserPermission::VIEW_REPAIR_ORDERS_MECHANIC->value,
             UserPermission::CREATE_TIME_ENTRIES->value,
             UserPermission::UPDATE_TIME_ENTRIES->value,
+            UserPermission::CREATE_INTERNAL_NOTES->value,
         ]);
 
         // Update cache to know about the newly created permissions and roles
