@@ -22,17 +22,19 @@ export function RepairOrderTabs({
 
     return (
         <Tabs defaultValue="time-entries" className="w-full">
-            <TabsList>
-                <TabsTrigger value="time-entries">
-                    {t('time_entries')} ({time_entries.length})
-                </TabsTrigger>
-                <TabsTrigger value="notes">
-                    {t('internal_notes')} ({internal_notes.length})
-                </TabsTrigger>
-                <TabsTrigger value="history">
-                    {t('activity_log')} ({activity_log.length})
-                </TabsTrigger>
-            </TabsList>
+            <div className="w-full overflow-x-auto">
+                <TabsList>
+                    <TabsTrigger value="time-entries">
+                        {t('time_entries')} ({time_entries.length})
+                    </TabsTrigger>
+                    <TabsTrigger value="notes">
+                        {t('internal_notes')} ({internal_notes.length})
+                    </TabsTrigger>
+                    <TabsTrigger value="history">
+                        {t('activity_log')} ({activity_log.length})
+                    </TabsTrigger>
+                </TabsList>
+            </div>
 
             <TabsContent value="time-entries">
                 <TimeEntriesList

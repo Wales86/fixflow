@@ -50,7 +50,7 @@ export function RepairOrderHeader({
         canDelete;
 
     return (
-        <div className="flex items-start justify-between">
+        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
             <div className="space-y-1">
                 <div className="flex items-center gap-3">
                     <h1 className="text-2xl font-bold tracking-tight">
@@ -65,7 +65,7 @@ export function RepairOrderHeader({
             </div>
 
             {hasAnyAction && (
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                     {canUpdateStatus && (
                         <Button variant="outline" onClick={onStatusChange}>
                             <RefreshCw className="mr-2 h-4 w-4" />

@@ -36,7 +36,7 @@ export default function Dashboard({
                     />
                     <StatCard
                         title="Dzisiejszy czas pracy"
-                        value={`${todayTimeEntriesTotal}h`}
+                        value={`${Math.floor(todayTimeEntriesTotal / 60)} h ${todayTimeEntriesTotal % 60}m`}
                         icon={Timer}
                     />
                 </div>
