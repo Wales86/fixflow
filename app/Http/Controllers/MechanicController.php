@@ -8,6 +8,7 @@ use App\Dto\Mechanic\GetMechanicsData;
 use App\Dto\Mechanic\MechanicData;
 use App\Dto\Mechanic\StoreMechanicData;
 use App\Dto\Mechanic\UpdateMechanicData;
+use App\Exceptions\CannotDeleteMechanicWithTimeEntriesException;
 use App\Http\Requests\Mechanic\MechanicIndexRequest;
 use App\Http\Requests\Mechanic\StoreMechanicRequest;
 use App\Http\Requests\Mechanic\UpdateMechanicRequest;
@@ -73,5 +74,22 @@ class MechanicController extends Controller
         return redirect()
             ->route('mechanics.index')
             ->with('success', __('mechanics.messages.updated'));
+    }
+
+    public function destroy(Mechanic $mechanic): RedirectResponse
+    {
+        $this->authorize('delete', $mechanic);
+
+        try {
+            $this->mechanicService->deleteMechanic($mechanic);
+        } catch (CannotDeleteMechanicWithTimeEntriesException) {
+            return redirect()
+                ->back()
+                ->with('error', __('mechanics.messages.cannot_delete_with_time_entries'));
+        }
+
+        return redirect()
+            ->route('mechanics.index')
+            ->with('success', __('mechanics.messages.deleted'));
     }
 }

@@ -7,6 +7,7 @@ use App\Dto\Mechanic\MechanicData;
 use App\Dto\Mechanic\StoreMechanicData;
 use App\Dto\Mechanic\UpdateMechanicData;
 use App\Dto\TimeTracking\MechanicSelectOptionData;
+use App\Exceptions\CannotDeleteMechanicWithTimeEntriesException;
 use App\Models\Mechanic;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -60,5 +61,14 @@ class MechanicService
         $mechanic->update($data->all());
 
         return $mechanic->fresh();
+    }
+
+    public function deleteMechanic(Mechanic $mechanic): void
+    {
+        if ($mechanic->timeEntries()->exists()) {
+            throw new CannotDeleteMechanicWithTimeEntriesException;
+        }
+
+        $mechanic->delete();
     }
 }

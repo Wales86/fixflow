@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Enums\UserPermission;
+use App\Enums\UserRole;
 use App\Models\Mechanic;
 use App\Models\User;
 
@@ -31,7 +32,8 @@ class MechanicPolicy
 
     public function delete(User $user, Mechanic $mechanic): bool
     {
-        return false;
+        return $user->workshop_id === $mechanic->workshop_id
+            && $user->hasRole(UserRole::OWNER->value);
     }
 
     public function restore(User $user, Mechanic $mechanic): bool
