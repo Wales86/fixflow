@@ -133,6 +133,11 @@ is_active: boolean;
 time_entries_count: number | null;
 created_at: string;
 };
+export type StoreMechanicData = {
+first_name: string;
+last_name: string;
+is_active: boolean;
+};
 }
 declare namespace App.Dto.RepairOrder {
 export type MechanicRepairOrderCardData = {

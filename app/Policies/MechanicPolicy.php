@@ -20,7 +20,7 @@ class MechanicPolicy
 
     public function create(User $user): bool
     {
-        return false;
+        return $user->can(UserPermission::CREATE_MECHANICS->value);
     }
 
     public function update(User $user, Mechanic $mechanic): bool

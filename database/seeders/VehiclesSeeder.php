@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Enums\RepairOrderStatus;
 use App\Models\Client;
 use App\Models\RepairOrder;
 use App\Models\Vehicle;
 use App\Models\Workshop;
-use App\Enums\RepairOrderStatus;
 use Illuminate\Database\Seeder;
 
 class VehiclesSeeder extends Seeder

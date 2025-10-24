@@ -43,6 +43,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('repair-orders/{repairOrder}', [RepairOrderController::class, 'destroy'])->name('repair-orders.destroy');
 
     Route::get('mechanics', [MechanicController::class, 'index'])->name('mechanics.index');
+    Route::get('mechanics/create', [MechanicController::class, 'create'])->name('mechanics.create');
+    Route::post('mechanics', [MechanicController::class, 'store'])->name('mechanics.store');
 
     Route::post('internal-notes', [InternalNoteController::class, 'store'])->name('internal-notes.store');
     Route::patch('internal-notes/{internalNote}', [InternalNoteController::class, 'update'])->name('internal-notes.update');

@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use App\Dto\Common\FilterableTablePagePropsData;
 use App\Dto\Common\FiltersData;
 use App\Dto\Mechanic\GetMechanicsData;
+use App\Dto\Mechanic\StoreMechanicData;
 use App\Http\Requests\Mechanic\MechanicIndexRequest;
+use App\Http\Requests\Mechanic\StoreMechanicRequest;
+use App\Models\Mechanic;
 use App\Services\MechanicService;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -28,5 +32,23 @@ class MechanicController extends Controller
         ]);
 
         return Inertia::render('mechanics/index', $props);
+    }
+
+    public function create(): Response
+    {
+        $this->authorize('create', Mechanic::class);
+
+        return Inertia::render('mechanics/create');
+    }
+
+    public function store(StoreMechanicRequest $request): RedirectResponse
+    {
+        $mechanicData = StoreMechanicData::from($request->validated());
+
+        $this->mechanicService->create($mechanicData);
+
+        return redirect()
+            ->route('mechanics.index')
+            ->with('success', __('mechanics.messages.created'));
     }
 }

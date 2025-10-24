@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Dto\Mechanic\GetMechanicsData;
 use App\Dto\Mechanic\MechanicData;
+use App\Dto\Mechanic\StoreMechanicData;
 use App\Dto\TimeTracking\MechanicSelectOptionData;
 use App\Models\Mechanic;
 use App\Models\User;
@@ -46,5 +47,10 @@ class MechanicService
 
         return $query->paginate(15)
             ->through(fn ($mechanic) => MechanicData::from($mechanic));
+    }
+
+    public function create(StoreMechanicData $data): Mechanic
+    {
+        return Mechanic::create($data->all());
     }
 }
