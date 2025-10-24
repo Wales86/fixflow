@@ -6,7 +6,7 @@ use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
-class TimeEntryData extends Data
+class TimeEntryEditData extends Data
 {
     public function __construct(
         public int $id,
@@ -14,7 +14,6 @@ class TimeEntryData extends Data
         public int $mechanic_id,
         public int $duration_minutes,
         public ?string $description,
-        public string $created_at,
-        public ?TimeEntryMechanicData $mechanic = null,
+        public TimeEntryMechanicData $mechanic
     ) {}
 }

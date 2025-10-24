@@ -1,8 +1,12 @@
 import { StatusBadge } from '@/components/status-badge';
+import { TimeEntryDialog } from '@/components/time-entries/time-entry-dialog';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { usePermission } from '@/lib/permissions';
 import { Link } from '@inertiajs/react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
-import { Clock } from 'lucide-react';
+import { Clock, Plus } from 'lucide-react';
+import { useState } from 'react';
 
 interface RepairOrderCardProps {
     order: App.Dto.RepairOrder.MechanicRepairOrderCardData;
@@ -10,24 +14,46 @@ interface RepairOrderCardProps {
 
 export function RepairOrderCard({ order }: RepairOrderCardProps) {
     const { t } = useLaravelReactI18n();
+    const canCreateTimeEntry = usePermission('create_time_entries');
+    const [isTimeEntryDialogOpen, setTimeEntryDialogOpen] = useState(false);
 
     const totalHours = Math.floor(order.total_time_minutes / 60);
     const totalMinutes = order.total_time_minutes % 60;
 
+    const handleAddTimeEntry = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setTimeEntryDialogOpen(true);
+    };
+
     return (
-        <Link href={`/repair-orders/${order.id}`}>
-            <Card className="transition-all hover:shadow-md">
-                <CardContent className="p-4">
-                    <div className="flex flex-col gap-3">
-                        {/* Header with status */}
-                        <div className="flex items-start justify-between gap-2">
-                            <div className="flex-1">
-                                <p className="text-sm text-muted-foreground">
-                                    #{order.id}
-                                </p>
+        <>
+            <Link href={`/repair-orders/${order.id}`}>
+                <Card className="transition-all hover:shadow-md">
+                    <CardContent className="p-4">
+                        <div className="flex flex-col gap-3">
+                            {/* Header with status and add button */}
+                            <div className="flex items-start justify-between gap-2">
+                                <div className="flex-1">
+                                    <p className="text-sm text-muted-foreground">
+                                        #{order.id}
+                                    </p>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <StatusBadge status={order.status} />
+
+                                    {canCreateTimeEntry && (
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="h-8 w-8"
+                                            onClick={handleAddTimeEntry}
+                                        >
+                                            <Plus className="h-4 w-4" />
+                                        </Button>
+                                    )}
+                                </div>
                             </div>
-                            <StatusBadge status={order.status} />
-                        </div>
 
                         {/* Vehicle info */}
                         <div>
@@ -65,6 +91,13 @@ export function RepairOrderCard({ order }: RepairOrderCardProps) {
                     </div>
                 </CardContent>
             </Card>
-        </Link>
+            </Link>
+
+            <TimeEntryDialog
+                isOpen={isTimeEntryDialogOpen}
+                onClose={() => setTimeEntryDialogOpen(false)}
+                repairOrderId={order.id}
+            />
+        </>
     );
 }

@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 class VerifyEmailController extends Controller
 {
     use RedirectsUsers;
+
     /**
      * Mark the authenticated user's email address as verified.
      */

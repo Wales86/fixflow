@@ -15,6 +15,7 @@ use Laravel\Fortify\Features;
 class AuthenticatedSessionController extends Controller
 {
     use RedirectsUsers;
+
     /**
      * Show the login page.
      */

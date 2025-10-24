@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 class EmailVerificationNotificationController extends Controller
 {
     use RedirectsUsers;
+
     /**
      * Send a new email verification notification.
      */

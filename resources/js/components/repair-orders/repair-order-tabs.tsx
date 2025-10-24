@@ -9,12 +9,14 @@ interface RepairOrderTabsProps {
     time_entries: App.Dto.TimeTracking.TimeEntryData[];
     internal_notes: App.Dto.InternalNote.InternalNoteData[];
     activity_log: App.Dto.Common.ActivityLogData[];
+    repairOrderId: number;
 }
 
 export function RepairOrderTabs({
     time_entries,
     internal_notes,
     activity_log,
+    repairOrderId,
 }: RepairOrderTabsProps) {
     const { t } = useLaravelReactI18n();
 
@@ -33,7 +35,10 @@ export function RepairOrderTabs({
             </TabsList>
 
             <TabsContent value="time-entries">
-                <TimeEntriesList entries={time_entries} />
+                <TimeEntriesList
+                    entries={time_entries}
+                    repairOrderId={repairOrderId}
+                />
             </TabsContent>
 
             <TabsContent value="notes">

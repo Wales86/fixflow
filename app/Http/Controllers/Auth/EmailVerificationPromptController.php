@@ -11,6 +11,7 @@ use Inertia\Response;
 class EmailVerificationPromptController extends Controller
 {
     use RedirectsUsers;
+
     /**
      * Show the email verification prompt page.
      */

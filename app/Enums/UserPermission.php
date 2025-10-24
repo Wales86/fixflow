@@ -33,6 +33,11 @@ enum UserPermission: string
     case UPDATE_INTERNAL_NOTES = 'update_internal_notes';
     case DELETE_INTERNAL_NOTES = 'delete_internal_notes';
 
+    // Time Entry permissions
+    case CREATE_TIME_ENTRIES = 'create_time_entries';
+    case UPDATE_TIME_ENTRIES = 'update_time_entries';
+    case DELETE_TIME_ENTRIES = 'delete_time_entries';
+
     public static function all(): array
     {
         return array_column(self::cases(), 'value');
@@ -76,6 +81,15 @@ enum UserPermission: string
             self::CREATE_INTERNAL_NOTES->value,
             self::UPDATE_INTERNAL_NOTES->value,
             self::DELETE_INTERNAL_NOTES->value,
+        ];
+    }
+
+    public static function timeEntries(): array
+    {
+        return [
+            self::CREATE_TIME_ENTRIES->value,
+            self::UPDATE_TIME_ENTRIES->value,
+            self::DELETE_TIME_ENTRIES->value,
         ];
     }
 }

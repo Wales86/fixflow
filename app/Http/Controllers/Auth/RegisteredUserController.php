@@ -16,6 +16,7 @@ use Inertia\Response;
 class RegisteredUserController extends Controller
 {
     use RedirectsUsers;
+
     /**
      * Show the registration page.
      */

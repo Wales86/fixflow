@@ -10,22 +10,25 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { usePermission } from '@/lib/permissions';
-import { Edit, FileText, MoreVertical, RefreshCw, Trash2 } from 'lucide-react';
+import { Clock, Edit, FileText, MoreVertical, RefreshCw, Trash2 } from 'lucide-react';
 
 interface RepairOrderHeaderProps {
     order: App.Dto.RepairOrder.RepairOrderShowData;
     onStatusChange: () => void;
     onAddNote: () => void;
+    onAddTimeEntry?: () => void;
 }
 
 export function RepairOrderHeader({
     order,
     onStatusChange,
     onAddNote,
+    onAddTimeEntry,
 }: RepairOrderHeaderProps) {
     const { t } = useLaravelReactI18n();
     const canUpdateStatus = usePermission('update_repair_order_status');
     const canCreateNotes = usePermission('create_internal_notes');
+    const canCreateTimeEntry = usePermission('create_time_entries');
     const canEdit = usePermission('update_repair_orders');
     const canDelete = usePermission('delete_repair_orders');
 
@@ -40,7 +43,11 @@ export function RepairOrderHeader({
     };
 
     const hasAnyAction =
-        canUpdateStatus || canCreateNotes || canEdit || canDelete;
+        canUpdateStatus ||
+        canCreateNotes ||
+        canCreateTimeEntry ||
+        canEdit ||
+        canDelete;
 
     return (
         <div className="flex items-start justify-between">
@@ -70,6 +77,13 @@ export function RepairOrderHeader({
                         <Button variant="outline" onClick={onAddNote}>
                             <FileText className="mr-2 h-4 w-4" />
                             {t('add_note')}
+                        </Button>
+                    )}
+
+                    {canCreateTimeEntry && onAddTimeEntry && (
+                        <Button variant="outline" onClick={onAddTimeEntry}>
+                            <Clock className="mr-2 h-4 w-4" />
+                            {t('add_time_entry')}
                         </Button>
                     )}
 

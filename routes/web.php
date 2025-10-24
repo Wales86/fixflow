@@ -4,6 +4,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InternalNoteController;
 use App\Http\Controllers\RepairOrderController;
+use App\Http\Controllers\TimeEntryController;
 use App\Http\Controllers\VehicleController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -43,6 +44,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('internal-notes', [InternalNoteController::class, 'store'])->name('internal-notes.store');
     Route::patch('internal-notes/{internalNote}', [InternalNoteController::class, 'update'])->name('internal-notes.update');
     Route::delete('internal-notes/{internalNote}', [InternalNoteController::class, 'destroy'])->name('internal-notes.destroy');
+
+    Route::post('time-entries', [TimeEntryController::class, 'store'])->name('time-entries.store');
+    Route::patch('time-entries/{timeEntry}', [TimeEntryController::class, 'update'])->name('time-entries.update');
+    Route::delete('time-entries/{timeEntry}', [TimeEntryController::class, 'destroy'])->name('time-entries.destroy');
 });
 
 require __DIR__.'/settings.php';

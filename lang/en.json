@@ -159,5 +159,21 @@
     "delete_note_confirm_title": "Delete Note",
     "delete_note_confirm_description": "Are you sure you want to delete this note? This action cannot be undone.",
     "active_repair_orders": "Active Repair Orders",
-    "no_active_repair_orders": "No active repair orders found"
+    "no_active_repair_orders": "No active repair orders found",
+    "add_time_entry": "Add Time Entry",
+    "edit_time_entry": "Edit Time Entry",
+    "add_time_entry_description": "Enter the time spent working on this repair order.",
+    "edit_time_entry_description": "Update the time entry information.",
+    "time_entry_added": "Time entry has been saved",
+    "time_entry_updated": "Time entry has been updated",
+    "time_entry_deleted": "Time entry has been deleted",
+    "select_mechanic": "Select Mechanic",
+    "duration": "Duration",
+    "hours": "Hours",
+    "work_description": "Work Description (optional)",
+    "work_description_placeholder": "Describe the work performed...",
+    "delete_time_entry": "Delete Time Entry",
+    "delete_time_entry_confirm": "Are you sure you want to delete this time entry? This action cannot be undone.",
+    "delete_time_entry_button": "Delete Entry",
+    "no_mechanics_available": "No mechanics available"
 }

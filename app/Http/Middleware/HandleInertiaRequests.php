@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\MechanicService;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -55,6 +56,7 @@ class HandleInertiaRequests extends Middleware
                 'warning' => $request->session()->get('warning'),
                 'info' => $request->session()->get('info'),
             ],
+            'mechanics' => app(MechanicService::class)->getActiveMechanicsForSharing($request->user()),
         ];
     }
 }

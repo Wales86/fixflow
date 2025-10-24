@@ -237,15 +237,27 @@ client_name: string;
 };
 }
 declare namespace App.Dto.TimeTracking {
+export type MechanicSelectOptionData = {
+id: number;
+full_name: string;
+is_active: boolean;
+};
 export type TimeEntryData = {
 id: number;
 repair_order_id: number;
 mechanic_id: number;
 duration_minutes: number;
-duration_hours: number;
 description: string | null;
 created_at: string;
 mechanic: App.Dto.TimeTracking.TimeEntryMechanicData | null;
+};
+export type TimeEntryEditData = {
+id: number;
+repair_order_id: number;
+mechanic_id: number;
+duration_minutes: number;
+description: string | null;
+mechanic: App.Dto.TimeTracking.TimeEntryMechanicData;
 };
 export type TimeEntryMechanicData = {
 id: number;
@@ -298,6 +310,6 @@ repair_orders: any;
 declare namespace App.Enums {
 export type NotableType = 'repair_order' | 'client' | 'vehicle';
 export type RepairOrderStatus = 'new' | 'diagnosis' | 'awaiting_contact' | 'awaiting_parts' | 'in_progress' | 'ready_for_pickup' | 'closed';
-export type UserPermission = 'view_dashboard' | 'view_clients' | 'create_clients' | 'update_clients' | 'delete_clients' | 'view_vehicles' | 'create_vehicles' | 'update_vehicles' | 'delete_vehicles' | 'view_repair_orders' | 'view_repair_orders_mechanic' | 'create_repair_orders' | 'update_repair_orders' | 'delete_repair_orders' | 'update_repair_order_status' | 'view_internal_notes' | 'create_internal_notes' | 'update_internal_notes' | 'delete_internal_notes';
+export type UserPermission = 'view_dashboard' | 'view_clients' | 'create_clients' | 'update_clients' | 'delete_clients' | 'view_vehicles' | 'create_vehicles' | 'update_vehicles' | 'delete_vehicles' | 'view_repair_orders' | 'view_repair_orders_mechanic' | 'create_repair_orders' | 'update_repair_orders' | 'delete_repair_orders' | 'update_repair_order_status' | 'view_internal_notes' | 'create_internal_notes' | 'update_internal_notes' | 'delete_internal_notes' | 'create_time_entries' | 'update_time_entries' | 'delete_time_entries';
 export type UserRole = 'Owner' | 'Office' | 'Mechanic';
 }

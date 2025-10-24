@@ -63,6 +63,8 @@ class RolesAndPermissionsSeeder extends Seeder
         // Mechanic can view repair orders list (mechanic view only)
         $mechanicRole->givePermissionTo([
             UserPermission::VIEW_REPAIR_ORDERS_MECHANIC->value,
+            UserPermission::CREATE_TIME_ENTRIES->value,
+            UserPermission::UPDATE_TIME_ENTRIES->value,
         ]);
 
         // Update cache to know about the newly created permissions and roles
