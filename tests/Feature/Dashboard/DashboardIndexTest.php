@@ -48,7 +48,7 @@ test('dashboard only shows data from authenticated user workshop', function () {
     RepairOrder::factory()->count(3)->create([
         'workshop_id' => $this->workshop1->id,
         'vehicle_id' => $vehicle1->id,
-        'status' => RepairOrderStatus::InProgress,
+        'status' => RepairOrderStatus::IN_PROGRESS,
     ]);
 
     // Create data for Workshop 2
@@ -60,7 +60,7 @@ test('dashboard only shows data from authenticated user workshop', function () {
     RepairOrder::factory()->count(5)->create([
         'workshop_id' => $this->workshop2->id,
         'vehicle_id' => $vehicle2->id,
-        'status' => RepairOrderStatus::InProgress,
+        'status' => RepairOrderStatus::IN_PROGRESS,
     ]);
 
     // User 1 should only see 3 orders from Workshop 1
@@ -90,7 +90,7 @@ test('dashboard does not leak data between workshops', function () {
     RepairOrder::factory()->create([
         'workshop_id' => $this->workshop1->id,
         'vehicle_id' => $vehicle1->id,
-        'status' => RepairOrderStatus::InProgress,
+        'status' => RepairOrderStatus::IN_PROGRESS,
     ]);
 
     $client2 = Client::factory()->create(['workshop_id' => $this->workshop2->id]);
@@ -104,7 +104,7 @@ test('dashboard does not leak data between workshops', function () {
     RepairOrder::factory()->create([
         'workshop_id' => $this->workshop2->id,
         'vehicle_id' => $vehicle2->id,
-        'status' => RepairOrderStatus::InProgress,
+        'status' => RepairOrderStatus::IN_PROGRESS,
     ]);
 
     actingAs($this->user1)
@@ -131,13 +131,13 @@ test('active orders count excludes closed orders', function () {
     RepairOrder::factory()->count(5)->create([
         'workshop_id' => $this->workshop1->id,
         'vehicle_id' => $vehicle->id,
-        'status' => RepairOrderStatus::InProgress,
+        'status' => RepairOrderStatus::IN_PROGRESS,
     ]);
 
     RepairOrder::factory()->count(3)->create([
         'workshop_id' => $this->workshop1->id,
         'vehicle_id' => $vehicle->id,
-        'status' => RepairOrderStatus::Closed,
+        'status' => RepairOrderStatus::CLOSED,
     ]);
 
     actingAs($this->user1)
@@ -156,11 +156,11 @@ test('active orders count includes all non-closed statuses', function () {
 
     $nonClosedStatuses = [
         RepairOrderStatus::NEW,
-        RepairOrderStatus::Diagnosis,
-        RepairOrderStatus::AwaitingContact,
-        RepairOrderStatus::AwaitingParts,
-        RepairOrderStatus::InProgress,
-        RepairOrderStatus::ReadyForPickup,
+        RepairOrderStatus::DIAGNOSIS,
+        RepairOrderStatus::AWAITING_CONTACT,
+        RepairOrderStatus::AWAITING_PARTS,
+        RepairOrderStatus::IN_PROGRESS,
+        RepairOrderStatus::READY_FOR_PICKUP,
     ];
 
     foreach ($nonClosedStatuses as $status) {
@@ -174,7 +174,7 @@ test('active orders count includes all non-closed statuses', function () {
     RepairOrder::factory()->create([
         'workshop_id' => $this->workshop1->id,
         'vehicle_id' => $vehicle->id,
-        'status' => RepairOrderStatus::Closed,
+        'status' => RepairOrderStatus::CLOSED,
     ]);
 
     actingAs($this->user1)
@@ -195,13 +195,13 @@ test('pending orders count only includes ready for pickup status', function () {
     RepairOrder::factory()->count(3)->create([
         'workshop_id' => $this->workshop1->id,
         'vehicle_id' => $vehicle->id,
-        'status' => RepairOrderStatus::ReadyForPickup,
+        'status' => RepairOrderStatus::READY_FOR_PICKUP,
     ]);
 
     RepairOrder::factory()->count(5)->create([
         'workshop_id' => $this->workshop1->id,
         'vehicle_id' => $vehicle->id,
-        'status' => RepairOrderStatus::InProgress,
+        'status' => RepairOrderStatus::IN_PROGRESS,
     ]);
 
     actingAs($this->user1)
@@ -382,7 +382,7 @@ test('recent orders have correct data structure', function () {
     $repairOrder = RepairOrder::factory()->create([
         'workshop_id' => $this->workshop1->id,
         'vehicle_id' => $vehicle->id,
-        'status' => RepairOrderStatus::InProgress,
+        'status' => RepairOrderStatus::IN_PROGRESS,
     ]);
 
     actingAs($this->user1)
@@ -420,7 +420,7 @@ test('dashboard handles workshop with only closed orders', function () {
     RepairOrder::factory()->count(5)->create([
         'workshop_id' => $this->workshop1->id,
         'vehicle_id' => $vehicle->id,
-        'status' => RepairOrderStatus::Closed,
+        'status' => RepairOrderStatus::CLOSED,
     ]);
 
     actingAs($this->user1)

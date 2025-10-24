@@ -199,7 +199,7 @@ class RepairOrderService
                 'client',
             ])
             ->where('workshop_id', $user->workshop_id)
-            ->where('status', '!=', RepairOrderStatus::Closed);
+            ->where('status', '!=', RepairOrderStatus::CLOSED);
 
         if (! empty($search)) {
             $query->where(function ($q) use ($search) {

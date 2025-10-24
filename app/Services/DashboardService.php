@@ -32,14 +32,14 @@ class DashboardService
     private function getActiveOrdersCount(): int
     {
         return RepairOrder::query()
-            ->where('status', '!=', RepairOrderStatus::Closed)
+            ->where('status', '!=', RepairOrderStatus::CLOSED)
             ->count();
     }
 
     private function getPendingOrdersCount(): int
     {
         return RepairOrder::query()
-            ->where('status', RepairOrderStatus::ReadyForPickup)
+            ->where('status', RepairOrderStatus::READY_FOR_PICKUP)
             ->count();
     }
 

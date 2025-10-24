@@ -115,7 +115,7 @@ test('status filter filters repair orders by status', function () {
     $client = Client::factory()->for($this->workshop)->create();
     $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
     RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::NEW]);
-    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::InProgress]);
+    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::IN_PROGRESS]);
 
     actingAs($user)
         ->get(route('repair-orders.index', ['status' => 'new']))
@@ -966,14 +966,14 @@ test('owner can update repair order status', function () {
 
     actingAs($user)
         ->patch(route('repair-orders.update', $repairOrder), [
-            'status' => RepairOrderStatus::InProgress->value,
+            'status' => RepairOrderStatus::IN_PROGRESS->value,
         ])
         ->assertRedirect(route('repair-orders.index'))
         ->assertSessionHas('success', __('repair_orders.messages.updated'));
 
     assertDatabaseHas('repair_orders', [
         'id' => $repairOrder->id,
-        'status' => RepairOrderStatus::InProgress->value,
+        'status' => RepairOrderStatus::IN_PROGRESS->value,
     ]);
 });
 
@@ -991,7 +991,7 @@ test('owner can update both description and status', function () {
     actingAs($user)
         ->patch(route('repair-orders.update', $repairOrder), [
             'description' => 'Updated description',
-            'status' => RepairOrderStatus::Diagnosis->value,
+            'status' => RepairOrderStatus::DIAGNOSIS->value,
         ])
         ->assertRedirect(route('repair-orders.index'))
         ->assertSessionHas('success', __('repair_orders.messages.updated'));
@@ -999,7 +999,7 @@ test('owner can update both description and status', function () {
     assertDatabaseHas('repair_orders', [
         'id' => $repairOrder->id,
         'problem_description' => 'Updated description',
-        'status' => RepairOrderStatus::Diagnosis->value,
+        'status' => RepairOrderStatus::DIAGNOSIS->value,
     ]);
 });
 
@@ -1011,7 +1011,7 @@ test('partial update with only description works', function () {
     $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
     $repairOrder = RepairOrder::factory()->for($vehicle)->for($this->workshop)->create([
         'problem_description' => 'Original description',
-        'status' => RepairOrderStatus::InProgress,
+        'status' => RepairOrderStatus::IN_PROGRESS,
     ]);
 
     actingAs($user)
@@ -1023,7 +1023,7 @@ test('partial update with only description works', function () {
     assertDatabaseHas('repair_orders', [
         'id' => $repairOrder->id,
         'problem_description' => 'Only description updated',
-        'status' => RepairOrderStatus::InProgress->value,
+        'status' => RepairOrderStatus::IN_PROGRESS->value,
     ]);
 });
 
@@ -1040,14 +1040,14 @@ test('partial update with only status works', function () {
 
     actingAs($user)
         ->patch(route('repair-orders.update', $repairOrder), [
-            'status' => RepairOrderStatus::Closed->value,
+            'status' => RepairOrderStatus::CLOSED->value,
         ])
         ->assertRedirect(route('repair-orders.index'));
 
     assertDatabaseHas('repair_orders', [
         'id' => $repairOrder->id,
         'problem_description' => 'Original description',
-        'status' => RepairOrderStatus::Closed->value,
+        'status' => RepairOrderStatus::CLOSED->value,
     ]);
 });
 
@@ -1128,7 +1128,7 @@ test('guests are redirected to login when attempting to update repair order stat
     $repairOrder = RepairOrder::factory()->for($vehicle)->for($this->workshop)->create();
 
     patch(route('repair-orders.update-status', $repairOrder), [
-        'status' => RepairOrderStatus::InProgress->value,
+        'status' => RepairOrderStatus::IN_PROGRESS->value,
     ])->assertRedirect(route('login'));
 });
 
@@ -1142,7 +1142,7 @@ test('user without proper role cannot update repair order status', function () {
 
     actingAs($user)
         ->patch(route('repair-orders.update-status', $repairOrder), [
-            'status' => RepairOrderStatus::InProgress->value,
+            'status' => RepairOrderStatus::IN_PROGRESS->value,
         ])
         ->assertForbidden();
 });
@@ -1159,14 +1159,14 @@ test('owner can update repair order status using dedicated endpoint', function (
 
     actingAs($user)
         ->patch(route('repair-orders.update-status', $repairOrder), [
-            'status' => RepairOrderStatus::InProgress->value,
+            'status' => RepairOrderStatus::IN_PROGRESS->value,
         ])
         ->assertRedirect()
         ->assertSessionHas('success', __('repair_orders.messages.status_updated'));
 
     assertDatabaseHas('repair_orders', [
         'id' => $repairOrder->id,
-        'status' => RepairOrderStatus::InProgress->value,
+        'status' => RepairOrderStatus::IN_PROGRESS->value,
     ]);
 });
 
@@ -1177,19 +1177,19 @@ test('office can update repair order status using dedicated endpoint', function 
     $client = Client::factory()->for($this->workshop)->create();
     $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
     $repairOrder = RepairOrder::factory()->for($vehicle)->for($this->workshop)->create([
-        'status' => RepairOrderStatus::Diagnosis,
+        'status' => RepairOrderStatus::DIAGNOSIS,
     ]);
 
     actingAs($user)
         ->patch(route('repair-orders.update-status', $repairOrder), [
-            'status' => RepairOrderStatus::ReadyForPickup->value,
+            'status' => RepairOrderStatus::READY_FOR_PICKUP->value,
         ])
         ->assertRedirect()
         ->assertSessionHas('success', __('repair_orders.messages.status_updated'));
 
     assertDatabaseHas('repair_orders', [
         'id' => $repairOrder->id,
-        'status' => RepairOrderStatus::ReadyForPickup->value,
+        'status' => RepairOrderStatus::READY_FOR_PICKUP->value,
     ]);
 });
 
@@ -1232,7 +1232,7 @@ test('user cannot update status of repair order from another workshop', function
 
     actingAs($user)
         ->patch(route('repair-orders.update-status', $otherRepairOrder), [
-            'status' => RepairOrderStatus::Closed->value,
+            'status' => RepairOrderStatus::CLOSED->value,
         ])
         ->assertNotFound();
 });
@@ -1243,7 +1243,7 @@ test('update status returns 404 for non-existent repair order', function () {
 
     actingAs($user)
         ->patch(route('repair-orders.update-status', 99999), [
-            'status' => RepairOrderStatus::Closed->value,
+            'status' => RepairOrderStatus::CLOSED->value,
         ])
         ->assertNotFound();
 });
@@ -1257,7 +1257,7 @@ test('user without role cannot update repair order status', function () {
 
     actingAs($user)
         ->patch(route('repair-orders.update-status', $repairOrder), [
-            'status' => RepairOrderStatus::InProgress->value,
+            'status' => RepairOrderStatus::IN_PROGRESS->value,
         ])
         ->assertForbidden();
 });
@@ -1369,8 +1369,8 @@ test('mechanic can view active repair orders', function () {
     $client = Client::factory()->for($this->workshop)->create();
     $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
     RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::NEW]);
-    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::InProgress]);
-    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::Closed]);
+    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::IN_PROGRESS]);
+    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::CLOSED]);
 
     actingAs($user)
         ->get(route('repair-orders.mechanic'))
@@ -1407,7 +1407,7 @@ test('mechanic index excludes closed repair orders', function () {
     $client = Client::factory()->for($this->workshop)->create();
     $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
     $activeOrder = RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::NEW]);
-    $closedOrder = RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::Closed]);
+    $closedOrder = RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::CLOSED]);
 
     actingAs($user)
         ->get(route('repair-orders.mechanic'))
@@ -1544,12 +1544,12 @@ test('mechanic index returns all active statuses except closed', function () {
     $client = Client::factory()->for($this->workshop)->create();
     $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
     RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::NEW]);
-    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::Diagnosis]);
-    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::AwaitingContact]);
-    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::AwaitingParts]);
-    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::InProgress]);
-    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::ReadyForPickup]);
-    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::Closed]);
+    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::DIAGNOSIS]);
+    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::AWAITING_CONTACT]);
+    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::AWAITING_PARTS]);
+    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::IN_PROGRESS]);
+    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::READY_FOR_PICKUP]);
+    RepairOrder::factory()->for($vehicle)->for($this->workshop)->create(['status' => RepairOrderStatus::CLOSED]);
 
     actingAs($user)
         ->get(route('repair-orders.mechanic'))
