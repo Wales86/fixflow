@@ -67,6 +67,7 @@ RUN git config --global --add safe.directory /var/www/html
 COPY start-container /usr/local/bin/start-container
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY php.ini /etc/php/8.4/cli/conf.d/99-sail.ini
+COPY xdebug.ini /etc/php/8.4/cli/conf.d/99-xdebug.ini
 RUN chmod +x /usr/local/bin/start-container
 
 EXPOSE 80/tcp
