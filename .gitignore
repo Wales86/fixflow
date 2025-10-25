@@ -9,8 +9,10 @@
 /resources/js/wayfinder
 /storage/*.key
 /storage/pail
+/storage/minio
 /vendor
 /database/data
+/database/pgsql-data
 .DS_Store
 .env
 .env.backup

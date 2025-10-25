@@ -13,7 +13,7 @@ abstract class TestCase extends BaseTestCase
 
     public User $user;
 
-    public User $workshop1;
+    public Workshop $workshop1;
 
     public Workshop $workshop2;
 
