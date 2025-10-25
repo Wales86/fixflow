@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\UserRole;
 use App\Models\Workshop;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -35,6 +36,16 @@ class UserFactory extends Factory
             'two_factor_recovery_codes' => Str::random(10),
             'two_factor_confirmed_at' => now(),
         ];
+    }
+
+    /**
+     * Indicate that the user is an owner.
+     */
+    public function owner(): static
+    {
+        return $this->afterCreating(function ($user) {
+            $user->assignRole(UserRole::OWNER->value);
+        });
     }
 
     /**
