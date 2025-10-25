@@ -9,6 +9,7 @@ use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
 beforeEach(function () {
+    /** @var Workshop $this->workshop */
     $this->workshop = Workshop::factory()->create();
     $this->workshop->makeCurrent();
 
