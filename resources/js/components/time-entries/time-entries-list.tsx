@@ -6,8 +6,6 @@ import { Clock, Pencil, Trash2, User } from 'lucide-react';
 import { useState } from 'react';
 
 import { TimeEntryDialog } from '@/components/time-entries/time-entry-dialog';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -18,6 +16,8 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { usePermission } from '@/lib/permissions';
 
 interface TimeEntriesListProps {
@@ -35,9 +35,7 @@ export function TimeEntriesList({
 
     const [editingEntry, setEditingEntry] =
         useState<App.Dto.TimeTracking.TimeEntryData | null>(null);
-    const [deletingEntryId, setDeletingEntryId] = useState<number | null>(
-        null,
-    );
+    const [deletingEntryId, setDeletingEntryId] = useState<number | null>(null);
 
     const formatDate = (dateString: string): string => {
         return format(new Date(dateString), 'dd MMMM yyyy, HH:mm', {
@@ -99,8 +97,10 @@ export function TimeEntriesList({
                                     <div className="flex flex-col items-end gap-1">
                                         <div className="flex items-center gap-1 text-sm font-semibold">
                                             <Clock className="h-4 w-4" />
-                                            {Math.floor(entry.duration_minutes / 60)} h{' '}
-                                            {entry.duration_minutes % 60}m
+                                            {Math.floor(
+                                                entry.duration_minutes / 60,
+                                            )}{' '}
+                                            h {entry.duration_minutes % 60}m
                                         </div>
                                         <div className="text-xs text-muted-foreground">
                                             ({entry.duration_minutes}{' '}
@@ -155,13 +155,17 @@ export function TimeEntriesList({
             >
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>{t('delete_time_entry')}</AlertDialogTitle>
+                        <AlertDialogTitle>
+                            {t('delete_time_entry')}
+                        </AlertDialogTitle>
                         <AlertDialogDescription>
                             {t('delete_time_entry_confirm')}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel onClick={() => setDeletingEntryId(null)}>
+                        <AlertDialogCancel
+                            onClick={() => setDeletingEntryId(null)}
+                        >
                             {t('cancel')}
                         </AlertDialogCancel>
                         <AlertDialogAction onClick={handleDelete}>

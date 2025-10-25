@@ -12,12 +12,21 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import clients from '@/routes/clients';
+import mechanics from '@/routes/mechanics';
 import repairOrders from '@/routes/repair-orders';
 import vehicles from '@/routes/vehicles';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
-import { BookOpen, Car, Folder, LayoutGrid, Users, Wrench } from 'lucide-react';
+import {
+    BookOpen,
+    Car,
+    Folder,
+    LayoutGrid,
+    UserCog,
+    Users,
+    Wrench,
+} from 'lucide-react';
 import AppLogo from './app-logo';
 
 export function AppSidebar() {
@@ -54,6 +63,12 @@ export function AppSidebar() {
             href: repairOrders.mechanic(),
             icon: Wrench,
             permission: 'view_repair_orders_mechanic',
+        },
+        {
+            title: t('mechanics.title'),
+            href: mechanics.index(),
+            icon: UserCog,
+            permission: 'view_mechanics',
         },
     ];
 

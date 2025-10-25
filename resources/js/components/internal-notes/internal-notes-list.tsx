@@ -5,8 +5,6 @@ import { useLaravelReactI18n } from 'laravel-react-i18n';
 import { Check, FileText, Pencil, Trash2, User, X } from 'lucide-react';
 import { useState } from 'react';
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -17,6 +15,8 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { usePermission } from '@/lib/permissions';
 
@@ -220,7 +220,10 @@ export function InternalNotesList({ notes }: InternalNotesListProps) {
                 </CardContent>
             </Card>
 
-            <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+            <AlertDialog
+                open={showDeleteDialog}
+                onOpenChange={setShowDeleteDialog}
+            >
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>
@@ -231,7 +234,9 @@ export function InternalNotesList({ notes }: InternalNotesListProps) {
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel onClick={() => setShowDeleteDialog(false)}>
+                        <AlertDialogCancel
+                            onClick={() => setShowDeleteDialog(false)}
+                        >
                             {t('cancel')}
                         </AlertDialogCancel>
                         <AlertDialogAction onClick={handleConfirmDelete}>

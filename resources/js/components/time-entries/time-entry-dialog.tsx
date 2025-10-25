@@ -208,9 +208,7 @@ export function TimeEntryDialog({
                             </Label>
                             <Textarea
                                 id="description"
-                                placeholder={t(
-                                    'work_description_placeholder',
-                                )}
+                                placeholder={t('work_description_placeholder')}
                                 value={data.description}
                                 onChange={(e) =>
                                     setData('description', e.target.value)

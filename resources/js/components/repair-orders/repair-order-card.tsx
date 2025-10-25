@@ -55,42 +55,42 @@ export function RepairOrderCard({ order }: RepairOrderCardProps) {
                                 </div>
                             </div>
 
-                        {/* Vehicle info */}
-                        <div>
-                            <h3 className="font-semibold">
-                                {order.vehicle.make} {order.vehicle.model}
-                            </h3>
-                            <p className="text-sm text-muted-foreground">
-                                {order.vehicle.registration_number}
-                            </p>
-                        </div>
+                            {/* Vehicle info */}
+                            <div>
+                                <h3 className="font-semibold">
+                                    {order.vehicle.make} {order.vehicle.model}
+                                </h3>
+                                <p className="text-sm text-muted-foreground">
+                                    {order.vehicle.registration_number}
+                                </p>
+                            </div>
 
-                        {/* Client info */}
-                        <div>
-                            <p className="text-sm">
-                                {order.client.first_name}{' '}
-                                {order.client.last_name}
-                            </p>
-                        </div>
+                            {/* Client info */}
+                            <div>
+                                <p className="text-sm">
+                                    {order.client.first_name}{' '}
+                                    {order.client.last_name}
+                                </p>
+                            </div>
 
-                        {/* Problem description */}
-                        <div>
-                            <p className="line-clamp-2 text-sm text-muted-foreground">
-                                {order.problem_description}
-                            </p>
-                        </div>
+                            {/* Problem description */}
+                            <div>
+                                <p className="line-clamp-2 text-sm text-muted-foreground">
+                                    {order.problem_description}
+                                </p>
+                            </div>
 
-                        {/* Time tracking */}
-                        <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                            <Clock className="size-4" />
-                            <span>
-                                {totalHours > 0 && `${totalHours}h `}
-                                {totalMinutes}min
-                            </span>
+                            {/* Time tracking */}
+                            <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                                <Clock className="size-4" />
+                                <span>
+                                    {totalHours > 0 && `${totalHours}h `}
+                                    {totalMinutes}min
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                </CardContent>
-            </Card>
+                    </CardContent>
+                </Card>
             </Link>
 
             <TimeEntryDialog

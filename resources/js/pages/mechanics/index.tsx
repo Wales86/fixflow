@@ -1,30 +1,46 @@
-import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
+import { useLaravelReactI18n } from 'laravel-react-i18n';
+import { Plus } from 'lucide-react';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Mechanicy',
-        href: '/mechanics',
-    },
-];
+import { MechanicsDataTable } from '@/components/mechanics/mechanics-data-table';
+import { Button } from '@/components/ui/button';
+import AppLayout from '@/layouts/app-layout';
+import { usePermission } from '@/lib/permissions';
+import { create } from '@/routes/mechanics';
+import { type BreadcrumbItem } from '@/types';
 
 export default function MechanicsIndex({
     tableData,
     filters,
 }: App.Dto.Common.FilterableTablePagePropsData) {
+    const { t } = useLaravelReactI18n();
+    const canCreate = usePermission('create_mechanics');
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: t('mechanics.title'),
+            href: '/mechanics',
+        },
+    ];
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Mechanicy" />
+            <Head title={t('mechanics.title')} />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="flex items-center justify-between">
                     <h1 className="text-2xl font-bold tracking-tight">
-                        Mechanicy
+                        {t('mechanics.title')}
                     </h1>
+                    {canCreate && (
+                        <Button asChild>
+                            <Link href={create().url}>
+                                <Plus className="mr-2 size-4" />
+                                {t('mechanics.add_mechanic')}
+                            </Link>
+                        </Button>
+                    )}
                 </div>
-                <div className="rounded-lg border bg-card p-4">
-                    <pre>{JSON.stringify(tableData, null, 2)}</pre>
-                </div>
+                <MechanicsDataTable tableData={tableData} filters={filters} />
             </div>
         </AppLayout>
     );
