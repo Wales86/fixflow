@@ -6,6 +6,7 @@ use App\Http\Controllers\InternalNoteController;
 use App\Http\Controllers\MechanicController;
 use App\Http\Controllers\RepairOrderController;
 use App\Http\Controllers\TimeEntryController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -48,6 +49,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('mechanics/{mechanic}/edit', [MechanicController::class, 'edit'])->name('mechanics.edit');
     Route::put('mechanics/{mechanic}', [MechanicController::class, 'update'])->name('mechanics.update');
     Route::delete('mechanics/{mechanic}', [MechanicController::class, 'destroy'])->name('mechanics.destroy');
+
+    Route::get('users', [UserController::class, 'index'])->name('users.index');
 
     Route::post('internal-notes', [InternalNoteController::class, 'store'])->name('internal-notes.store');
     Route::patch('internal-notes/{internalNote}', [InternalNoteController::class, 'update'])->name('internal-notes.update');

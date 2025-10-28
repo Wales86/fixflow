@@ -14,6 +14,7 @@ import { dashboard } from '@/routes';
 import clients from '@/routes/clients';
 import mechanics from '@/routes/mechanics';
 import repairOrders from '@/routes/repair-orders';
+import users from '@/routes/users';
 import vehicles from '@/routes/vehicles';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
@@ -25,6 +26,7 @@ import {
     LayoutGrid,
     UserCog,
     Users,
+    UsersRound,
     Wrench,
 } from 'lucide-react';
 import AppLogo from './app-logo';
@@ -69,6 +71,12 @@ export function AppSidebar() {
             href: mechanics.index(),
             icon: UserCog,
             permission: 'view_mechanics',
+        },
+        {
+            title: t('users.title'),
+            href: users.index(),
+            icon: UsersRound,
+            permission: 'view_users',
         },
     ];
 

@@ -286,6 +286,15 @@ declare namespace App.Dto.TimeTracking {
         last_name: string;
     };
 }
+declare namespace App.Dto.User {
+    export type UserData = {
+        id: number;
+        name: string;
+        email: string;
+        roles: Array<any>;
+        created_at: string;
+    };
+}
 declare namespace App.Dto.Vehicle {
     export type StoreVehicleData = {
         client_id: number;
@@ -364,6 +373,10 @@ declare namespace App.Enums {
         | 'view_mechanics'
         | 'create_mechanics'
         | 'update_mechanics'
-        | 'delete_mechanics';
+        | 'delete_mechanics'
+        | 'view_users'
+        | 'create_users'
+        | 'update_users'
+        | 'delete_users';
     export type UserRole = 'Owner' | 'Office' | 'Mechanic';
 }
