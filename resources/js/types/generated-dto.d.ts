@@ -287,6 +287,12 @@ declare namespace App.Dto.TimeTracking {
     };
 }
 declare namespace App.Dto.User {
+    export type CreateUserData = {
+        name: string;
+        email: string;
+        password: string;
+        role: string;
+    };
     export type UserData = {
         id: number;
         name: string;

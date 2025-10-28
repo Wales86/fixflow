@@ -4,10 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Dto\Common\FilterableTablePagePropsData;
 use App\Dto\Common\FiltersData;
+use App\Dto\User\CreateUserData;
+use App\Dto\User\UserData;
 use App\Enums\UserRole;
 use App\Http\Requests\User\CreateUserRequest;
+use App\Http\Requests\User\EditUserRequest;
 use App\Http\Requests\User\IndexUserRequest;
+use App\Http\Requests\User\StoreUserRequest;
+use App\Models\User;
 use App\Services\UserService;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -35,5 +41,26 @@ class UserController extends Controller
         return Inertia::render('users/create', [
             'roles' => UserRole::options(),
         ]);
+    }
+
+    public function edit(EditUserRequest $request, User $user): Response
+    {
+        $user->load('roles');
+
+        return Inertia::render('users/edit', [
+            'user' => UserData::fromModel($user),
+            'roles' => UserRole::options(),
+        ]);
+    }
+
+    public function store(StoreUserRequest $request): RedirectResponse
+    {
+        $userData = CreateUserData::from($request->validated());
+
+        $this->userService->create($userData);
+
+        return redirect()
+            ->route('users.index')
+            ->with('success', 'Użytkownik został dodany');
     }
 }
