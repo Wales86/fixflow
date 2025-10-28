@@ -1,6 +1,7 @@
 import { Head } from '@inertiajs/react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
 
+import { UserForm } from '@/components/users/user-form';
 import AppLayout from '@/layouts/app-layout';
 import { index } from '@/routes/users';
 import { type BreadcrumbItem } from '@/types';
@@ -30,11 +31,7 @@ export default function UsersCreate({ roles }: UsersCreateProps) {
                 <h1 className="text-2xl font-bold tracking-tight">
                     {t('users.add_user')}
                 </h1>
-                <div className="rounded-lg border p-4">
-                    <p className="text-muted-foreground">
-                        User form placeholder - roles: {JSON.stringify(roles)}
-                    </p>
-                </div>
+                <UserForm roles={roles} />
             </div>
         </AppLayout>
     );

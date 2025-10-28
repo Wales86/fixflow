@@ -4,9 +4,15 @@ import { FormEventHandler } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { store, update } from '@/routes/users';
 import { toast } from 'sonner';
 
@@ -18,7 +24,7 @@ interface UserFormProps {
 type UserFormData = {
     name: string;
     email: string;
-    roles: string[];
+    role: string;
     password?: string;
     password_confirmation?: string;
 };
@@ -31,7 +37,7 @@ export function UserForm({ user, roles }: UserFormProps) {
         useForm<UserFormData>({
             name: user?.name ?? '',
             email: user?.email ?? '',
-            roles: user?.roles ?? [],
+            role: user?.roles?.[0] ?? '',
             password: '',
             password_confirmation: '',
         });
@@ -56,14 +62,6 @@ export function UserForm({ user, roles }: UserFormProps) {
         }
     };
 
-    const handleRoleToggle = (roleValue: string) => {
-        const newRoles = data.roles.includes(roleValue)
-            ? data.roles.filter((r) => r !== roleValue)
-            : [...data.roles, roleValue];
-
-        setData('roles', newRoles);
-        clearErrors('roles');
-    };
 
     return (
         <Card>
@@ -179,38 +177,37 @@ export function UserForm({ user, roles }: UserFormProps) {
                     )}
 
                     <div className="space-y-2">
-                        <Label>
-                            {t('users.roles')}{' '}
+                        <Label htmlFor="role">
+                            {t('users.role')}{' '}
                             <span className="text-red-500">*</span>
                         </Label>
-                        <div className="space-y-3">
-                            {roles.map((role) => (
-                                <div
-                                    key={role.value}
-                                    className="flex items-center gap-2"
-                                >
-                                    <Checkbox
-                                        id={`role-${role.value}`}
-                                        checked={data.roles.includes(
-                                            role.value,
-                                        )}
-                                        onCheckedChange={() =>
-                                            handleRoleToggle(role.value)
-                                        }
-                                        disabled={processing}
-                                    />
-                                    <Label
-                                        htmlFor={`role-${role.value}`}
-                                        className="font-normal"
-                                    >
+                        <Select
+                            value={data.role}
+                            onValueChange={(value) => {
+                                setData('role', value);
+                                clearErrors('role');
+                            }}
+                            disabled={processing}
+                        >
+                            <SelectTrigger
+                                id="role"
+                                className={errors.role ? 'border-red-500' : ''}
+                            >
+                                <SelectValue
+                                    placeholder={t('users.select_role')}
+                                />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {roles.map((role) => (
+                                    <SelectItem key={role.value} value={role.value}>
                                         {role.label}
-                                    </Label>
-                                </div>
-                            ))}
-                        </div>
-                        {errors.roles && (
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        {errors.role && (
                             <p className="text-sm text-red-500">
-                                {errors.roles}
+                                {errors.role}
                             </p>
                         )}
                     </div>

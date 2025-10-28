@@ -229,6 +229,7 @@
     "users.no_results_found": "Nie znaleziono użytkowników pasujących do Twoich kryteriów",
     "users.roles": "Role",
     "users.role": "Rola",
+    "users.select_role": "Wybierz rolę",
     "password": "Hasło",
     "password_confirmation": "Potwierdź hasło"
 }

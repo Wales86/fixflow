@@ -229,6 +229,7 @@
     "users.no_results_found": "No users found matching your search",
     "users.roles": "Roles",
     "users.role": "Role",
+    "users.select_role": "Select role",
     "password": "Password",
     "password_confirmation": "Confirm Password"
 }
