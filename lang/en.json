@@ -231,5 +231,7 @@
     "users.role": "Role",
     "users.select_role": "Select role",
     "password": "Password",
-    "password_confirmation": "Confirm Password"
+    "password_confirmation": "Confirm Password",
+    "users.user_deleted": "User has been deleted",
+    "users.cannot_delete_self": "Cannot delete your own account"
 }

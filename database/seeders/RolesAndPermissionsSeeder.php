@@ -61,6 +61,7 @@ class RolesAndPermissionsSeeder extends Seeder
             UserPermission::VIEW_USERS->value,
             UserPermission::CREATE_USERS->value,
             UserPermission::UPDATE_USERS->value,
+            UserPermission::DELETE_USERS->value,
         ]);
 
         $mechanicRole->syncPermissions([

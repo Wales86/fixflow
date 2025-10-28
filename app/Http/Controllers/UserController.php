@@ -9,6 +9,7 @@ use App\Dto\User\UpdateUserData;
 use App\Dto\User\UserData;
 use App\Enums\UserRole;
 use App\Http\Requests\User\CreateUserRequest;
+use App\Http\Requests\User\DestroyUserRequest;
 use App\Http\Requests\User\EditUserRequest;
 use App\Http\Requests\User\IndexUserRequest;
 use App\Http\Requests\User\StoreUserRequest;
@@ -75,5 +76,20 @@ class UserController extends Controller
         return redirect()
             ->route('users.index')
             ->with('success', 'Użytkownik został zaktualizowany');
+    }
+
+    public function destroy(DestroyUserRequest $request, User $user): RedirectResponse
+    {
+        if (auth()->id() === $user->id) {
+            return redirect()
+                ->back()
+                ->with('error', __('users.cannot_delete_self'));
+        }
+
+        $this->userService->delete($user);
+
+        return redirect()
+            ->route('users.index')
+            ->with('success', __('users.user_deleted'));
     }
 }

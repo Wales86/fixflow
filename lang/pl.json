@@ -231,5 +231,7 @@
     "users.role": "Rola",
     "users.select_role": "Wybierz rolę",
     "password": "Hasło",
-    "password_confirmation": "Potwierdź hasło"
+    "password_confirmation": "Potwierdź hasło",
+    "users.user_deleted": "Użytkownik został usunięty",
+    "users.cannot_delete_self": "Nie można usunąć własnego konta"
 }

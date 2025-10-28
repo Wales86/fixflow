@@ -55,6 +55,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('users', [UserController::class, 'store'])->name('users.store');
     Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
     Route::post('internal-notes', [InternalNoteController::class, 'store'])->name('internal-notes.store');
     Route::patch('internal-notes/{internalNote}', [InternalNoteController::class, 'update'])->name('internal-notes.update');
