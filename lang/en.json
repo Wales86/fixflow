@@ -226,5 +226,9 @@
     "users.list_title": "Users List",
     "users.list_description": "Manage workshop users and their permissions",
     "users.no_users_found": "No users found",
-    "users.no_results_found": "No users found matching your search"
+    "users.no_results_found": "No users found matching your search",
+    "users.roles": "Roles",
+    "users.role": "Role",
+    "password": "Password",
+    "password_confirmation": "Confirm Password"
 }

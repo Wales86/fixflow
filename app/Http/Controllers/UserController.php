@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Dto\Common\FilterableTablePagePropsData;
 use App\Dto\Common\FiltersData;
 use App\Dto\User\CreateUserData;
+use App\Dto\User\UpdateUserData;
 use App\Dto\User\UserData;
 use App\Enums\UserRole;
 use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\User\EditUserRequest;
 use App\Http\Requests\User\IndexUserRequest;
 use App\Http\Requests\User\StoreUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
@@ -62,5 +64,16 @@ class UserController extends Controller
         return redirect()
             ->route('users.index')
             ->with('success', 'Użytkownik został dodany');
+    }
+
+    public function update(UpdateUserRequest $request, User $user): RedirectResponse
+    {
+        $updateData = UpdateUserData::from($request->validated());
+
+        $this->userService->update($user, $updateData);
+
+        return redirect()
+            ->route('users.index')
+            ->with('success', 'Użytkownik został zaktualizowany');
     }
 }

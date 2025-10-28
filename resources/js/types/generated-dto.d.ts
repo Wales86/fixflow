@@ -293,6 +293,11 @@ declare namespace App.Dto.User {
         password: string;
         role: string;
     };
+    export type UpdateUserData = {
+        name: string;
+        email: string;
+        roles: Array<any>;
+    };
     export type UserData = {
         id: number;
         name: string;

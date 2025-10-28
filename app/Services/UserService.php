@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\Dto\User\UserData;
 use App\Dto\User\CreateUserData;
-use App\Enums\UserRole;
+use App\Dto\User\UpdateUserData;
+use App\Dto\User\UserData;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -35,6 +35,20 @@ class UserService
             $user->assignRole($data->role);
 
             return $user;
+        });
+    }
+
+    public function update(User $user, UpdateUserData $data): User
+    {
+        return DB::transaction(function () use ($user, $data) {
+            $user->update([
+                'name' => $data->name,
+                'email' => $data->email,
+            ]);
+
+            $user->syncRoles($data->roles);
+
+            return $user->fresh();
         });
     }
 }

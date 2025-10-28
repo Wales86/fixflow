@@ -42,13 +42,13 @@ export function UsersDataTable({
         return [
             {
                 accessorKey: 'name',
-                header: t('users.name'),
+                header: t('name'),
                 cell: ({ row }) => row.original.name,
                 enableSorting: true,
             },
             {
                 accessorKey: 'email',
-                header: t('users.email'),
+                header: t('email'),
                 cell: ({ row }) => row.original.email,
                 enableSorting: true,
             },

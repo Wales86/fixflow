@@ -226,5 +226,9 @@
     "users.list_title": "Lista użytkowników",
     "users.list_description": "Zarządzaj użytkownikami warsztatu i ich uprawnieniami",
     "users.no_users_found": "Nie znaleziono użytkowników",
-    "users.no_results_found": "Nie znaleziono użytkowników pasujących do Twoich kryteriów"
+    "users.no_results_found": "Nie znaleziono użytkowników pasujących do Twoich kryteriów",
+    "users.roles": "Role",
+    "users.role": "Rola",
+    "password": "Hasło",
+    "password_confirmation": "Potwierdź hasło"
 }
