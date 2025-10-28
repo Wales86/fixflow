@@ -3,6 +3,7 @@
 return [
     'title' => 'Użytkownicy',
     'add_user' => 'Dodaj użytkownika',
+    'new_user' => 'Nowy użytkownik',
     'list_title' => 'Lista użytkowników',
     'list_description' => 'Zarządzaj użytkownikami warsztatu i ich uprawnieniami',
     'search_placeholder' => 'Szukaj użytkowników...',

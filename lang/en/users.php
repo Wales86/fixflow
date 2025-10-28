@@ -3,6 +3,7 @@
 return [
     'title' => 'Users',
     'add_user' => 'Add user',
+    'new_user' => 'New user',
     'list_title' => 'Users list',
     'list_description' => 'Manage workshop users and their permissions',
     'search_placeholder' => 'Search users...',
