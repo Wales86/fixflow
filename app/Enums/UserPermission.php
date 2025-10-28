@@ -44,6 +44,12 @@ enum UserPermission: string
     case UPDATE_MECHANICS = 'update_mechanics';
     case DELETE_MECHANICS = 'delete_mechanics';
 
+    // User permissions
+    case VIEW_USERS = 'view_users';
+    case CREATE_USERS = 'create_users';
+    case UPDATE_USERS = 'update_users';
+    case DELETE_USERS = 'delete_users';
+
     public static function all(): array
     {
         return array_column(self::cases(), 'value');
@@ -106,6 +112,16 @@ enum UserPermission: string
             self::CREATE_MECHANICS->value,
             self::UPDATE_MECHANICS->value,
             self::DELETE_MECHANICS->value,
+        ];
+    }
+
+    public static function users(): array
+    {
+        return [
+            self::VIEW_USERS->value,
+            self::CREATE_USERS->value,
+            self::UPDATE_USERS->value,
+            self::DELETE_USERS->value,
         ];
     }
 }
