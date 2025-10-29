@@ -10,6 +10,7 @@ import { register } from '@/routes';
 import { request } from '@/routes/password';
 import { Form, Head } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
+import { useLaravelReactI18n } from 'laravel-react-i18n';
 
 interface LoginProps {
     status?: string;
@@ -17,12 +18,13 @@ interface LoginProps {
 }
 
 export default function Login({ status, canResetPassword }: LoginProps) {
+    const { t } = useLaravelReactI18n();
     return (
         <AuthLayout
-            title="Log in to your account"
-            description="Enter your email and password below to log in"
+            title={t('login_to_your_account')}
+            description={t('enter_your_email_and_password_below_to_log_in')}
         >
-            <Head title="Log in" />
+            <Head title={t('login')} />
 
             <Form
                 {...AuthenticatedSessionController.store.form()}
@@ -33,7 +35,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                     <>
                         <div className="grid gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
+                                <Label htmlFor="email">{t('email')}</Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -49,14 +51,14 @@ export default function Login({ status, canResetPassword }: LoginProps) {
 
                             <div className="grid gap-2">
                                 <div className="flex items-center">
-                                    <Label htmlFor="password">Password</Label>
+                                    <Label htmlFor="password">{t('password')}</Label>
                                     {canResetPassword && (
                                         <TextLink
                                             href={request()}
                                             className="ml-auto text-sm"
                                             tabIndex={5}
                                         >
-                                            Forgot password?
+                                            {t('forgot_password')}
                                         </TextLink>
                                     )}
                                 </div>
@@ -67,7 +69,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                     required
                                     tabIndex={2}
                                     autoComplete="current-password"
-                                    placeholder="Password"
+                                    placeholder={t('password')}
                                 />
                                 <InputError message={errors.password} />
                             </div>
@@ -78,7 +80,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                     name="remember"
                                     tabIndex={3}
                                 />
-                                <Label htmlFor="remember">Remember me</Label>
+                                <Label htmlFor="remember">{t('remember_me')}</Label>
                             </div>
 
                             <Button
@@ -91,14 +93,14 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                 {processing && (
                                     <LoaderCircle className="h-4 w-4 animate-spin" />
                                 )}
-                                Log in
+                                {t('login')}
                             </Button>
                         </div>
 
                         <div className="text-center text-sm text-muted-foreground">
-                            Don't have an account?{' '}
+                            {t('dont_have_an_account')} {' '}
                             <TextLink href={register()} tabIndex={5}>
-                                Sign up
+                                {t('sign_up')}
                             </TextLink>
                         </div>
                     </>

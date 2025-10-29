@@ -238,5 +238,22 @@
     "password": "Password",
     "password_confirmation": "Confirm Password",
     "users.user_deleted": "User has been deleted",
-    "users.cannot_delete_self": "Cannot delete your own account"
+    "users.cannot_delete_self": "Cannot delete your own account",
+    "dont_have_an_account": "Don't have an account?",
+    "sign_up": "Sign up",
+    "remember_me": "Remember me",
+    "forgot_password": "Forgot password?",
+    "login_to_your_account": "Login to your account",
+    "enter_your_email_and_password_below_to_log_in": "Enter your email and password below to log in",
+    "register_workshop": "Register workshop",
+    "create_workshop_account": "Create workshop account",
+    "workshop_name": "Workshop name",
+    "workshop_name_placeholder": "Workshop ABC",
+    "owner_name": "Owner name",
+    "owner_name_placeholder": "John Doe",
+    "email_placeholder": "email@example.com",
+    "password_placeholder": "Minimum 8 characters",
+    "confirm_password_placeholder": "Confirm password",
+    "confirm_password": "Confirm password",
+    "already_have_an_account": "Already have an account?"
 }
