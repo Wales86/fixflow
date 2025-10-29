@@ -28,6 +28,8 @@ import {
     useReactTable,
 } from '@tanstack/react-table';
 
+import { DataTableRowActions } from './data-table-row-actions';
+
 export function UsersDataTable({
     tableData,
     filters,
@@ -81,6 +83,12 @@ export function UsersDataTable({
                     });
                 },
                 enableSorting: true,
+            },
+            {
+                id: 'actions',
+                cell: ({ row }) => (
+                    <DataTableRowActions user={row.original} />
+                ),
             },
         ];
     }, [t]);

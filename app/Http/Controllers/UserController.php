@@ -91,6 +91,6 @@ class UserController extends Controller
 
         return redirect()
             ->route('users.index')
-            ->with('success', __('users.user_deleted'));
+            ->with('success', __('users.deleted_successfully'));
     }
 }

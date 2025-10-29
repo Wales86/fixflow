@@ -21,27 +21,27 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { usePermission } from '@/lib/permissions';
-import { destroy, edit } from '@/routes/mechanics';
+import { destroy, edit } from '@/routes/users';
 
 interface DataTableRowActionsProps {
-    mechanic: App.Dto.Mechanic.MechanicData;
+    user: App.Dto.User.UserData;
 }
 
-export function DataTableRowActions({ mechanic }: DataTableRowActionsProps) {
+export function DataTableRowActions({ user }: DataTableRowActionsProps) {
     const { t } = useLaravelReactI18n();
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
 
-    const canUpdate = usePermission('update_mechanics');
-    const canDelete = usePermission('delete_mechanics');
+    const canUpdate = usePermission('update_users');
+    const canDelete = usePermission('delete_users');
 
     const handleEdit = () => {
-        router.visit(edit(mechanic.id).url);
+        router.visit(edit(user.id).url);
     };
 
     const handleDelete = () => {
         setIsDeleting(true);
-        router.delete(destroy(mechanic.id).url, {
+        router.delete(destroy(user.id).url, {
             onSuccess: () => {
                 setShowDeleteDialog(false);
             },
@@ -62,7 +62,7 @@ export function DataTableRowActions({ mechanic }: DataTableRowActionsProps) {
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="sm" className="size-8 p-0">
                         <span className="sr-only">
-                            {t('mechanics.open_menu')}
+                            {t('users.open_menu')}
                         </span>
                         <MoreHorizontal className="size-4" />
                     </Button>
@@ -92,23 +92,12 @@ export function DataTableRowActions({ mechanic }: DataTableRowActionsProps) {
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>
-                            {t('mechanics.delete_confirmation_title')}
+                            {t('users.delete_confirmation_title')}
                         </DialogTitle>
                         <DialogDescription>
-                            {t('mechanics.delete_confirmation_description', {
-                                name: `${mechanic.first_name} ${mechanic.last_name}`,
+                            {t('users.delete_confirmation_description', {
+                                name: user.name,
                             })}
-                            {mechanic.time_entries_count &&
-                                mechanic.time_entries_count > 0 && (
-                                    <span className="mt-2 block text-yellow-600 dark:text-yellow-500">
-                                        {t(
-                                            'mechanics.has_time_entries_warning',
-                                            {
-                                                count: mechanic.time_entries_count,
-                                            },
-                                        )}
-                                    </span>
-                                )}
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
