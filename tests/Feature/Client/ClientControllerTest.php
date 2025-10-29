@@ -458,7 +458,7 @@ test('client show includes all client vehicles', function () {
     $user->assignRole('Owner');
 
     $client = Client::factory()->for($this->workshop)->create();
-    $vehicles = \App\Models\Vehicle::factory()->for($client)->for($this->workshop)->count(3)->create();
+    $vehicles = Vehicle::factory()->for($client)->for($this->workshop)->count(3)->create();
 
     actingAs($user)
         ->get(route('clients.show', $client))
