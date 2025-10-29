@@ -255,5 +255,9 @@
     "password_placeholder": "Minimum 8 characters",
     "confirm_password_placeholder": "Confirm password",
     "confirm_password": "Confirm password",
-    "already_have_an_account": "Already have an account?"
+    "already_have_an_account": "Already have an account?",
+    "manage_your_profile_and_account_settings": "Manage your profile and account settings",
+    "appearance_settings": "Appearance settings",
+    "update_your_account_appearance_settings": "Update your account's appearance settings",
+    "two_factor_auth": "Two-Factor Authentication"
 }

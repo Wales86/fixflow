@@ -255,5 +255,9 @@
     "password_placeholder": "Minimum 8 znaków",
     "confirm_password_placeholder": "Powtórz hasło",
     "confirm_password": "Potwierdź hasło",
-    "already_have_an_account": "Masz już konto?"
+    "already_have_an_account": "Masz już konto?",
+    "manage_your_profile_and_account_settings": "Zarządzaj swoim profilem i ustawieniami konta",
+    "appearance_settings": "Ustawienia wyglądu",
+    "update_your_account_appearance_settings": "Aktualizuj ustawienia wyglądu swojego konta",
+    "two_factor_auth": "Uwierzytelnianie dwuskładnikowe"
 }
