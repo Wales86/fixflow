@@ -29,11 +29,12 @@ class UserController extends Controller
     public function index(IndexUserRequest $request): Response
     {
         $workshopId = auth()->user()->workshop_id;
-        $usersPaginated = $this->userService->getUsers($workshopId);
+        $filters = FiltersData::from($request->validated());
+        $usersPaginated = $this->userService->getUsers($workshopId, $filters);
 
         $props = FilterableTablePagePropsData::from([
             'tableData' => $usersPaginated,
-            'filters' => FiltersData::from([]),
+            'filters' => $filters,
         ]);
 
         return Inertia::render('users/index', $props);

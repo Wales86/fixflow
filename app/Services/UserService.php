@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Dto\Common\FiltersData;
 use App\Dto\User\CreateUserData;
 use App\Dto\User\UpdateUserData;
 use App\Dto\User\UserData;
@@ -12,13 +13,27 @@ use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
-    public function getUsers(int $workshopId): LengthAwarePaginator
+    public function getUsers(int $workshopId, FiltersData $filters): LengthAwarePaginator
     {
-        return User::query()
+        $query = User::query()
             ->where('workshop_id', $workshopId)
-            ->with('roles')
-            ->orderBy('name')
+            ->with('roles');
+
+        if ($filters->search) {
+            $query->where(function ($q) use ($filters) {
+                $q->where('name', 'like', "%{$filters->search}%")
+                    ->orWhere('email', 'like', "%{$filters->search}%");
+            });
+        }
+
+        $sort = $filters->sort ?? 'name';
+        $direction = $filters->direction ?? 'asc';
+
+        $query->orderBy($sort, $direction);
+
+        return $query
             ->paginate(15)
+            ->withQueryString()
             ->through(fn ($user) => UserData::from($user));
     }
 

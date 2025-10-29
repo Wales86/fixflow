@@ -16,6 +16,7 @@ const VALID_MECHANIC_DATA = [
 ];
 
 beforeEach(function () {
+    /** @var Workshop $this->workshop */
     $this->workshop = Workshop::factory()->create();
     $this->workshop->makeCurrent();
 

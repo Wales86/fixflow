@@ -4,6 +4,7 @@ namespace App\Http\Requests\User;
 
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class IndexUserRequest extends FormRequest
 {
@@ -17,6 +18,10 @@ class IndexUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [];
+        return [
+            'search' => ['nullable', 'string', 'max:255'],
+            'sort' => ['nullable', 'string', Rule::in(['name', 'email', 'created_at'])],
+            'direction' => ['nullable', 'string', Rule::in(['asc', 'desc'])],
+        ];
     }
 }
