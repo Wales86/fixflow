@@ -36,7 +36,7 @@ export function TimeEntryDialog({
     timeEntry,
 }: TimeEntryDialogProps) {
     const { t } = useLaravelReactI18n();
-    const { mechanics } = usePage<SharedData>().props as any;
+    const { mechanics } = usePage<SharedData>().props;
 
     const isEditMode = !!timeEntry;
 
@@ -134,7 +134,7 @@ export function TimeEntryDialog({
                                     />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {mechanics?.map((mechanic: any) => (
+                                    {mechanics?.map((mechanic) => (
                                         <SelectItem
                                             key={mechanic.id}
                                             value={mechanic.id.toString()}

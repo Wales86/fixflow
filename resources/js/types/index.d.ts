@@ -35,6 +35,7 @@ export interface SharedData {
     auth: Auth;
     sidebarOpen: boolean;
     flash: FlashMessages;
+    mechanics?: App.Dto.TimeTracking.MechanicSelectOptionData[];
     [key: string]: unknown;
 }
 

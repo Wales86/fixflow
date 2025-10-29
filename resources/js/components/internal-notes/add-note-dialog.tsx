@@ -35,7 +35,7 @@ export function AddNoteDialog({
     onClose,
 }: AddNoteDialogProps) {
     const { t } = useLaravelReactI18n();
-    const { mechanics } = usePage<SharedData>().props as any;
+    const { mechanics } = usePage<SharedData>().props;
 
     const { data, setData, post, processing, errors, reset } = useForm({
         notable_type: notableType,
@@ -95,7 +95,7 @@ export function AddNoteDialog({
                                         />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {mechanics?.map((mechanic: any) => (
+                                        {mechanics?.map((mechanic) => (
                                             <SelectItem
                                                 key={mechanic.id}
                                                 value={mechanic.id.toString()}

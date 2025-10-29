@@ -35,7 +35,7 @@ test('owner can delete user in same workshop', function () {
         ->delete(route('users.destroy', $userToDelete));
 
     $response->assertRedirect(route('users.index'));
-    $response->assertSessionHas('success', 'Użytkownik został usunięty');
+    $response->assertSessionHas('success', 'Użytkownik został usunięty pomyślnie');
 
     assertSoftDeleted('users', [
         'id' => $userToDelete->id,
@@ -53,7 +53,7 @@ test('office can delete user in same workshop', function () {
         ->delete(route('users.destroy', $userToDelete));
 
     $response->assertRedirect(route('users.index'));
-    $response->assertSessionHas('success', 'Użytkownik został usunięty');
+    $response->assertSessionHas('success', 'Użytkownik został usunięty pomyślnie');
 
     assertSoftDeleted('users', [
         'id' => $userToDelete->id,

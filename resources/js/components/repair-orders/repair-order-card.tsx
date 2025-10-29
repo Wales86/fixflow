@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { usePermission } from '@/lib/permissions';
 import { Link } from '@inertiajs/react';
-import { useLaravelReactI18n } from 'laravel-react-i18n';
 import { Clock, Plus } from 'lucide-react';
 import { useState } from 'react';
 
@@ -13,7 +12,6 @@ interface RepairOrderCardProps {
 }
 
 export function RepairOrderCard({ order }: RepairOrderCardProps) {
-    const { t } = useLaravelReactI18n();
     const canCreateTimeEntry = usePermission('create_time_entries');
     const [isTimeEntryDialogOpen, setTimeEntryDialogOpen] = useState(false);
 
