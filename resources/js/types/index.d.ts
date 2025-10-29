@@ -2,7 +2,7 @@ import { InertiaLinkProps } from '@inertiajs/react';
 import { LucideIcon } from 'lucide-react';
 
 export interface Auth {
-    user: User;
+    user: SharedUserData | null;
 }
 
 export interface BreadcrumbItem {
@@ -32,7 +32,6 @@ export interface FlashMessages {
 
 export interface SharedData {
     name: string;
-    quote: { message: string; author: string };
     auth: Auth;
     sidebarOpen: boolean;
     flash: FlashMessages;
