@@ -176,6 +176,7 @@
     "delete_time_entry_confirm": "Czy na pewno chcesz usunąć ten wpis czasu? Tej operacji nie można cofnąć.",
     "delete_time_entry_button": "Usuń wpis",
     "no_mechanics_available": "Brak dostępnych mechaników",
+    "clients.title": "Klienci",
     "mechanics.title": "Mechanicy",
     "mechanics.add_mechanic": "Dodaj mechanika",
     "mechanics.add_new_mechanic": "Dodaj nowego mechanika",

@@ -176,6 +176,7 @@
     "delete_time_entry_confirm": "Are you sure you want to delete this time entry? This action cannot be undone.",
     "delete_time_entry_button": "Delete Entry",
     "no_mechanics_available": "No mechanics available",
+    "clients.title": "Clients",
     "mechanics.title": "Mechanics",
     "mechanics.add_mechanic": "Add Mechanic",
     "mechanics.add_new_mechanic": "Add New Mechanic",
