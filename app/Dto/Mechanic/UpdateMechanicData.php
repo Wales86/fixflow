@@ -6,4 +6,3 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
 class UpdateMechanicData extends StoreMechanicData {}
-

@@ -120,7 +120,7 @@ test('store validation fails when password is too short', function () {
     actingAs($owner)
         ->post(route('users.store'), array_merge(VALID_USER_DATA, [
             'password' => '123',
-            'password_confirmation' => '123'
+            'password_confirmation' => '123',
         ]))
         ->assertInvalid(['password']);
 });
@@ -132,7 +132,7 @@ test('store validation fails when password confirmation does not match', functio
     actingAs($owner)
         ->post(route('users.store'), array_merge(VALID_USER_DATA, [
             'password' => 'password123',
-            'password_confirmation' => 'different123'
+            'password_confirmation' => 'different123',
         ]))
         ->assertInvalid(['password']);
 });

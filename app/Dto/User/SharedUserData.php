@@ -2,8 +2,8 @@
 
 namespace App\Dto\User;
 
-use App\Models\User;
 use App\Dto\Workshop\WorkshopData;
+use App\Models\User;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 

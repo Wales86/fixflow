@@ -246,4 +246,3 @@ test('can update only names without changing is_active', function () {
         'is_active' => false,
     ]);
 });
-

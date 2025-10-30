@@ -17,6 +17,7 @@ interface DateRangePickerProps {
     onChange?: (range: DateRange | undefined) => void;
     className?: string;
     placeholder?: string;
+    disabled?: boolean;
 }
 
 export function DateRangePicker({
@@ -24,6 +25,7 @@ export function DateRangePicker({
     onChange,
     className,
     placeholder = 'Pick a date range',
+    disabled = false,
 }: DateRangePickerProps) {
     const [date, setDate] = React.useState<DateRange | undefined>(value);
 
@@ -45,6 +47,7 @@ export function DateRangePicker({
                     <Button
                         id="date"
                         variant={'outline'}
+                        disabled={disabled}
                         className={cn(
                             'w-[300px] justify-start text-left font-normal',
                             !date && 'text-muted-foreground',

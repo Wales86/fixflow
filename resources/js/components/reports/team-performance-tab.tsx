@@ -1,6 +1,7 @@
 import { StatCard } from '@/components/stat-card';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DateRangePicker } from '@/components/ui/date-range-picker';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
     Table,
     TableBody,
@@ -26,7 +27,7 @@ import {
 } from 'recharts';
 
 interface TeamPerformanceTabProps {
-    data: App.Dto.Report.TeamPerformanceReportData;
+    data?: App.Dto.Report.TeamPerformanceReportData;
 }
 
 export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
@@ -46,6 +47,7 @@ export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
                 {
                     preserveState: true,
                     preserveScroll: true,
+                    only: ['teamPerformanceReport'],
                 },
             );
         }
@@ -69,108 +71,172 @@ export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
                 />
             </div>
 
-            {/* KPI Cards */}
-            <div className="grid gap-4 md:grid-cols-3">
-                <StatCard
-                    title={t('total_hours_worked')}
-                    value={data.totalHours}
-                    icon={Clock}
-                    description={t('in_selected_period')}
-                />
-                <StatCard
-                    title={t('total_orders_completed')}
-                    value={data.totalOrders}
-                    icon={Wrench}
-                    description={t('in_selected_period')}
-                />
-                <StatCard
-                    title={t('active_mechanics')}
-                    value={data.activeMechanics}
-                    icon={Users}
-                />
-            </div>
+            {!data ? (
+                <TeamPerformanceSkeleton />
+            ) : (
+                <>
+                    {/* KPI Cards */}
+                    <div className="grid gap-4 md:grid-cols-3">
+                        <StatCard
+                            title={t('total_hours_worked')}
+                            value={data.totalHours}
+                            icon={Clock}
+                            description={t('in_selected_period')}
+                        />
+                        <StatCard
+                            title={t('total_orders_completed')}
+                            value={data.totalOrders}
+                            icon={Wrench}
+                            description={t('in_selected_period')}
+                        />
+                        <StatCard
+                            title={t('active_mechanics')}
+                            value={data.activeMechanics}
+                            icon={Users}
+                        />
+                    </div>
 
-            {/* Bar Chart */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>{t('hours_worked_by_mechanic')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <ResponsiveContainer width="100%" height={350}>
-                        <BarChart data={data.chartData}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis
-                                dataKey="name"
-                                angle={-45}
-                                textAnchor="end"
-                                height={100}
-                            />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <Bar
-                                dataKey="hours"
-                                fill="hsl(var(--primary))"
-                                name={t('hours')}
-                            />
-                        </BarChart>
-                    </ResponsiveContainer>
-                </CardContent>
-            </Card>
+                    {/* Bar Chart */}
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>{t('hours_worked_by_mechanic')}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <ResponsiveContainer width="100%" height={350}>
+                                <BarChart data={data.chartData}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis
+                                        dataKey="name"
+                                        angle={-45}
+                                        textAnchor="end"
+                                        height={100}
+                                    />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Bar
+                                        dataKey="hours"
+                                        fill="hsl(var(--primary))"
+                                        name={t('hours')}
+                                    />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </CardContent>
+                    </Card>
 
-            {/* Data Table */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>{t('detailed_mechanic_stats')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>{t('mechanic')}</TableHead>
-                                <TableHead className="text-right">
-                                    {t('total_hours')}
-                                </TableHead>
-                                <TableHead className="text-right">
-                                    {t('orders_completed')}
-                                </TableHead>
-                                <TableHead className="text-right">
-                                    {t('avg_time_per_order')}
-                                </TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {data.tableData.length > 0 ? (
-                                data.tableData.map((row, index) => (
-                                    <TableRow key={index}>
-                                        <TableCell className="font-medium">
-                                            {row.mechanic}
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            {row.totalHours}h
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            {row.ordersCompleted}
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            {row.avgTimePerOrder.toFixed(1)}h
-                                        </TableCell>
+                    {/* Data Table */}
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>{t('detailed_mechanic_stats')}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>{t('mechanic')}</TableHead>
+                                        <TableHead className="text-right">
+                                            {t('total_hours')}
+                                        </TableHead>
+                                        <TableHead className="text-right">
+                                            {t('orders_completed')}
+                                        </TableHead>
+                                        <TableHead className="text-right">
+                                            {t('avg_time_per_order')}
+                                        </TableHead>
                                     </TableRow>
-                                ))
-                            ) : (
-                                <TableRow>
-                                    <TableCell
-                                        colSpan={4}
-                                        className="text-center text-muted-foreground"
-                                    >
-                                        {t('no_data_available')}
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
+                                </TableHeader>
+                                <TableBody>
+                                    {data.tableData.length > 0 ? (
+                                        data.tableData.map((row, index) => (
+                                            <TableRow key={index}>
+                                                <TableCell className="font-medium">
+                                                    {row.mechanic}
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    {row.totalHours}h
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    {row.ordersCompleted}
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    {row.avgTimePerOrder.toFixed(1)}h
+                                                </TableCell>
+                                            </TableRow>
+                                        ))
+                                    ) : (
+                                        <TableRow>
+                                            <TableCell
+                                                colSpan={4}
+                                                className="text-center text-muted-foreground"
+                                            >
+                                                {t('no_data_available')}
+                                            </TableCell>
+                                        </TableRow>
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </CardContent>
+                    </Card>
+                </>
+            )}
+        </div>
+    );
+}
+
+function TeamPerformanceSkeleton() {
+    return (
+        <>
+            <div className="grid gap-4 md:grid-cols-3">
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <Skeleton className="h-5 w-32" />
+                        <Skeleton className="size-4" />
+                    </CardHeader>
+                    <CardContent>
+                        <Skeleton className="h-8 w-16" />
+                        <Skeleton className="mt-1 h-4 w-40" />
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <Skeleton className="h-5 w-36" />
+                        <Skeleton className="size-4" />
+                    </CardHeader>
+                    <CardContent>
+                        <Skeleton className="h-8 w-12" />
+                        <Skeleton className="mt-1 h-4 w-40" />
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <Skeleton className="h-5 w-28" />
+                        <Skeleton className="size-4" />
+                    </CardHeader>
+                    <CardContent>
+                        <Skeleton className="h-8 w-10" />
+                    </CardContent>
+                </Card>
+            </div>
+            <Card>
+                <CardHeader>
+                    <Skeleton className="h-6 w-48" />
+                </CardHeader>
+                <CardContent>
+                    <Skeleton className="h-[350px] w-full" />
                 </CardContent>
             </Card>
-        </div>
+            <Card>
+                <CardHeader>
+                    <Skeleton className="h-6 w-52" />
+                </CardHeader>
+                <CardContent>
+                    <div className="space-y-2">
+                        <Skeleton className="h-10 w-full" />
+                        <Skeleton className="h-10 w-full" />
+                        <Skeleton className="h-10 w-full" />
+                    </div>
+                </CardContent>
+            </Card>
+        </>
     );
 }

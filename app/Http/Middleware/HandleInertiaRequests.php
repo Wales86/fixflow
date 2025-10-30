@@ -2,10 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Dto\User\SharedUserData;
 use App\Services\MechanicService;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
-use App\Dto\User\SharedUserData;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -39,6 +39,7 @@ class HandleInertiaRequests extends Middleware
     {
         $user = $request->user();
         $userData = $user ? SharedUserData::fromModel($user) : null;
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),

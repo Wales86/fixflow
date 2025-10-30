@@ -1,5 +1,5 @@
+import { MechanicPerformanceTab } from '@/components/reports/mechanic-performance-tab';
 import { TeamPerformanceTab } from '@/components/reports/team-performance-tab';
-import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AppLayout from '@/layouts/app-layout';
 import reports from '@/routes/reports';
@@ -15,11 +15,15 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 interface ReportsIndexProps {
-    teamPerformanceReport: App.Dto.Report.TeamPerformanceReportData;
+    teamPerformanceReport?: App.Dto.Report.TeamPerformanceReportData;
+    mechanics: App.Dto.Report.MechanicSelectOptionData[];
+    mechanicPerformanceReport?: App.Dto.Report.MechanicPerformanceReportData | null;
 }
 
 export default function ReportsIndex({
     teamPerformanceReport,
+    mechanics,
+    mechanicPerformanceReport,
 }: ReportsIndexProps) {
     const { t } = useLaravelReactI18n();
 
@@ -42,15 +46,10 @@ export default function ReportsIndex({
                     </TabsContent>
 
                     <TabsContent value="mechanic" className="mt-4">
-                        <Card>
-                            <CardContent className="p-6">
-                                <p className="text-muted-foreground">
-                                    {t(
-                                        'mechanic_performance_tab_content_placeholder',
-                                    )}
-                                </p>
-                            </CardContent>
-                        </Card>
+                        <MechanicPerformanceTab
+                            mechanics={mechanics}
+                            data={mechanicPerformanceReport}
+                        />
                     </TabsContent>
                 </Tabs>
             </div>
