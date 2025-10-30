@@ -82,7 +82,7 @@ export function AppSidebar() {
             title: t('reports'),
             href: reports.index(),
             icon: BarChart3,
-            permission: 'view_dashboard',
+            permission: 'view_reports',
         },
     ];
 

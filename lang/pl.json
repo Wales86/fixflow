@@ -264,5 +264,16 @@
     "team_performance": "Wydajność zespołu",
     "mechanic_performance": "Wydajność pracownika",
     "team_performance_tab_content_placeholder": "Zawartość zakładki Wydajność Zespołu będzie tutaj wkrótce",
-    "mechanic_performance_tab_content_placeholder": "Zawartość zakładki Wydajność Pracownika będzie tutaj wkrótce"
+    "mechanic_performance_tab_content_placeholder": "Zawartość zakładki Wydajność Pracownika będzie tutaj wkrótce",
+    "team_performance_description": "Przegląd wydajności całego zespołu mechaników",
+    "total_hours_worked": "Łączny czas pracy",
+    "total_orders_completed": "Zleceń ukończonych",
+    "active_mechanics": "Aktywni mechanicy",
+    "in_selected_period": "w wybranym okresie",
+    "hours_worked_by_mechanic": "Godziny pracy według mechanika",
+    "detailed_mechanic_stats": "Szczegółowe statystyki mechaników",
+    "mechanic": "Mechanik",
+    "orders_completed": "Ukończone zlecenia",
+    "avg_time_per_order": "Śr. czas na zlecenie",
+    "no_data_available": "Brak danych do wyświetlenia"
 }

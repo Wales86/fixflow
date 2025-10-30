@@ -264,5 +264,16 @@
     "team_performance": "Team Performance",
     "mechanic_performance": "Mechanic Performance",
     "team_performance_tab_content_placeholder": "Team Performance tab content coming soon",
-    "mechanic_performance_tab_content_placeholder": "Mechanic Performance tab content coming soon"
+    "mechanic_performance_tab_content_placeholder": "Mechanic Performance tab content coming soon",
+    "team_performance_description": "Overview of team mechanics performance",
+    "total_hours_worked": "Total Hours Worked",
+    "total_orders_completed": "Orders Completed",
+    "active_mechanics": "Active Mechanics",
+    "in_selected_period": "in selected period",
+    "hours_worked_by_mechanic": "Hours Worked by Mechanic",
+    "detailed_mechanic_stats": "Detailed Mechanic Statistics",
+    "mechanic": "Mechanic",
+    "orders_completed": "Orders Completed",
+    "avg_time_per_order": "Avg. Time per Order",
+    "no_data_available": "No data available"
 }

@@ -7,6 +7,9 @@ enum UserPermission: string
     // Dashboard permissions
     case VIEW_DASHBOARD = 'view_dashboard';
 
+    // Report permissions
+    case VIEW_REPORTS = 'view_reports';
+
     // Client permissions
     case VIEW_CLIENTS = 'view_clients';
     case CREATE_CLIENTS = 'create_clients';

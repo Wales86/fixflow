@@ -257,6 +257,25 @@ declare namespace App.Dto.RepairOrder {
         client_name: string;
     };
 }
+declare namespace App.Dto.Report {
+    export type MechanicChartData = {
+        name: string;
+        hours: number;
+    };
+    export type MechanicPerformanceStatsData = {
+        mechanic: string;
+        totalHours: number;
+        ordersCompleted: number;
+        avgTimePerOrder: number;
+    };
+    export type TeamPerformanceReportData = {
+        totalHours: number;
+        totalOrders: number;
+        activeMechanics: number;
+        chartData: Array<App.Dto.Report.MechanicChartData>;
+        tableData: Array<App.Dto.Report.MechanicPerformanceStatsData>;
+    };
+}
 declare namespace App.Dto.TimeTracking {
     export type MechanicSelectOptionData = {
         id: number;
@@ -376,6 +395,7 @@ declare namespace App.Enums {
         | 'closed';
     export type UserPermission =
         | 'view_dashboard'
+        | 'view_reports'
         | 'view_clients'
         | 'create_clients'
         | 'update_clients'
