@@ -9,7 +9,6 @@ import SettingsLayout from '@/layouts/settings/layout';
 import { edit as editAppearance } from '@/routes/appearance';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
 
-
 export default function Appearance() {
     const { t } = useLaravelReactI18n();
 
@@ -19,7 +18,7 @@ export default function Appearance() {
             href: editAppearance().url,
         },
     ];
-    
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={t('appearance_settings')} />
@@ -28,7 +27,9 @@ export default function Appearance() {
                 <div className="space-y-6">
                     <HeadingSmall
                         title={t('appearance_settings')}
-                        description={t('update_your_account_appearance_settings')}
+                        description={t(
+                            'update_your_account_appearance_settings',
+                        )}
                     />
                     <AppearanceTabs />
                 </div>

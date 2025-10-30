@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InternalNoteController;
 use App\Http\Controllers\MechanicController;
 use App\Http\Controllers\RepairOrderController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TimeEntryController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
@@ -64,6 +65,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('time-entries', [TimeEntryController::class, 'store'])->name('time-entries.store');
     Route::patch('time-entries/{timeEntry}', [TimeEntryController::class, 'update'])->name('time-entries.update');
     Route::delete('time-entries/{timeEntry}', [TimeEntryController::class, 'destroy'])->name('time-entries.destroy');
+
+    Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
 });
 
 require __DIR__.'/settings.php';

@@ -61,9 +61,7 @@ export function DataTableRowActions({ user }: DataTableRowActionsProps) {
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="sm" className="size-8 p-0">
-                        <span className="sr-only">
-                            {t('users.open_menu')}
-                        </span>
+                        <span className="sr-only">{t('users.open_menu')}</span>
                         <MoreHorizontal className="size-4" />
                     </Button>
                 </DropdownMenuTrigger>

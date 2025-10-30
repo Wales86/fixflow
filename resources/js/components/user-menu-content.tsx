@@ -10,8 +10,8 @@ import { logout } from '@/routes';
 import { edit } from '@/routes/profile';
 import { type User } from '@/types';
 import { Link, router } from '@inertiajs/react';
-import { LogOut, Settings } from 'lucide-react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
+import { LogOut, Settings } from 'lucide-react';
 
 interface UserMenuContentProps {
     user: User;

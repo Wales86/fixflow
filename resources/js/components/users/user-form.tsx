@@ -62,7 +62,6 @@ export function UserForm({ user, roles }: UserFormProps) {
         }
     };
 
-
     return (
         <Card>
             <CardHeader>
@@ -199,7 +198,10 @@ export function UserForm({ user, roles }: UserFormProps) {
                             </SelectTrigger>
                             <SelectContent>
                                 {roles.map((role) => (
-                                    <SelectItem key={role.value} value={role.value}>
+                                    <SelectItem
+                                        key={role.value}
+                                        value={role.value}
+                                    >
                                         {role.label}
                                     </SelectItem>
                                 ))}

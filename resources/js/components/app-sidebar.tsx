@@ -14,15 +14,15 @@ import { dashboard } from '@/routes';
 import clients from '@/routes/clients';
 import mechanics from '@/routes/mechanics';
 import repairOrders from '@/routes/repair-orders';
+import reports from '@/routes/reports';
 import users from '@/routes/users';
 import vehicles from '@/routes/vehicles';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
 import {
-    BookOpen,
+    BarChart3,
     Car,
-    Folder,
     LayoutGrid,
     UserCog,
     Users,
@@ -77,6 +77,12 @@ export function AppSidebar() {
             href: users.index(),
             icon: UsersRound,
             permission: 'view_users',
+        },
+        {
+            title: t('reports'),
+            href: reports.index(),
+            icon: BarChart3,
+            permission: 'view_dashboard',
         },
     ];
 

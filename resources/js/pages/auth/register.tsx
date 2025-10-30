@@ -81,7 +81,9 @@ export default function Register() {
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="password">{t('password')}</Label>
+                                <Label htmlFor="password">
+                                    {t('password')}
+                                </Label>
                                 <Input
                                     id="password"
                                     type="password"
@@ -105,7 +107,9 @@ export default function Register() {
                                     tabIndex={5}
                                     autoComplete="new-password"
                                     name="password_confirmation"
-                                    placeholder={t('confirm_password_placeholder')}
+                                    placeholder={t(
+                                        'confirm_password_placeholder',
+                                    )}
                                 />
                                 <InputError
                                     message={errors.password_confirmation}
@@ -127,7 +131,7 @@ export default function Register() {
                         </div>
 
                         <div className="text-center text-sm text-muted-foreground">
-                            {t('already_have_an_account')} {' '}
+                            {t('already_have_an_account')}{' '}
                             <TextLink href={login()} tabIndex={7}>
                                 {t('login')}
                             </TextLink>

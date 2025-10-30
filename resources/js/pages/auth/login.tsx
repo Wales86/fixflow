@@ -9,8 +9,8 @@ import AuthLayout from '@/layouts/auth-layout';
 import { register } from '@/routes';
 import { request } from '@/routes/password';
 import { Form, Head } from '@inertiajs/react';
-import { LoaderCircle } from 'lucide-react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
+import { LoaderCircle } from 'lucide-react';
 
 interface LoginProps {
     status?: string;
@@ -51,7 +51,9 @@ export default function Login({ status, canResetPassword }: LoginProps) {
 
                             <div className="grid gap-2">
                                 <div className="flex items-center">
-                                    <Label htmlFor="password">{t('password')}</Label>
+                                    <Label htmlFor="password">
+                                        {t('password')}
+                                    </Label>
                                     {canResetPassword && (
                                         <TextLink
                                             href={request()}
@@ -80,7 +82,9 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                     name="remember"
                                     tabIndex={3}
                                 />
-                                <Label htmlFor="remember">{t('remember_me')}</Label>
+                                <Label htmlFor="remember">
+                                    {t('remember_me')}
+                                </Label>
                             </div>
 
                             <Button
@@ -98,7 +102,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                         </div>
 
                         <div className="text-center text-sm text-muted-foreground">
-                            {t('dont_have_an_account')} {' '}
+                            {t('dont_have_an_account')}{' '}
                             <TextLink href={register()} tabIndex={5}>
                                 {t('sign_up')}
                             </TextLink>

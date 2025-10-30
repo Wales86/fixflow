@@ -86,9 +86,7 @@ export function UsersDataTable({
             },
             {
                 id: 'actions',
-                cell: ({ row }) => (
-                    <DataTableRowActions user={row.original} />
-                ),
+                cell: ({ row }) => <DataTableRowActions user={row.original} />,
             },
         ];
     }, [t]);

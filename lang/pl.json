@@ -259,5 +259,10 @@
     "manage_your_profile_and_account_settings": "Zarządzaj swoim profilem i ustawieniami konta",
     "appearance_settings": "Ustawienia wyglądu",
     "update_your_account_appearance_settings": "Aktualizuj ustawienia wyglądu swojego konta",
-    "two_factor_auth": "Uwierzytelnianie dwuskładnikowe"
+    "two_factor_auth": "Uwierzytelnianie dwuskładnikowe",
+    "reports": "Raporty",
+    "team_performance": "Wydajność zespołu",
+    "mechanic_performance": "Wydajność pracownika",
+    "team_performance_tab_content_placeholder": "Zawartość zakładki Wydajność Zespołu będzie tutaj wkrótce",
+    "mechanic_performance_tab_content_placeholder": "Zawartość zakładki Wydajność Pracownika będzie tutaj wkrótce"
 }
