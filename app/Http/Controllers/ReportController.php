@@ -15,8 +15,7 @@ class ReportController extends Controller
 {
     public function __construct(
         public ReportService $reportService
-    ) {
-    }
+    ) {}
 
     public function index(): RedirectResponse
     {
@@ -48,6 +47,11 @@ class ReportController extends Controller
         return Inertia::render('reports/mechanic', [
             'mechanicPerformanceReport' => $mechanicPerformanceReport,
             'mechanics' => $this->reportService->getActiveMechanics(),
+            'filters' => [
+                'mechanic_id' => $validated['mechanic_id'] ?? null,
+                'start_date' => $validated['start_date'] ?? null,
+                'end_date' => $validated['end_date'] ?? null,
+            ],
         ]);
     }
 }

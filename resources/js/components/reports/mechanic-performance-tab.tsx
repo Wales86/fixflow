@@ -14,23 +14,41 @@ import { formatMinutes } from '@/lib/utils';
 import { router } from '@inertiajs/react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
 import { Clock, RefreshCw, TrendingUp, Wrench, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { type DateRange } from 'react-day-picker';
 
 interface MechanicPerformanceTabProps {
     mechanics: App.Dto.Report.MechanicSelectOptionData[];
     data?: App.Dto.Report.MechanicPerformanceReportData | null;
+    filters: {
+        mechanic_id: number | null;
+        start_date: string | null;
+        end_date: string | null;
+    };
 }
 
 export function MechanicPerformanceTab({
     mechanics,
     data,
+    filters,
 }: MechanicPerformanceTabProps) {
     const { t } = useLaravelReactI18n();
     const [dateRange, setDateRange] = useState<DateRange | undefined>();
     const [selectedMechanicId, setSelectedMechanicId] = useState<
         string | undefined
     >();
+
+    useEffect(() => {
+        if (filters.mechanic_id) {
+            setSelectedMechanicId(filters.mechanic_id.toString());
+        }
+        if (filters.start_date && filters.end_date) {
+            setDateRange({
+                from: new Date(filters.start_date),
+                to: new Date(filters.end_date),
+            });
+        }
+    }, [filters]);
 
     const handleDateRangeChange = (range: DateRange | undefined) => {
         setDateRange(range);
@@ -112,6 +130,7 @@ export function MechanicPerformanceTab({
                         value={dateRange}
                         onChange={handleDateRangeChange}
                         disabled={!selectedMechanicId}
+                        placeholder={t('pick_a_date_range')}
                     />
                     {dateRange && selectedMechanicId && (
                         <Button

@@ -92,9 +92,7 @@ export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
             params.end_date = dateRange.to.toISOString();
         }
 
-        console.log(params);
-
-        router.visit(reports.mechanic(params).url);
+        router.visit(reports.mechanic({ query: params }).url);
     };
 
     return (

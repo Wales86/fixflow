@@ -19,11 +19,17 @@ const breadcrumbs: BreadcrumbItem[] = [
 interface MechanicPerformancePageProps {
     mechanics: App.Dto.Report.MechanicSelectOptionData[];
     mechanicPerformanceReport?: App.Dto.Report.MechanicPerformanceReportData | null;
+    filters: {
+        mechanic_id: number | null;
+        start_date: string | null;
+        end_date: string | null;
+    };
 }
 
 export default function MechanicPerformancePage({
     mechanics,
     mechanicPerformanceReport,
+    filters,
 }: MechanicPerformancePageProps) {
     const { t } = useLaravelReactI18n();
 
@@ -34,6 +40,7 @@ export default function MechanicPerformancePage({
                 <MechanicPerformanceTab
                     mechanics={mechanics}
                     data={mechanicPerformanceReport}
+                    filters={filters}
                 />
             </div>
         </AppLayout>
