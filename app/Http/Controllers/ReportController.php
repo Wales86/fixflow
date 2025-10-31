@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Dto\Report\GetMechanicPerformanceReportData;
 use App\Dto\Report\GetTeamPerformanceReportData;
-use App\Http\Requests\Report\FilterReportsRequest;
+use App\Http\Requests\Report\FilterMechanicReportRequest;
+use App\Http\Requests\Report\FilterTeamReportRequest;
 use App\Services\ReportService;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -16,7 +18,24 @@ class ReportController extends Controller
     ) {
     }
 
-    public function index(FilterReportsRequest $request): Response
+    public function index(): RedirectResponse
+    {
+        return redirect()->route('reports.team');
+    }
+
+    public function teamPerformance(FilterTeamReportRequest $request): Response
+    {
+        $validated = $request->validated();
+
+        $teamParams = GetTeamPerformanceReportData::from($validated);
+        $teamPerformanceReport = $this->reportService->getTeamPerformanceReport($teamParams);
+
+        return Inertia::render('reports/team', [
+            'teamPerformanceReport' => $teamPerformanceReport,
+        ]);
+    }
+
+    public function mechanicPerformance(FilterMechanicReportRequest $request): Response
     {
         $validated = $request->validated();
 
@@ -26,11 +45,7 @@ class ReportController extends Controller
             $mechanicPerformanceReport = $this->reportService->getMechanicPerformanceReport($mechanicParams);
         }
 
-        $teamParams = GetTeamPerformanceReportData::from($validated);
-        $teamPerformanceReport = $this->reportService->getTeamPerformanceReport($teamParams);
-
-        return Inertia::render('reports/index', [
-            'teamPerformanceReport' => $teamPerformanceReport,
+        return Inertia::render('reports/mechanic', [
             'mechanicPerformanceReport' => $mechanicPerformanceReport,
             'mechanics' => $this->reportService->getActiveMechanics(),
         ]);

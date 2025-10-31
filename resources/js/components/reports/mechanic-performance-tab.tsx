@@ -56,7 +56,7 @@ export function MechanicPerformanceTab({
             params.end_date = range.to.toISOString();
         }
 
-        router.get('/reports', params, {
+        router.get('/reports/mechanic', params, {
             preserveState: true,
             preserveScroll: true,
             only: ['mechanicPerformanceReport'],

@@ -67,6 +67,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('time-entries/{timeEntry}', [TimeEntryController::class, 'destroy'])->name('time-entries.destroy');
 
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/team', [ReportController::class, 'teamPerformance'])->name('reports.team');
+    Route::get('/reports/mechanic', [ReportController::class, 'mechanicPerformance'])->name('reports.mechanic');
 });
 
 require __DIR__.'/settings.php';

@@ -39,7 +39,7 @@ export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
 
         if (range?.from && range?.to) {
             router.get(
-                '/reports',
+                '/reports/team',
                 {
                     start_date: range.from.toISOString(),
                     end_date: range.to.toISOString(),
@@ -99,7 +99,9 @@ export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
                     {/* Bar Chart */}
                     <Card>
                         <CardHeader>
-                            <CardTitle>{t('hours_worked_by_mechanic')}</CardTitle>
+                            <CardTitle>
+                                {t('hours_worked_by_mechanic')}
+                            </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <ResponsiveContainer width="100%" height={350}>
@@ -127,7 +129,9 @@ export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
                     {/* Data Table */}
                     <Card>
                         <CardHeader>
-                            <CardTitle>{t('detailed_mechanic_stats')}</CardTitle>
+                            <CardTitle>
+                                {t('detailed_mechanic_stats')}
+                            </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <Table>
@@ -159,7 +163,10 @@ export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
                                                     {row.ordersCompleted}
                                                 </TableCell>
                                                 <TableCell className="text-right">
-                                                    {row.avgTimePerOrder.toFixed(1)}h
+                                                    {row.avgTimePerOrder.toFixed(
+                                                        1,
+                                                    )}
+                                                    h
                                                 </TableCell>
                                             </TableRow>
                                         ))
