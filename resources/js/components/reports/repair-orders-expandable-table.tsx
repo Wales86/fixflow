@@ -1,11 +1,6 @@
 import { StatusBadge } from '@/components/status-badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-    Collapsible,
-    CollapsibleContent,
-    CollapsibleTrigger,
-} from '@/components/ui/collapsible';
-import {
     Table,
     TableBody,
     TableCell,
@@ -17,7 +12,7 @@ import { formatMinutes } from '@/lib/utils';
 import { format } from 'date-fns';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 interface RepairOrdersExpandableTableProps {
     orders: App.Dto.Report.RepairOrderDetailData[];
@@ -89,136 +84,74 @@ export function RepairOrdersExpandableTable({
                             {orders.map((order) => {
                                 const isExpanded = expandedRows.has(order.id);
                                 return (
-                                    <Collapsible
-                                        key={order.id}
-                                        open={isExpanded}
-                                        onOpenChange={() => toggleRow(order.id)}
-                                        asChild
-                                    >
-                                        <>
-                                            <TableRow className="group">
-                                                <TableCell>
-                                                    <CollapsibleTrigger asChild>
-                                                        <button className="flex items-center justify-center rounded p-1 hover:bg-muted">
-                                                            {isExpanded ? (
-                                                                <ChevronUp className="h-4 w-4" />
-                                                            ) : (
-                                                                <ChevronDown className="h-4 w-4" />
-                                                            )}
-                                                        </button>
-                                                    </CollapsibleTrigger>
-                                                </TableCell>
-                                                <TableCell className="font-medium">
-                                                    {order.vehicleInfo}
-                                                </TableCell>
-                                                <TableCell>
-                                                    <StatusBadge
-                                                        status={
-                                                            order.status as App.Enums.RepairOrderStatus
-                                                        }
-                                                    />
-                                                </TableCell>
-                                                <TableCell>
-                                                    {formatDate(
-                                                        order.startedAt,
+                                    <React.Fragment key={order.id}>
+                                        <TableRow className="group">
+                                            <TableCell>
+                                                <button
+                                                    className="flex items-center justify-center rounded p-1 hover:bg-muted"
+                                                    onClick={() => toggleRow(order.id)}
+                                                >
+                                                    {isExpanded ? (
+                                                        <ChevronUp className="h-4 w-4" />
+                                                    ) : (
+                                                        <ChevronDown className="h-4 w-4" />
                                                     )}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {formatDate(
-                                                        order.finishedAt,
-                                                    )}
-                                                </TableCell>
-                                                <TableCell className="text-right font-medium">
-                                                    {formatMinutes(
-                                                        order.totalMinutes,
-                                                    )}
+                                                </button>
+                                            </TableCell>
+                                            <TableCell className="font-medium">
+                                                {order.vehicleInfo}
+                                            </TableCell>
+                                            <TableCell>
+                                                <StatusBadge status={order.status as App.Enums.RepairOrderStatus} />
+                                            </TableCell>
+                                            <TableCell>
+                                                {formatDate(order.startedAt)}
+                                            </TableCell>
+                                            <TableCell>
+                                                {formatDate(order.finishedAt)}
+                                            </TableCell>
+                                            <TableCell className="text-right font-medium">
+                                                {formatMinutes(order.totalMinutes)}
+                                            </TableCell>
+                                        </TableRow>
+                                        {isExpanded && (
+                                            <TableRow>
+                                                <TableCell colSpan={6} className="bg-muted/30 p-0">
+                                                    <div className="p-4">
+                                                        <h4 className="mb-3 text-sm font-semibold">{t('time_entries')}</h4>
+                                                        <Table>
+                                                            <TableHeader>
+                                                                <TableRow>
+                                                                    <TableHead>{t('date')}</TableHead>
+                                                                    <TableHead>{t('duration')}</TableHead>
+                                                                    <TableHead>{t('description')}</TableHead>
+                                                                </TableRow>
+                                                            </TableHeader>
+                                                            <TableBody>
+                                                                {order.timeEntries.length >0 ? (
+                                                                    order.timeEntries.map((entry) => (
+                                                                            <TableRow key={entry.id}>
+                                                                                <TableCell>
+                                                                                    {formatDateTime(entry.date)}
+                                                                                </TableCell>
+                                                                                <TableCell>
+                                                                                    {formatMinutes(entry.durationMinutes)}
+                                                                                </TableCell>
+                                                                                <TableCell>{entry.description || '-'}</TableCell>
+                                                                            </TableRow>
+                                                                        ))
+                                                                ) : (
+                                                                    <TableRow>
+                                                                        <TableCell colSpan={3} className="text-center text-muted-foreground">{t('no_time_entries')}</TableCell>
+                                                                    </TableRow>
+                                                                )}
+                                                            </TableBody>
+                                                        </Table>
+                                                    </div>
                                                 </TableCell>
                                             </TableRow>
-                                            <CollapsibleContent asChild>
-                                                <TableRow>
-                                                    <TableCell
-                                                        colSpan={6}
-                                                        className="bg-muted/30 p-0"
-                                                    >
-                                                        <div className="p-4">
-                                                            <h4 className="mb-3 text-sm font-semibold">
-                                                                {t(
-                                                                    'time_entries',
-                                                                )}
-                                                            </h4>
-                                                            <Table>
-                                                                <TableHeader>
-                                                                    <TableRow>
-                                                                        <TableHead>
-                                                                            {t(
-                                                                                'date',
-                                                                            )}
-                                                                        </TableHead>
-                                                                        <TableHead>
-                                                                            {t(
-                                                                                'duration',
-                                                                            )}
-                                                                        </TableHead>
-                                                                        <TableHead>
-                                                                            {t(
-                                                                                'description',
-                                                                            )}
-                                                                        </TableHead>
-                                                                    </TableRow>
-                                                                </TableHeader>
-                                                                <TableBody>
-                                                                    {order
-                                                                        .timeEntries
-                                                                        .length >
-                                                                    0 ? (
-                                                                        order.timeEntries.map(
-                                                                            (
-                                                                                entry,
-                                                                            ) => (
-                                                                                <TableRow
-                                                                                    key={
-                                                                                        entry.id
-                                                                                    }
-                                                                                >
-                                                                                    <TableCell>
-                                                                                        {formatDateTime(
-                                                                                            entry.date,
-                                                                                        )}
-                                                                                    </TableCell>
-                                                                                    <TableCell>
-                                                                                        {formatMinutes(
-                                                                                            entry.durationMinutes,
-                                                                                        )}
-                                                                                    </TableCell>
-                                                                                    <TableCell>
-                                                                                        {entry.description ||
-                                                                                            '-'}
-                                                                                    </TableCell>
-                                                                                </TableRow>
-                                                                            ),
-                                                                        )
-                                                                    ) : (
-                                                                        <TableRow>
-                                                                            <TableCell
-                                                                                colSpan={
-                                                                                    3
-                                                                                }
-                                                                                className="text-center text-muted-foreground"
-                                                                            >
-                                                                                {t(
-                                                                                    'no_time_entries',
-                                                                                )}
-                                                                            </TableCell>
-                                                                        </TableRow>
-                                                                    )}
-                                                                </TableBody>
-                                                            </Table>
-                                                        </div>
-                                                    </TableCell>
-                                                </TableRow>
-                                            </CollapsibleContent>
-                                        </>
-                                    </Collapsible>
+                                        )}
+                                    </React.Fragment>
                                 );
                             })}
                         </TableBody>

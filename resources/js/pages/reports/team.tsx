@@ -5,7 +5,6 @@ import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
 
-
 interface TeamPerformancePageProps {
     teamPerformanceReport?: App.Dto.Report.TeamPerformanceReportData;
 }
