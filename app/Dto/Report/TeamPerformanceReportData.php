@@ -11,7 +11,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class TeamPerformanceReportData extends Data
 {
     public function __construct(
-        public int $totalHours,
+        public int $totalMinutes,
         public int $totalOrders,
         public int $activeMechanics,
         #[DataCollectionOf(MechanicChartData::class)]

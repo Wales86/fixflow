@@ -1,5 +1,6 @@
 import { RepairOrdersExpandableTable } from '@/components/reports/repair-orders-expandable-table';
 import { StatCard } from '@/components/stat-card';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { DateRangePicker } from '@/components/ui/date-range-picker';
 import {
@@ -9,9 +10,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { formatMinutes } from '@/lib/utils';
 import { router } from '@inertiajs/react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
-import { Clock, TrendingUp, Wrench } from 'lucide-react';
+import { Clock, RefreshCw, TrendingUp, Wrench, X } from 'lucide-react';
 import { useState } from 'react';
 import { type DateRange } from 'react-day-picker';
 
@@ -63,6 +65,19 @@ export function MechanicPerformanceTab({
         });
     };
 
+    const handleResetDateRange = () => {
+        setDateRange(undefined);
+        if (selectedMechanicId) {
+            fetchMechanicData(selectedMechanicId, undefined);
+        }
+    };
+
+    const handleRefresh = () => {
+        if (selectedMechanicId) {
+            fetchMechanicData(selectedMechanicId, dateRange);
+        }
+    };
+
     return (
         <div className="space-y-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -98,6 +113,26 @@ export function MechanicPerformanceTab({
                         onChange={handleDateRangeChange}
                         disabled={!selectedMechanicId}
                     />
+                    {dateRange && selectedMechanicId && (
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={handleResetDateRange}
+                            title={t('reset_date_range')}
+                        >
+                            <X className="h-4 w-4" />
+                        </Button>
+                    )}
+                    {selectedMechanicId && (
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={handleRefresh}
+                            title={t('refresh')}
+                        >
+                            <RefreshCw className="h-4 w-4" />
+                        </Button>
+                    )}
                 </div>
             </div>
 
@@ -116,7 +151,7 @@ export function MechanicPerformanceTab({
                     <div className="grid gap-4 md:grid-cols-3">
                         <StatCard
                             title={t('total_hours_worked')}
-                            value={data.totalHours}
+                            value={formatMinutes(data.totalMinutes)}
                             icon={Clock}
                             description={t('in_selected_period')}
                         />
@@ -128,7 +163,9 @@ export function MechanicPerformanceTab({
                         />
                         <StatCard
                             title={t('avg_time_per_order')}
-                            value={`${data.avgTimePerOrder.toFixed(1)}h`}
+                            value={formatMinutes(
+                                Math.round(data.avgTimePerOrder),
+                            )}
                             icon={TrendingUp}
                             description={t('average_completion_time')}
                         />

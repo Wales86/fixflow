@@ -13,6 +13,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { formatMinutes } from '@/lib/utils';
 import { format } from 'date-fns';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
 import { ChevronDown, ChevronUp } from 'lucide-react';
@@ -38,15 +39,6 @@ export function RepairOrdersExpandableTable({
             }
             return next;
         });
-    };
-
-    const formatMinutesToHours = (minutes: number): string => {
-        const hours = Math.floor(minutes / 60);
-        const remainingMinutes = minutes % 60;
-        if (remainingMinutes === 0) {
-            return `${hours}h`;
-        }
-        return `${hours}h ${remainingMinutes}m`;
     };
 
     const formatDate = (dateString: string | null): string => {
@@ -137,7 +129,7 @@ export function RepairOrdersExpandableTable({
                                                     )}
                                                 </TableCell>
                                                 <TableCell className="text-right font-medium">
-                                                    {formatMinutesToHours(
+                                                    {formatMinutes(
                                                         order.totalMinutes,
                                                     )}
                                                 </TableCell>
@@ -194,7 +186,7 @@ export function RepairOrdersExpandableTable({
                                                                                         )}
                                                                                     </TableCell>
                                                                                     <TableCell>
-                                                                                        {formatMinutesToHours(
+                                                                                        {formatMinutes(
                                                                                             entry.durationMinutes,
                                                                                         )}
                                                                                     </TableCell>

@@ -10,6 +10,6 @@ class MechanicChartData extends Data
 {
     public function __construct(
         public string $name,
-        public int $hours,
+        public int $minutes,
     ) {}
 }

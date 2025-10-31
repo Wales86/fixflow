@@ -22,7 +22,7 @@ class ReportService
     public function getTeamPerformanceReport(GetTeamPerformanceReportData $params): TeamPerformanceReportData
     {
         return TeamPerformanceReportData::from([
-            'totalHours' => $this->getTotalHours($params->startDate, $params->endDate),
+            'totalMinutes' => $this->getTotalMinutes($params->startDate, $params->endDate),
             'totalOrders' => $this->getTotalCompletedOrders($params->startDate, $params->endDate),
             'activeMechanics' => $this->getActiveMechanicsCount(),
             'chartData' => $this->getChartData($params->startDate, $params->endDate),
@@ -30,13 +30,11 @@ class ReportService
         ]);
     }
 
-    private function getTotalHours(Carbon $start, Carbon $end): int
+    private function getTotalMinutes(Carbon $start, Carbon $end): int
     {
-        $totalMinutes = TimeEntry::query()
+        return (int) TimeEntry::query()
             ->whereBetween('created_at', [$start, $end])
             ->sum('duration_minutes');
-
-        return (int) ($totalMinutes / 60);
     }
 
     private function getTotalCompletedOrders(Carbon $start, Carbon $end): int
@@ -68,19 +66,18 @@ class ReportService
                 }
 
                 $totalMinutes = $entries->sum('duration_minutes');
-                $totalHours = (int) ($totalMinutes / 60);
                 $ordersCount = $entries->pluck('repair_order_id')->unique()->count();
-                $avgTimePerOrder = $ordersCount > 0 ? round($totalHours / $ordersCount, 1) : 0;
+                $avgTimePerOrder = $ordersCount > 0 ? round($totalMinutes / $ordersCount, 1) : 0;
 
                 return [
                     'mechanic' => $mechanic->first_name.' '.$mechanic->last_name,
-                    'totalHours' => $totalHours,
+                    'totalMinutes' => $totalMinutes,
                     'ordersCompleted' => $ordersCount,
                     'avgTimePerOrder' => $avgTimePerOrder,
                 ];
             })
             ->filter() // Remove null values (when mechanic was deleted but time entries remain)
-            ->sortByDesc('totalHours')
+            ->sortByDesc('totalMinutes')
             ->values(); // Reset array keys to sequential (0,1,2...) instead of mechanic_id keys from groupBy
     }
 
@@ -90,7 +87,7 @@ class ReportService
 
         $chartItems = $stats->take(10)->map(fn ($stat) => MechanicChartData::from([
             'name' => $stat['mechanic'],
-            'hours' => $stat['totalHours'],
+            'minutes' => $stat['totalMinutes'],
         ]));
 
         return new DataCollection(MechanicChartData::class, $chartItems);
@@ -114,20 +111,18 @@ class ReportService
             ->whereBetween('created_at', [$params->startDate, $params->endDate])
             ->sum('duration_minutes');
 
-        $totalHours = (int) ($totalMinutes / 60);
-
         $ordersCompleted = TimeEntry::query()
             ->where('mechanic_id', $mechanic->id)
             ->whereBetween('created_at', [$params->startDate, $params->endDate])
             ->distinct('repair_order_id')
             ->count('repair_order_id');
 
-        $avgTimePerOrder = $ordersCompleted > 0 ? round($totalHours / $ordersCompleted, 1) : 0;
+        $avgTimePerOrder = $ordersCompleted > 0 ? round($totalMinutes / $ordersCompleted, 1) : 0;
 
         $repairOrders = $this->getMechanicRepairOrders($mechanic->id, $params->startDate, $params->endDate);
 
         return MechanicPerformanceReportData::from([
-            'totalHours' => $totalHours,
+            'totalMinutes' => $totalMinutes,
             'ordersCompleted' => $ordersCompleted,
             'avgTimePerOrder' => $avgTimePerOrder,
             'repairOrders' => $repairOrders,

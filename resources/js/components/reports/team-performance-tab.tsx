@@ -1,4 +1,5 @@
 import { StatCard } from '@/components/stat-card';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DateRangePicker } from '@/components/ui/date-range-picker';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -10,9 +11,10 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { formatMinutes } from '@/lib/utils';
 import { router } from '@inertiajs/react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
-import { Clock, Users, Wrench } from 'lucide-react';
+import { Clock, RefreshCw, Users, Wrench, X } from 'lucide-react';
 import { useState } from 'react';
 import { type DateRange } from 'react-day-picker';
 import {
@@ -53,6 +55,33 @@ export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
         }
     };
 
+    const handleResetDateRange = () => {
+        setDateRange(undefined);
+        router.get(
+            '/reports/team',
+            {},
+            {
+                preserveState: true,
+                preserveScroll: true,
+                only: ['teamPerformanceReport'],
+            },
+        );
+    };
+
+    const handleRefresh = () => {
+        const params: Record<string, string> = {};
+        if (dateRange?.from && dateRange?.to) {
+            params.start_date = dateRange.from.toISOString();
+            params.end_date = dateRange.to.toISOString();
+        }
+
+        router.get('/reports/team', params, {
+            preserveState: true,
+            preserveScroll: true,
+            only: ['teamPerformanceReport'],
+        });
+    };
+
     return (
         <div className="space-y-6">
             {/* Date Range Filter */}
@@ -65,10 +94,30 @@ export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
                         {t('team_performance_description')}
                     </p>
                 </div>
-                <DateRangePicker
-                    value={dateRange}
-                    onChange={handleDateRangeChange}
-                />
+                <div className="flex items-center gap-2">
+                    <DateRangePicker
+                        value={dateRange}
+                        onChange={handleDateRangeChange}
+                    />
+                    {dateRange && (
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={handleResetDateRange}
+                            title={t('reset_date_range')}
+                        >
+                            <X className="h-4 w-4" />
+                        </Button>
+                    )}
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={handleRefresh}
+                        title={t('refresh')}
+                    >
+                        <RefreshCw className="h-4 w-4" />
+                    </Button>
+                </div>
             </div>
 
             {!data ? (
@@ -79,7 +128,7 @@ export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
                     <div className="grid gap-4 md:grid-cols-3">
                         <StatCard
                             title={t('total_hours_worked')}
-                            value={data.totalHours}
+                            value={formatMinutes(data.totalMinutes)}
                             icon={Clock}
                             description={t('in_selected_period')}
                         />
@@ -114,10 +163,14 @@ export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
                                         height={100}
                                     />
                                     <YAxis />
-                                    <Tooltip />
+                                    <Tooltip
+                                        formatter={(value: number) =>
+                                            formatMinutes(value)
+                                        }
+                                    />
                                     <Legend />
                                     <Bar
-                                        dataKey="hours"
+                                        dataKey="minutes"
                                         fill="hsl(var(--primary))"
                                         name={t('hours')}
                                     />
@@ -157,16 +210,19 @@ export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
                                                     {row.mechanic}
                                                 </TableCell>
                                                 <TableCell className="text-right">
-                                                    {row.totalHours}h
+                                                    {formatMinutes(
+                                                        row.totalMinutes,
+                                                    )}
                                                 </TableCell>
                                                 <TableCell className="text-right">
                                                     {row.ordersCompleted}
                                                 </TableCell>
                                                 <TableCell className="text-right">
-                                                    {row.avgTimePerOrder.toFixed(
-                                                        1,
+                                                    {formatMinutes(
+                                                        Math.round(
+                                                            row.avgTimePerOrder,
+                                                        ),
                                                     )}
-                                                    h
                                                 </TableCell>
                                             </TableRow>
                                         ))

@@ -10,7 +10,7 @@ class MechanicPerformanceStatsData extends Data
 {
     public function __construct(
         public string $mechanic,
-        public int $totalHours,
+        public int $totalMinutes,
         public int $ordersCompleted,
         public float $avgTimePerOrder,
     ) {}
