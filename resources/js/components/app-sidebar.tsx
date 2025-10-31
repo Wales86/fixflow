@@ -79,16 +79,22 @@ export function AppSidebar() {
             permission: 'view_users',
         },
         {
-            title: t('team_performance'),
+            title: t('reports'),
             href: reports.team(),
             icon: BarChart3,
             permission: 'view_reports',
-        },
-        {
-            title: t('mechanic_performance'),
-            href: reports.mechanic(),
-            icon: BarChart3,
-            permission: 'view_reports',
+            items: [
+                {
+                    title: t('team_performance'),
+                    href: reports.team(),
+                    permission: 'view_reports',
+                },
+                {
+                    title: t('mechanic_performance'),
+                    href: reports.mechanic(),
+                    permission: 'view_reports',
+                },
+            ],
         },
     ];
 
