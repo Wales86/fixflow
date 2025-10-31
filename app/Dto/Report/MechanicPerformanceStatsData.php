@@ -9,6 +9,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class MechanicPerformanceStatsData extends Data
 {
     public function __construct(
+        public int $mechanicId,
         public string $mechanic,
         public int $totalMinutes,
         public int $ordersCompleted,

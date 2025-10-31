@@ -70,6 +70,7 @@ class ReportService
                 $avgTimePerOrder = $ordersCount > 0 ? round($totalMinutes / $ordersCount, 1) : 0;
 
                 return [
+                    'mechanicId' => $mechanic->id,
                     'mechanic' => $mechanic->first_name.' '.$mechanic->last_name,
                     'totalMinutes' => $totalMinutes,
                     'ordersCompleted' => $ordersCount,

@@ -269,6 +269,7 @@ avgTimePerOrder: number;
 repairOrders: Array<App.Dto.Report.RepairOrderDetailData>;
 };
 export type MechanicPerformanceStatsData = {
+mechanicId: number;
 mechanic: string;
 totalMinutes: number;
 ordersCompleted: number;

@@ -5,16 +5,6 @@ import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Reports',
-        href: reports.team().url,
-    },
-    {
-        title: 'Team Performance',
-        href: reports.team().url,
-    },
-];
 
 interface TeamPerformancePageProps {
     teamPerformanceReport?: App.Dto.Report.TeamPerformanceReportData;
@@ -24,6 +14,17 @@ export default function TeamPerformancePage({
     teamPerformanceReport,
 }: TeamPerformancePageProps) {
     const { t } = useLaravelReactI18n();
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: t('reports'),
+            href: reports.team().url,
+        },
+        {
+            title: t('team_performance'),
+            href: reports.team().url,
+        },
+    ];
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>

@@ -267,7 +267,6 @@
     "mechanic_performance_tab_content_placeholder": "Zawartość zakładki Wydajność Pracownika będzie tutaj wkrótce",
     "team_performance_description": "Przegląd wydajności całego zespołu mechaników",
     "mechanic_performance_description": "Zobacz wydajność indywidualnego pracownika i ukończone prace",
-    "select_mechanic": "Wybierz mechanika",
     "select_mechanic_to_view_performance": "Wybierz mechanika, aby wyświetlić jego dane o wydajności",
     "average_completion_time": "średni czas realizacji",
     "repair_orders_table_placeholder": "Szczegółowa tabela zleceń napraw pojawi się wkrótce",
@@ -284,5 +283,8 @@
     "mechanic": "Mechanik",
     "orders_completed": "Ukończone zlecenia",
     "avg_time_per_order": "Śr. czas na zlecenie",
-    "no_data_available": "Brak danych do wyświetlenia"
+    "no_data_available": "Brak danych do wyświetlenia",
+    "pick_a_date_range": "Wybierz zakres dat",
+    "reset_date_range": "Resetuj zakres dat",
+    "refresh": "Odśwież"
 }

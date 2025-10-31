@@ -267,7 +267,6 @@
     "mechanic_performance_tab_content_placeholder": "Mechanic Performance tab content coming soon",
     "team_performance_description": "Overview of team mechanics performance",
     "mechanic_performance_description": "View individual mechanic performance and completed work",
-    "select_mechanic": "Select mechanic",
     "select_mechanic_to_view_performance": "Select a mechanic to view their performance data",
     "average_completion_time": "average completion time",
     "repair_orders_table_placeholder": "Detailed repair orders table coming soon",
@@ -284,5 +283,8 @@
     "mechanic": "Mechanic",
     "orders_completed": "Orders Completed",
     "avg_time_per_order": "Avg. Time per Order",
-    "no_data_available": "No data available"
+    "no_data_available": "No data available",
+    "pick_a_date_range": "Pick a date range",
+    "reset_date_range": "Reset date range",
+    "refresh": "Refresh"
 }

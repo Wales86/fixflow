@@ -12,6 +12,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { formatMinutes } from '@/lib/utils';
+import reports from '@/routes/reports';
 import { router } from '@inertiajs/react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
 import { Clock, RefreshCw, Users, Wrench, X } from 'lucide-react';
@@ -82,6 +83,20 @@ export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
         });
     };
 
+    const handleMechanicClick = (mechanicId: number) => {
+        const params: Record<string, string | number> = {
+            mechanic_id: mechanicId,
+        };
+        if (dateRange?.from && dateRange?.to) {
+            params.start_date = dateRange.from.toISOString();
+            params.end_date = dateRange.to.toISOString();
+        }
+
+        console.log(params);
+
+        router.visit(reports.mechanic(params).url);
+    };
+
     return (
         <div className="space-y-6">
             {/* Date Range Filter */}
@@ -98,6 +113,7 @@ export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
                     <DateRangePicker
                         value={dateRange}
                         onChange={handleDateRangeChange}
+                        placeholder={t('pick_a_date_range')}
                     />
                     {dateRange && (
                         <Button
@@ -205,7 +221,15 @@ export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
                                 <TableBody>
                                     {data.tableData.length > 0 ? (
                                         data.tableData.map((row, index) => (
-                                            <TableRow key={index}>
+                                            <TableRow
+                                                key={index}
+                                                className="cursor-pointer hover:bg-muted/50"
+                                                onClick={() =>
+                                                    handleMechanicClick(
+                                                        row.mechanicId,
+                                                    )
+                                                }
+                                            >
                                                 <TableCell className="font-medium">
                                                     {row.mechanic}
                                                 </TableCell>
