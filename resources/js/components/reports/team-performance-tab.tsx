@@ -22,8 +22,10 @@ import {
     Bar,
     BarChart,
     CartesianGrid,
+    Label,
     Legend,
     ResponsiveContainer,
+    Text,
     Tooltip,
     XAxis,
     YAxis,
@@ -51,8 +53,8 @@ function CustomTooltip({ active, payload }: CustomTooltipProps) {
     if (active && payload && payload.length) {
         const data = payload[0].payload;
         return (
-            <div className="rounded-lg border bg-background p-2 shadow-md">
-                <p className="font-medium text-foreground">{data.name}</p>
+            <div className="rounded-lg border bg-card p-2 shadow-md">
+                <p className="font-medium text-card-foreground">{data.name}</p>
                 <p className="text-sm text-muted-foreground">
                     {t('hours')}: {formatMinutes(data.minutes)}
                 </p>
@@ -61,6 +63,32 @@ function CustomTooltip({ active, payload }: CustomTooltipProps) {
     }
 
     return null;
+}
+
+interface CustomYAxisTickProps {
+    x: number;
+    y: number;
+    payload: { value: string };
+}
+
+function CustomYAxisTick(props: any) {
+    const { x, y, payload } = props;
+    const nameParts = payload.value.split(' ');
+    const firstName = nameParts[0] || '';
+    const lastName = nameParts.slice(1).join(' ') || '';
+
+    return (
+        <g transform={`translate(${x},${y})`}>
+            <Text x={-10} y={-5} textAnchor="end" className="text-sm fill-current">
+                {firstName}
+            </Text>
+            {lastName && (
+                <Text x={-10} y={10} textAnchor="end" className="text-sm fill-current text-muted-foreground">
+                    {lastName}
+                </Text>
+            )}
+        </g>
+    );
 }
 
 export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
@@ -198,21 +226,41 @@ export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
                         </CardHeader>
                         <CardContent>
                             <ResponsiveContainer width="100%" height={350}>
-                                <BarChart data={data.chartData}>
+                                <BarChart
+                                    data={data.chartData}
+                                    layout="vertical"
+                                    margin={{
+                                        left: 0,
+                                        right: 20,
+                                        top: 20,
+                                        bottom: 20,
+                                    }}
+                                >
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis
+                                        type="number"
+                                        domain={[0, 'dataMax + 60']}
+                                        tickFormatter={(value) => (value / 60).toFixed(1)}
+                                    >
+                                        <Label value={t('hours')} position="insideBottom" offset={-10} />
+                                    </XAxis>
+                                    <YAxis
                                         dataKey="name"
-                                        angle={-45}
-                                        textAnchor="end"
-                                        height={100}
+                                        type="category"
+                                        tickLine={false}
+                                        tickMargin={20}
+                                        axisLine={false}
+                                        width={160}
+                                        tick={<CustomYAxisTick />}
                                     />
-                                    <YAxis />
                                     <Tooltip content={<CustomTooltip />} />
-                                    <Legend />
                                     <Bar
                                         dataKey="minutes"
-                                        fill="hsl(var(--primary))"
+                                        fill="hsl(var(--primary) / 0.8)"
                                         name={t('hours')}
+                                        radius={5}
+                                        stroke="hsl(var(--primary))"
+                                        strokeWidth={1}
                                     />
                                 </BarChart>
                             </ResponsiveContainer>
