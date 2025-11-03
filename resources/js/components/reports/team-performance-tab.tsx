@@ -33,6 +33,36 @@ interface TeamPerformanceTabProps {
     data?: App.Dto.Report.TeamPerformanceReportData;
 }
 
+interface ChartDataItem {
+    name: string;
+    minutes: number;
+}
+
+interface CustomTooltipProps {
+    active?: boolean;
+    payload?: Array<{
+        payload: ChartDataItem;
+    }>;
+}
+
+function CustomTooltip({ active, payload }: CustomTooltipProps) {
+    const { t } = useLaravelReactI18n();
+
+    if (active && payload && payload.length) {
+        const data = payload[0].payload;
+        return (
+            <div className="rounded-lg border bg-background p-2 shadow-md">
+                <p className="font-medium text-foreground">{data.name}</p>
+                <p className="text-sm text-muted-foreground">
+                    {t('hours')}: {formatMinutes(data.minutes)}
+                </p>
+            </div>
+        );
+    }
+
+    return null;
+}
+
 export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
     const { t } = useLaravelReactI18n();
     const [dateRange, setDateRange] = useState<DateRange | undefined>();
@@ -177,11 +207,7 @@ export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
                                         height={100}
                                     />
                                     <YAxis />
-                                    <Tooltip
-                                        formatter={(value: number) =>
-                                            formatMinutes(value)
-                                        }
-                                    />
+                                    <Tooltip content={<CustomTooltip />} />
                                     <Legend />
                                     <Bar
                                         dataKey="minutes"
