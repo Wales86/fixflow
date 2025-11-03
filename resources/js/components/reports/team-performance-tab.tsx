@@ -1,6 +1,12 @@
 import { StatCard } from '@/components/stat-card';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    ChartConfig,
+    ChartContainer,
+    ChartTooltip,
+    ChartTooltipContent,
+} from '@/components/ui/chart';
 import { DateRangePicker } from '@/components/ui/date-range-picker';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
@@ -23,10 +29,7 @@ import {
     BarChart,
     CartesianGrid,
     Label,
-    Legend,
-    ResponsiveContainer,
     Text,
-    Tooltip,
     XAxis,
     YAxis,
 } from 'recharts';
@@ -35,35 +38,12 @@ interface TeamPerformanceTabProps {
     data?: App.Dto.Report.TeamPerformanceReportData;
 }
 
-interface ChartDataItem {
-    name: string;
-    minutes: number;
-}
-
-interface CustomTooltipProps {
-    active?: boolean;
-    payload?: Array<{
-        payload: ChartDataItem;
-    }>;
-}
-
-function CustomTooltip({ active, payload }: CustomTooltipProps) {
-    const { t } = useLaravelReactI18n();
-
-    if (active && payload && payload.length) {
-        const data = payload[0].payload;
-        return (
-            <div className="rounded-lg border bg-card p-2 shadow-md">
-                <p className="font-medium text-card-foreground">{data.name}</p>
-                <p className="text-sm text-muted-foreground">
-                    {t('hours')}: {formatMinutes(data.minutes)}
-                </p>
-            </div>
-        );
-    }
-
-    return null;
-}
+const chartConfig = {
+    minutes: {
+        label: 'Hours',
+        color: 'var(--chart-1)',
+    },
+} satisfies ChartConfig;
 
 interface CustomYAxisTickProps {
     x: number;
@@ -225,7 +205,10 @@ export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <ResponsiveContainer width="100%" height={350}>
+                            <ChartContainer
+                                config={chartConfig}
+                                className="h-[350px] w-full"
+                            >
                                 <BarChart
                                     data={data.chartData}
                                     layout="vertical"
@@ -240,9 +223,15 @@ export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
                                     <XAxis
                                         type="number"
                                         domain={[0, 'dataMax + 60']}
-                                        tickFormatter={(value) => (value / 60).toFixed(1)}
+                                        tickFormatter={(value) =>
+                                            (value / 60).toFixed(1)
+                                        }
                                     >
-                                        <Label value={t('hours')} position="insideBottom" offset={-10} />
+                                        <Label
+                                            value={t('hours')}
+                                            position="insideBottom"
+                                            offset={-10}
+                                        />
                                     </XAxis>
                                     <YAxis
                                         dataKey="name"
@@ -253,17 +242,25 @@ export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
                                         width={160}
                                         tick={<CustomYAxisTick />}
                                     />
-                                    <Tooltip content={<CustomTooltip />} />
+                                    <ChartTooltip
+                                        content={
+                                            <ChartTooltipContent
+                                                formatter={(value) =>
+                                                    formatMinutes(
+                                                        Number(value),
+                                                    )
+                                                }
+                                            />
+                                        }
+                                    />
                                     <Bar
                                         dataKey="minutes"
-                                        fill="hsl(var(--primary) / 0.8)"
+                                        fill="var(--color-minutes)"
                                         name={t('hours')}
                                         radius={5}
-                                        stroke="hsl(var(--primary))"
-                                        strokeWidth={1}
                                     />
                                 </BarChart>
-                            </ResponsiveContainer>
+                            </ChartContainer>
                         </CardContent>
                     </Card>
 
