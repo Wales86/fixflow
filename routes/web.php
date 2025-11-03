@@ -16,6 +16,17 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
+// Public storage files route
+Route::get('/storage/{path}', function (string $path) {
+    $filePath = storage_path('app/public/'.$path);
+    
+    if (! file_exists($filePath)) {
+        abort(404);
+    }
+    
+    return response()->file($filePath);
+})->where('path', '.*')->name('storage');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('clients', [ClientController::class, 'index'])->name('clients.index');

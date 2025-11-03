@@ -87,6 +87,6 @@ class RepairOrder extends Model implements HasMedia
     {
         $this->addMediaCollection('images')
             ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/jpg', 'image/gif'])
-            ->maxFilesize(10 * 1024 * 1024);
+            ->useDisk('minio');
     }
 }
