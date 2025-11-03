@@ -17,6 +17,7 @@ class UserService
     {
         $query = User::query()
             ->where('workshop_id', $workshopId)
+            ->where('id', '!=', auth()->user()->id)
             ->with('roles');
 
         if ($filters->search) {
