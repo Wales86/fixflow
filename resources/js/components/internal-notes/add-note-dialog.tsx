@@ -36,6 +36,9 @@ export function AddNoteDialog({
 }: AddNoteDialogProps) {
     const { t } = useLaravelReactI18n();
     const { mechanics } = usePage<SharedData>().props;
+    const { auth: { user } } = usePage<SharedData>().props;
+
+    const isMechanic = user?.roles.includes('Mechanic');
 
     const { data, setData, post, processing, errors, reset } = useForm({
         notable_type: notableType,
@@ -75,7 +78,7 @@ export function AddNoteDialog({
 
                 <form onSubmit={handleSubmit}>
                     <div className="space-y-4 py-4">
-                        {mechanics && mechanics.length > 0 && (
+                        {isMechanic && mechanics && mechanics.length > 0 && (
                             <div className="space-y-2">
                                 <Label htmlFor="mechanic_id">
                                     {t('select_mechanic')}
