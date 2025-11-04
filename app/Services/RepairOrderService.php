@@ -13,6 +13,7 @@ use App\Dto\RepairOrder\RepairOrderFormData;
 use App\Dto\RepairOrder\RepairOrderListItemData;
 use App\Dto\RepairOrder\RepairOrderShowData;
 use App\Dto\RepairOrder\RepairOrderShowPagePropsData;
+use App\Dto\RepairOrder\RepairOrderVehicleData;
 use App\Dto\RepairOrder\StoreRepairOrderData;
 use App\Dto\RepairOrder\UpdateRepairOrderData;
 use App\Dto\RepairOrder\UpdateRepairOrderStatusData;
@@ -30,7 +31,7 @@ class RepairOrderService
     public function paginatedList(array $filters = []): LengthAwarePaginator
     {
         $query = RepairOrder::query()
-            ->with(['vehicle', 'client']);
+            ->with(['vehicle.client']);
 
         if (! empty($filters['status'])) {
             $query->where('status', $filters['status']);
@@ -45,7 +46,7 @@ class RepairOrderService
                             ->orWhere('model', 'like', "%{$search}%")
                             ->orWhere('registration_number', 'like', "%{$search}%");
                     })
-                    ->orWhereHas('client', function ($clientQuery) use ($search) {
+                    ->orWhereHas('vehicle.client', function ($clientQuery) use ($search) {
                         $clientQuery->where('first_name', 'like', "%{$search}%")
                             ->orWhere('last_name', 'like', "%{$search}%")
                             ->orWhere('phone_number', 'like', "%{$search}%");
@@ -195,8 +196,7 @@ class RepairOrderService
     {
         $query = RepairOrder::query()
             ->with([
-                'vehicle',
-                'client',
+                'vehicle.client',
             ])
             ->where('workshop_id', $user->workshop_id)
             ->where('status', '!=', RepairOrderStatus::CLOSED);
@@ -209,7 +209,7 @@ class RepairOrderService
                             ->orWhere('make', 'like', "%{$search}%")
                             ->orWhere('model', 'like', "%{$search}%");
                     })
-                    ->orWhereHas('client', function ($clientQuery) use ($search) {
+                    ->orWhereHas('vehicle.client', function ($clientQuery) use ($search) {
                         $clientQuery->where('last_name', 'like', "%{$search}%")
                             ->orWhere('first_name', 'like', "%{$search}%");
                     });
@@ -217,7 +217,16 @@ class RepairOrderService
         }
 
         return MechanicRepairOrderCardData::collect(
-            $query->latest('created_at')->get(),
+            $query->latest('created_at')->get()
+                ->map(fn ($repairOrder) => new MechanicRepairOrderCardData(
+                    id: $repairOrder->id,
+                    status: $repairOrder->status,
+                    problem_description: $repairOrder->problem_description,
+                    total_time_minutes: $repairOrder->total_time_minutes,
+                    created_at: $repairOrder->created_at,
+                    vehicle: RepairOrderVehicleData::from($repairOrder->vehicle),
+                    client: RepairOrderClientData::from($repairOrder->vehicle->client),
+                )),
             DataCollection::class
         );
     }

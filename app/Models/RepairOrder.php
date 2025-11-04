@@ -56,17 +56,6 @@ class RepairOrder extends Model implements HasMedia
         return $this->belongsTo(Vehicle::class);
     }
 
-    public function client(): HasOneThrough
-    {
-        return $this->hasOneThrough(
-            Client::class,
-            Vehicle::class,
-            'id',
-            'id',
-            'vehicle_id',
-            'client_id'
-        );
-    }
 
     public function timeEntries(): HasMany
     {
