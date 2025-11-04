@@ -5,16 +5,7 @@ import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Reports',
-        href: reports.mechanic().url,
-    },
-    {
-        title: 'Mechanic Performance',
-        href: reports.mechanic().url,
-    },
-];
+
 
 interface MechanicPerformancePageProps {
     mechanics: App.Dto.Report.MechanicSelectOptionData[];
@@ -32,6 +23,17 @@ export default function MechanicPerformancePage({
     filters,
 }: MechanicPerformancePageProps) {
     const { t } = useLaravelReactI18n();
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: t('reports'),
+            href: reports.mechanic().url,
+        },
+        {
+            title: t('mechanic_performance'),
+            href: reports.mechanic().url,
+        },
+    ];
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
