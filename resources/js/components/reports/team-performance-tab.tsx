@@ -51,7 +51,7 @@ interface CustomYAxisTickProps {
     payload: { value: string };
 }
 
-function CustomYAxisTick(props: any) {
+function CustomYAxisTick(props: CustomYAxisTickProps) {
     const { x, y, payload } = props;
     const nameParts = payload.value.split(' ');
     const firstName = nameParts[0] || '';
@@ -240,7 +240,7 @@ export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
                                         tickMargin={20}
                                         axisLine={false}
                                         width={160}
-                                        tick={<CustomYAxisTick />}
+                                        tick={CustomYAxisTick}
                                     />
                                     <ChartTooltip
                                         content={
