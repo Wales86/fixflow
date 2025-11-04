@@ -286,5 +286,6 @@
     "no_data_available": "Brak danych do wyświetlenia",
     "pick_a_date_range": "Wybierz zakres dat",
     "reset_date_range": "Resetuj zakres dat",
-    "refresh": "Odśwież"
+    "refresh": "Odśwież",
+    "total_hours": "Łączny czas pracy"
 }

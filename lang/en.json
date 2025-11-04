@@ -286,5 +286,6 @@
     "no_data_available": "No data available",
     "pick_a_date_range": "Pick a date range",
     "reset_date_range": "Reset date range",
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "total_hours": "Total Hours"
 }
