@@ -58,73 +58,55 @@ enum UserPermission: string
         return array_column(self::cases(), 'value');
     }
 
-    public static function clients(): array
+    public static function officePermissions(): array
     {
         return [
+            self::VIEW_DASHBOARD->value,
+
             self::VIEW_CLIENTS->value,
             self::CREATE_CLIENTS->value,
             self::UPDATE_CLIENTS->value,
-            self::DELETE_CLIENTS->value,
-        ];
-    }
 
-    public static function vehicles(): array
-    {
-        return [
             self::VIEW_VEHICLES->value,
             self::CREATE_VEHICLES->value,
             self::UPDATE_VEHICLES->value,
-            self::DELETE_VEHICLES->value,
-        ];
-    }
 
-    public static function repairOrders(): array
-    {
-        return [
             self::VIEW_REPAIR_ORDERS->value,
             self::CREATE_REPAIR_ORDERS->value,
             self::UPDATE_REPAIR_ORDERS->value,
-            self::DELETE_REPAIR_ORDERS->value,
             self::UPDATE_REPAIR_ORDER_STATUS->value,
-        ];
-    }
 
-    public static function internalNotes(): array
-    {
-        return [
             self::VIEW_INTERNAL_NOTES->value,
             self::CREATE_INTERNAL_NOTES->value,
             self::UPDATE_INTERNAL_NOTES->value,
-            self::DELETE_INTERNAL_NOTES->value,
-        ];
-    }
 
-    public static function timeEntries(): array
-    {
-        return [
-            self::CREATE_TIME_ENTRIES->value,
-            self::UPDATE_TIME_ENTRIES->value,
-            self::DELETE_TIME_ENTRIES->value,
-        ];
-    }
-
-    public static function mechanics(): array
-    {
-        return [
             self::VIEW_MECHANICS->value,
             self::CREATE_MECHANICS->value,
             self::UPDATE_MECHANICS->value,
-            self::DELETE_MECHANICS->value,
-        ];
-    }
 
-    public static function users(): array
-    {
-        return [
             self::VIEW_USERS->value,
             self::CREATE_USERS->value,
             self::UPDATE_USERS->value,
             self::DELETE_USERS->value,
         ];
+    }
+
+    public static function mechanicPermissions(): array
+    {
+        return [
+            self::VIEW_REPAIR_ORDERS_MECHANIC->value,
+            self::CREATE_TIME_ENTRIES->value,
+            self::UPDATE_TIME_ENTRIES->value,
+            self::CREATE_INTERNAL_NOTES->value,
+            self::UPDATE_REPAIR_ORDER_STATUS->value,
+        ];
+    }
+
+    public static function ownerPermissions(): array
+    {
+        return array_filter(
+            self::all(),
+            fn ($permission) => $permission !== self::VIEW_REPAIR_ORDERS_MECHANIC->value
+        );
     }
 }
