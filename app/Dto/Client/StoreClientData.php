@@ -7,7 +7,6 @@ use Spatie\LaravelData\Attributes\Validation\Max;
 use Spatie\LaravelData\Attributes\Validation\Required;
 use Spatie\LaravelData\Attributes\Validation\StringType;
 use Spatie\LaravelData\Data;
-use Spatie\LaravelData\Optional;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
@@ -21,14 +20,14 @@ class StoreClientData extends Data
         #[Required, StringType, Max(50)]
         public string $phone_number,
         #[Email, Max(255)]
-        public string|Optional $email,
+        public ?string $email,
         #[StringType, Max(255)]
-        public string|Optional $address_street,
+        public ?string $address_street,
         #[StringType, Max(255)]
-        public string|Optional $address_city,
+        public ?string $address_city,
         #[StringType, Max(20)]
-        public string|Optional $address_postal_code,
+        public ?string $address_postal_code,
         #[StringType, Max(100)]
-        public string|Optional $address_country,
+        public ?string $address_country,
     ) {}
 }
