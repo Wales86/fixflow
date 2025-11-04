@@ -88,7 +88,7 @@ export function RepairOrderHeader({
                     )}
 
                     {canCreateTimeEntry && onAddTimeEntry && (
-                        <Button variant="outline" onClick={onAddTimeEntry}>
+                        <Button onClick={onAddTimeEntry}>
                             <Clock className="mr-2 h-4 w-4" />
                             {t('add_time_entry')}
                         </Button>

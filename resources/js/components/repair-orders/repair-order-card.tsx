@@ -1,11 +1,12 @@
 import { StatusBadge } from '@/components/status-badge';
 import { TimeEntryDialog } from '@/components/time-entries/time-entry-dialog';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { usePermission } from '@/lib/permissions';
 import { Link } from '@inertiajs/react';
-import { Clock, Plus } from 'lucide-react';
+import { Clock, FileText, Plus } from 'lucide-react';
 import { useState } from 'react';
+import { AddNoteDialog } from '../internal-notes/add-note-dialog';
 
 interface RepairOrderCardProps {
     order: App.Dto.RepairOrder.MechanicRepairOrderCardData;
@@ -13,7 +14,9 @@ interface RepairOrderCardProps {
 
 export function RepairOrderCard({ order }: RepairOrderCardProps) {
     const canCreateTimeEntry = usePermission('create_time_entries');
+    const canCreateNote = usePermission('create_internal_notes');
     const [isTimeEntryDialogOpen, setTimeEntryDialogOpen] = useState(false);
+    const [isNoteDialogOpen, setNoteDialogOpen] = useState(false);
 
     const totalHours = Math.floor(order.total_time_minutes / 60);
     const totalMinutes = order.total_time_minutes % 60;
@@ -24,10 +27,16 @@ export function RepairOrderCard({ order }: RepairOrderCardProps) {
         setTimeEntryDialogOpen(true);
     };
 
+    const handleAddNote = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setNoteDialogOpen(true);
+    };
+
     return (
         <>
             <Link href={`/repair-orders/${order.id}`}>
-                <Card className="transition-all hover:shadow-md">
+                <Card className="flex h-full flex-col justify-between transition-all hover:shadow-md">
                     <CardContent className="p-4">
                         <div className="flex flex-col gap-3">
                             {/* Header with status and add button */}
@@ -39,17 +48,6 @@ export function RepairOrderCard({ order }: RepairOrderCardProps) {
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <StatusBadge status={order.status} />
-
-                                    {canCreateTimeEntry && (
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            className="h-8 w-8"
-                                            onClick={handleAddTimeEntry}
-                                        >
-                                            <Plus className="h-4 w-4" />
-                                        </Button>
-                                    )}
                                 </div>
                             </div>
 
@@ -88,6 +86,31 @@ export function RepairOrderCard({ order }: RepairOrderCardProps) {
                             </div>
                         </div>
                     </CardContent>
+                    {(canCreateTimeEntry || canCreateNote) && (
+                        <CardFooter className="flex flex-col gap-2 p-4 pt-0">
+                            {canCreateTimeEntry && (
+                                <Button
+                                    size="sm"
+                                    className="w-full cursor-pointer"
+                                    onClick={handleAddTimeEntry}
+                                >
+                                    <Clock className="mr-2 size-4" />
+                                    Dodaj czas pracy
+                                </Button>
+                            )}
+                            {canCreateNote && (
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="w-full cursor-pointer"
+                                    onClick={handleAddNote}
+                                >
+                                    <FileText className="mr-2 size-4" />
+                                    Dodaj notatkę
+                                </Button>
+                            )}
+                        </CardFooter>
+                    )}
                 </Card>
             </Link>
 
@@ -95,6 +118,12 @@ export function RepairOrderCard({ order }: RepairOrderCardProps) {
                 isOpen={isTimeEntryDialogOpen}
                 onClose={() => setTimeEntryDialogOpen(false)}
                 repairOrderId={order.id}
+            />
+            <AddNoteDialog
+                notableType="repair_order"
+                notableId={order.id}
+                isOpen={isNoteDialogOpen}
+                onClose={() => setNoteDialogOpen(false)}
             />
         </>
     );
