@@ -1,5 +1,6 @@
 import { useForm, usePage } from '@inertiajs/react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
+import { useEffect } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -47,6 +48,12 @@ export function AddNoteDialog({
         mechanic_id: null as number | null,
     });
 
+    useEffect(() => {
+        if (isMechanic && mechanics?.length === 1) {
+            setData('mechanic_id', mechanics[0].id);
+        }
+    }, [isMechanic, mechanics]);
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -82,6 +89,12 @@ export function AddNoteDialog({
                             <div className="space-y-2">
                                 <Label htmlFor="mechanic_id">
                                     {t('select_mechanic')}
+                                    {isMechanic && (
+                                        <span className="text-destructive">
+                                            {' '}
+                                            *
+                                        </span>
+                                    )}
                                 </Label>
                                 <Select
                                     value={data.mechanic_id?.toString() ?? ''}

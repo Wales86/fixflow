@@ -31,10 +31,10 @@ class InternalNoteController extends Controller
             'mechanic_id' => $validated['mechanic_id'] ?? null,
         ]);
 
-        // If mechanic_id is provided, use Mechanic as author, otherwise use User
-        $author = isset($validated['mechanic_id'])
-            ? Mechanic::findOrFail($validated['mechanic_id'])
-            : $request->user();
+        $author = $request->user();
+        if (isset($validated['mechanic_id'])) {
+            $author = Mechanic::findOrFail($validated['mechanic_id']);
+        }
 
         $this->internalNoteService->store($storeData, $author);
 
