@@ -57,6 +57,7 @@ class RepairOrdersSeeder extends Seeder
                     ['mechanic_index' => 0, 'duration_minutes' => 240, 'description' => 'Zdiagnozowano wyciek oleju w bloku silnika'],
                     ['mechanic_index' => 1, 'duration_minutes' => 180, 'description' => 'Wymieniono uszczelki silnika'],
                 ],
+                'internal_note' => 'Klient poprosił o przyspieszenie naprawy ze względu na nadchodzącą podróż.',
             ],
             [
                 'vehicle_index' => 1,
@@ -78,6 +79,7 @@ class RepairOrdersSeeder extends Seeder
                 'time_entries' => [
                     ['mechanic_index' => 1, 'duration_minutes' => 60, 'description' => 'Sprawdzono układ klimatyzacji'],
                 ],
+                'internal_note' => 'Części na zamówieniu, oczekiwana dostawa za 3 dni.',
             ],
             [
                 'vehicle_index' => 3,
@@ -143,6 +145,9 @@ class RepairOrdersSeeder extends Seeder
         foreach ($repairOrdersData as $orderData) {
             $vehicle = $vehicles[$orderData['vehicle_index']];
 
+            // Set the creation time to the start time of the repair to ensure chronological order
+            Carbon::setTestNow($orderData['started_at']);
+
             $repairOrder = RepairOrder::create([
                 'workshop_id' => $workshop->id,
                 'vehicle_id' => $vehicle->id,
@@ -152,9 +157,23 @@ class RepairOrdersSeeder extends Seeder
                 'finished_at' => $orderData['finished_at'],
             ]);
 
+            // If the order is closed, set the updated_at to the finished_at time
+            if ($repairOrder->finished_at) {
+                $repairOrder->updated_at = $repairOrder->finished_at;
+                $repairOrder->save();
+            }
+
             // Create time entries for orders with status other than NEW
             if ($orderData['status'] !== RepairOrderStatus::NEW) {
                 foreach ($orderData['time_entries'] as $timeEntryData) {
+                    // Mock time entry creation time to be slightly after the repair order start
+                    $timeEntryCreationTime = $orderData['started_at']->copy()->addHours(rand(1, 8));
+                    // Ensure the creation time is not after the finish time for closed orders
+                    if ($orderData['finished_at'] && $timeEntryCreationTime->isAfter($orderData['finished_at'])) {
+                        $timeEntryCreationTime = $orderData['started_at']->copy()->addMinutes(rand(15, 60));
+                    }
+                    Carbon::setTestNow($timeEntryCreationTime);
+
                     TimeEntry::create([
                         'repair_order_id' => $repairOrder->id,
                         'mechanic_id' => $mechanics[$timeEntryData['mechanic_index']]->id,
@@ -163,27 +182,21 @@ class RepairOrdersSeeder extends Seeder
                     ]);
                 }
             }
+
+            // Add internal note if it exists
+            if (isset($orderData['internal_note'])) {
+                Carbon::setTestNow($orderData['started_at']->copy()->addMinutes(rand(5, 60)));
+                InternalNote::create([
+                    'notable_type' => RepairOrder::class,
+                    'notable_id' => $repairOrder->id,
+                    'content' => $orderData['internal_note'],
+                    'author_id' => $users->first()->id,
+                    'author_type' => User::class,
+                ]);
+            }
         }
 
-        // Add internal notes to a couple of orders
-        $repairOrders = RepairOrder::where('workshop_id', $workshop->id)->get();
-
-        // Add note to first repair order
-        InternalNote::create([
-            'notable_type' => RepairOrder::class,
-            'notable_id' => $repairOrders[0]->id,
-            'content' => 'Klient poprosił o przyspieszenie naprawy ze względu na nadchodzącą podróż.',
-            'author_id' => $users->first()->id,
-            'author_type' => User::class,
-        ]);
-
-        // Add note to third repair order
-        InternalNote::create([
-            'notable_type' => RepairOrder::class,
-            'notable_id' => $repairOrders[2]->id,
-            'content' => 'Części na zamówieniu, oczekiwana dostawa za 3 dni.',
-            'author_id' => $users->first()->id,
-            'author_type' => User::class,
-        ]);
+        // Reset the mocked time
+        Carbon::setTestNow();
     }
 }
