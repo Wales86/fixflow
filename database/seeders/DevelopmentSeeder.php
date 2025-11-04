@@ -17,6 +17,7 @@ class DevelopmentSeeder extends Seeder
             MechanicsSeeder::class,
             ClientsSeeder::class,
             VehiclesSeeder::class,
+            RepairOrdersSeeder::class,
         ]);
     }
 }
