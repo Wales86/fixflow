@@ -3,13 +3,13 @@
 namespace App\Http\Requests\Report;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Carbon\Carbon;
+use App\Enums\UserPermission;
 
 class FilterTeamReportRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return $this->user()->can(UserPermission::VIEW_REPORTS->value);
     }
 
     public function rules(): array

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Report;
 
+use App\Enums\UserPermission;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -9,7 +10,7 @@ class FilterMechanicReportRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return $this->user()->can(UserPermission::VIEW_REPORTS->value);
     }
 
     public function rules(): array
