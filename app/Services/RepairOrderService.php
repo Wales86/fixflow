@@ -23,6 +23,8 @@ use App\Models\RepairOrder;
 use App\Models\User;
 use App\Models\Vehicle;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 use Spatie\LaravelData\DataCollection;
 
 class RepairOrderService
@@ -37,20 +39,7 @@ class RepairOrderService
         }
 
         if (! empty($filters['search'])) {
-            $search = $filters['search'];
-            $query->where(function ($q) use ($search) {
-                $q->where('problem_description', 'like', "%{$search}%")
-                    ->orWhereHas('vehicle', function ($vehicleQuery) use ($search) {
-                        $vehicleQuery->where('make', 'like', "%{$search}%")
-                            ->orWhere('model', 'like', "%{$search}%")
-                            ->orWhere('registration_number', 'like', "%{$search}%");
-                    })
-                    ->orWhereHas('client', function ($clientQuery) use ($search) {
-                        $clientQuery->where('first_name', 'like', "%{$search}%")
-                            ->orWhere('last_name', 'like', "%{$search}%")
-                            ->orWhere('phone_number', 'like', "%{$search}%");
-                    });
-            });
+            $this->applySearchFilter($query, $filters['search'], true);
         }
 
         if (! empty($filters['sort'])) {
@@ -202,18 +191,7 @@ class RepairOrderService
             ->where('status', '!=', RepairOrderStatus::CLOSED);
 
         if (! empty($search)) {
-            $query->where(function ($q) use ($search) {
-                $q->where('problem_description', 'like', "%{$search}%")
-                    ->orWhereHas('vehicle', function ($vehicleQuery) use ($search) {
-                        $vehicleQuery->where('registration_number', 'like', "%{$search}%")
-                            ->orWhere('make', 'like', "%{$search}%")
-                            ->orWhere('model', 'like', "%{$search}%");
-                    })
-                    ->orWhereHas('client', function ($clientQuery) use ($search) {
-                        $clientQuery->where('last_name', 'like', "%{$search}%")
-                            ->orWhere('first_name', 'like', "%{$search}%");
-                    });
-            });
+            $this->applySearchFilter($query, $search);
         }
 
         return MechanicRepairOrderCardData::collect(
@@ -234,5 +212,26 @@ class RepairOrderService
         }
 
         $repairOrder->delete();
+    }
+
+    private function applySearchFilter(Builder $query, string $search, bool $searchPhoneNumber = false): void
+    {
+        $search = strtolower($search);
+        $query->where(function ($q) use ($search, $searchPhoneNumber) {
+            $q->where(DB::raw('LOWER(problem_description)'), 'like', "%{$search}%")
+                ->orWhereHas('vehicle', function ($vehicleQuery) use ($search) {
+                    $vehicleQuery->where(DB::raw('LOWER(make)'), 'like', "%{$search}%")
+                        ->orWhere(DB::raw('LOWER(model)'), 'like', "%{$search}%")
+                        ->orWhere(DB::raw('LOWER(registration_number)'), 'like', "%{$search}%");
+                })
+                ->orWhereHas('client', function ($clientQuery) use ($search, $searchPhoneNumber) {
+                    $clientQuery->where(DB::raw('LOWER(first_name)'), 'like', "%{$search}%")
+                        ->orWhere(DB::raw('LOWER(last_name)'), 'like', "%{$search}%");
+
+                    if ($searchPhoneNumber) {
+                        $clientQuery->orWhere(DB::raw('LOWER(phone_number)'), 'like', "%{$search}%");
+                    }
+                });
+        });
     }
 }
