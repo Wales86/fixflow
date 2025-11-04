@@ -15,7 +15,9 @@ import repairOrders from '@/routes/repair-orders';
 import reports from '@/routes/reports';
 import users from '@/routes/users';
 import vehicles from '@/routes/vehicles';
-import { type TFunction } from 'i18next';
+import { useLaravelReactI18n } from 'laravel-react-i18n';
+
+type TFunction = ReturnType<typeof useLaravelReactI18n>['t'];
 
 export const getMainNavItems = (t: TFunction): NavItem[] => [
     {
