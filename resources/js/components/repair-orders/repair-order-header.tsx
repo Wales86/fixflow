@@ -72,23 +72,31 @@ export function RepairOrderHeader({
             </div>
 
             {hasAnyAction && (
-                <div className="flex flex-wrap gap-2">
+                <div className="flex w-full flex-col gap-2 md:w-auto md:flex-row md:flex-wrap">
                     {canUpdateStatus && (
-                        <Button variant="outline" onClick={onStatusChange}>
+                        <Button
+                            variant="outline"
+                            onClick={onStatusChange}
+                            className="w-full border-sky-500 text-sky-500 hover:bg-sky-50 hover:text-sky-600 md:w-auto"
+                        >
                             <RefreshCw className="mr-2 h-4 w-4" />
                             {t('change_status')}
                         </Button>
                     )}
 
                     {canCreateNotes && (
-                        <Button variant="outline" onClick={onAddNote}>
+                        <Button
+                            variant="outline"
+                            onClick={onAddNote}
+                            className="w-full md:w-auto"
+                        >
                             <FileText className="mr-2 h-4 w-4" />
                             {t('add_note')}
                         </Button>
                     )}
 
                     {canCreateTimeEntry && onAddTimeEntry && (
-                        <Button onClick={onAddTimeEntry}>
+                        <Button onClick={onAddTimeEntry} className="w-full md:w-auto">
                             <Clock className="mr-2 h-4 w-4" />
                             {t('add_time_entry')}
                         </Button>
