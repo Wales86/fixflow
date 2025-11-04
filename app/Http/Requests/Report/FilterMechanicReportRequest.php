@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Report;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
 class FilterMechanicReportRequest extends FormRequest
@@ -14,9 +15,17 @@ class FilterMechanicReportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'start_date' => ['nullable', 'date_format:Y-m-d\TH:i:s.v\Z'],
-            'end_date' => ['nullable', 'date_format:Y-m-d\TH:i:s.v\Z', 'after_or_equal:start_date'],
-            'mechanic_id' => ['nullable', 'integer', 'exists:users,id'],
+            'start_date' => ['nullable', 'date'],
+            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
+            'mechanic_id' => ['nullable', 'integer', 'exists:mechanics,id'],
         ];
+    }
+
+    protected function passedValidation(): void
+    {
+        $this->merge([
+            'start_date' => $this->start_date ? Carbon::parse($this->start_date)->startOfDay() : null,
+            'end_date' => $this->end_date ? Carbon::parse($this->end_date)->endOfDay() : null,
+        ]);
     }
 }

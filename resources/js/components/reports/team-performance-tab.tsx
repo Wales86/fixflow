@@ -24,6 +24,7 @@ import { useLaravelReactI18n } from 'laravel-react-i18n';
 import { Clock, RefreshCw, Users, Wrench, X } from 'lucide-react';
 import { useState } from 'react';
 import { type DateRange } from 'react-day-picker';
+import { format } from 'date-fns';
 import {
     Bar,
     BarChart,
@@ -82,8 +83,8 @@ export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
             router.get(
                 '/reports/team',
                 {
-                    start_date: range.from.toISOString(),
-                    end_date: range.to.toISOString(),
+                    start_date: format(range.from, 'yyyy-MM-dd'),
+                    end_date: format(range.to, 'yyyy-MM-dd'),
                 },
                 {
                     preserveState: true,
@@ -108,10 +109,10 @@ export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
     };
 
     const handleRefresh = () => {
-        const params: Record<string, string> = {};
+        const params: Record<string, string | undefined> = {};
         if (dateRange?.from && dateRange?.to) {
-            params.start_date = dateRange.from.toISOString();
-            params.end_date = dateRange.to.toISOString();
+            params.start_date = format(dateRange.from, 'yyyy-MM-dd');
+            params.end_date = format(dateRange.to, 'yyyy-MM-dd');
         }
 
         router.get('/reports/team', params, {
@@ -122,12 +123,12 @@ export function TeamPerformanceTab({ data }: TeamPerformanceTabProps) {
     };
 
     const handleMechanicClick = (mechanicId: number) => {
-        const params: Record<string, string | number> = {
+        const params: Record<string, string | number | undefined> = {
             mechanic_id: mechanicId,
         };
         if (dateRange?.from && dateRange?.to) {
-            params.start_date = dateRange.from.toISOString();
-            params.end_date = dateRange.to.toISOString();
+            params.start_date = format(dateRange.from, 'yyyy-MM-dd');
+            params.end_date = format(dateRange.to, 'yyyy-MM-dd');
         }
 
         router.visit(reports.mechanic({ query: params }).url);

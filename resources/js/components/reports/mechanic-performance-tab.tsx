@@ -16,6 +16,7 @@ import { useLaravelReactI18n } from 'laravel-react-i18n';
 import { Clock, RefreshCw, TrendingUp, Wrench, X } from 'lucide-react';
 import { useState } from 'react';
 import { type DateRange } from 'react-day-picker';
+import { format } from 'date-fns';
 
 interface MechanicPerformanceTabProps {
     mechanics: App.Dto.Report.MechanicSelectOptionData[];
@@ -60,14 +61,11 @@ export function MechanicPerformanceTab({
         mechanicId: string,
         range: DateRange | undefined,
     ) => {
-        const params: Record<string, string> = {
+        const params: Record<string, string | undefined> = {
             mechanic_id: mechanicId,
+            start_date: range?.from ? format(range.from, 'yyyy-MM-dd') : undefined,
+            end_date: range?.to ? format(range.to, 'yyyy-MM-dd') : undefined,
         };
-
-        if (range?.from && range?.to) {
-            params.start_date = range.from.toISOString();
-            params.end_date = range.to.toISOString();
-        }
 
         router.get('/reports/mechanic', params, {
             preserveState: true,
