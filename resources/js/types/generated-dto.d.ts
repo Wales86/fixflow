@@ -222,6 +222,7 @@ started_at: string | null;
 finished_at: string | null;
 total_time_minutes: number;
 created_at: string;
+updated_at: string;
 vehicle: App.Dto.RepairOrder.RepairOrderVehicleData;
 client: App.Dto.RepairOrder.RepairOrderClientData;
 images: Array<App.Dto.Common.MediaData>;

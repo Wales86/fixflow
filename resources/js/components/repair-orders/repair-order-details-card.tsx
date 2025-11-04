@@ -3,8 +3,21 @@ import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calendar, Car, Clock, Image as ImageIcon, User } from 'lucide-react';
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
+import {
+    Calendar,
+    Car,
+    Clock,
+    ImageIcon,
+    User,
+    CalendarCheck,
+    CalendarClock,
+} from 'lucide-react';
 
 interface RepairOrderDetailsCardProps {
     order: App.Dto.RepairOrder.RepairOrderShowData;
@@ -84,7 +97,7 @@ export function RepairOrderDetailsCard({ order }: RepairOrderDetailsCardProps) {
                 </div>
 
                 {/* Dates and Time */}
-                <div className="grid gap-6 md:grid-cols-2">
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                     <div className="space-y-2">
                         <div className="flex items-center text-sm text-muted-foreground">
                             <Calendar className="mr-2 h-4 w-4" />
@@ -94,7 +107,38 @@ export function RepairOrderDetailsCard({ order }: RepairOrderDetailsCardProps) {
                             {formatDate(order.created_at)}
                         </div>
                     </div>
+                    {order.started_at && (
+                        <div className="space-y-2">
+                            <div className="flex items-center text-sm text-muted-foreground">
+                                <Calendar className="mr-2 h-4 w-4" />
+                                {t('started_at')}
+                            </div>
+                            <div className="text-sm">
+                                {formatDate(order.started_at)}
+                            </div>
+                        </div>
+                    )}
+                    <div className="space-y-2">
+                        <div className="flex items-center text-sm text-muted-foreground">
+                            <CalendarClock className="mr-2 h-4 w-4" />
+                            {t('updated_at')}
+                        </div>
+                        <div className="text-sm">
+                            {formatDate(order.updated_at)}
+                        </div>
+                    </div>
 
+                    {order.finished_at && (
+                        <div className="space-y-2">
+                            <div className="flex items-center text-sm text-muted-foreground">
+                                <CalendarCheck className="mr-2 h-4 w-4" />
+                                {t('finished_at')}
+                            </div>
+                            <div className="text-sm">
+                                {formatDate(order.finished_at)}
+                            </div>
+                        </div>
+                    )}
                     <div className="space-y-2">
                         <div className="flex items-center text-sm text-muted-foreground">
                             <Clock className="mr-2 h-4 w-4" />
