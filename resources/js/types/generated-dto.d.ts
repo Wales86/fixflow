@@ -250,6 +250,7 @@ status: App.Enums.RepairOrderStatus | null;
 };
 export type UpdateRepairOrderStatusData = {
 status: App.Enums.RepairOrderStatus;
+mechanic_id: number | null;
 };
 export type VehicleSelectionData = {
 id: number;

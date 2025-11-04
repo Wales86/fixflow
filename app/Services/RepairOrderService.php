@@ -19,12 +19,14 @@ use App\Dto\RepairOrder\UpdateRepairOrderStatusData;
 use App\Dto\RepairOrder\VehicleSelectionData;
 use App\Enums\RepairOrderStatus;
 use App\Exceptions\CannotDeleteRepairOrderWithTimeEntriesException;
+use App\Models\Mechanic;
 use App\Models\RepairOrder;
 use App\Models\User;
 use App\Models\Vehicle;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use Spatie\Activitylog\Facades\CauserResolver;
 use Spatie\LaravelData\DataCollection;
 
 class RepairOrderService
@@ -141,6 +143,13 @@ class RepairOrderService
 
     public function updateStatus(RepairOrder $repairOrder, UpdateRepairOrderStatusData $data): RepairOrder
     {
+        if ($data->mechanic_id) {
+            $mechanic = Mechanic::find($data->mechanic_id);
+            if ($mechanic) {
+                CauserResolver::setCauser($mechanic);
+            }
+        }
+
         $repairOrder->update([
             'status' => $data->status,
         ]);
