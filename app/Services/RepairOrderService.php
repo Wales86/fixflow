@@ -34,7 +34,7 @@ class RepairOrderService
     public function paginatedList(array $filters = []): LengthAwarePaginator
     {
         $query = RepairOrder::query()
-            ->with(['vehicle', 'client']);
+            ->with(['vehicle.client']);
 
         if (! empty($filters['status'])) {
             $query->where('status', $filters['status']);
@@ -193,8 +193,7 @@ class RepairOrderService
     {
         $query = RepairOrder::query()
             ->with([
-                'vehicle',
-                'client',
+                'vehicle.client',
             ])
             ->where('workshop_id', $user->workshop_id)
             ->where('status', '!=', RepairOrderStatus::CLOSED);
@@ -233,7 +232,7 @@ class RepairOrderService
                         ->orWhere(DB::raw('LOWER(model)'), 'like', "%{$search}%")
                         ->orWhere(DB::raw('LOWER(registration_number)'), 'like', "%{$search}%");
                 })
-                ->orWhereHas('client', function ($clientQuery) use ($search, $searchPhoneNumber) {
+                ->orWhereHas('vehicle.client', function ($clientQuery) use ($search, $searchPhoneNumber) {
                     $clientQuery->where(DB::raw('LOWER(first_name)'), 'like', "%{$search}%")
                         ->orWhere(DB::raw('LOWER(last_name)'), 'like', "%{$search}%");
 
