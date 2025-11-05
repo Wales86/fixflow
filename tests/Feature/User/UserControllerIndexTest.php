@@ -72,7 +72,7 @@ test('users list includes paginated data', function () {
         ->get(route('users.index'))
         ->assertOk()
         ->assertInertia(fn ($page) => $page
-            ->has('tableData.data', 6)
+            ->has('tableData.data', 5)
             ->has('tableData.links')
         );
 });
@@ -117,15 +117,17 @@ test('users are scoped to current workshop', function () {
         ->get(route('users.index'))
         ->assertOk()
         ->assertInertia(fn ($page) => $page
-            ->has('tableData.data', 2)
-            ->where('tableData.data.0.id', $user->id)
-            ->where('tableData.data.1.id', $workshopUser->id)
+            ->has('tableData.data', 1)
+            ->where('tableData.data.0.id', $workshopUser->id)
         );
 });
 
 test('users include roles in response', function () {
     $user = User::factory()->for($this->workshop)->create();
     $user->assignRole('Owner');
+
+    $otherUser = User::factory()->for($this->workshop)->create();
+    $otherUser->assignRole('Owner');
 
     actingAs($user)
         ->get(route('users.index'))
@@ -139,6 +141,8 @@ test('users include roles in response', function () {
 test('users include all required fields', function () {
     $user = User::factory()->for($this->workshop)->create();
     $user->assignRole('Owner');
+
+    User::factory()->for($this->workshop)->create();
 
     actingAs($user)
         ->get(route('users.index'))
