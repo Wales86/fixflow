@@ -16,17 +16,16 @@ class DatabaseSeeder extends Seeder
             RolesAndPermissionsSeeder::class,
         ]);
 
-        // Seed workshop with owner user (REQUIRED)
-        $this->call([
-            WorkshopSeeder::class,
-        ]);
-
         // === DEVELOPMENT SEEDERS ===
         // These seeders contain test data and should ONLY run in development/local environments
-        if (! app()->environment('production')) {
+        // if (! app()->environment('production')) {
+            $this->call([
+                WorkshopSeeder::class,
+            ]);
+
             $this->call([
                 DevelopmentSeeder::class,
             ]);
-        }
+        // }
     }
 }
