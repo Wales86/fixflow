@@ -2,37 +2,9 @@ import { dashboard, login, register } from '@/routes';
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
-import { Illustration } from '@/Components/Illustration';
 import AppLogoIconTools from '@/components/app-logo-icon-tools';
 import { motion } from 'framer-motion';
 
-// Animation variants
-const fadeInUp = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.6, ease: 'easeOut' }
-};
-
-const fadeIn = {
-    initial: { opacity: 0 },
-    animate: { opacity: 1 },
-    transition: { duration: 0.6 }
-};
-
-const staggerContainer = {
-    animate: {
-        transition: {
-            staggerChildren: 0.15
-        }
-    }
-};
-
-const cardVariant = {
-    initial: { opacity: 0, y: 30 },
-    whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true, margin: '-50px' },
-    transition: { duration: 0.6, ease: 'easeOut' }
-};
 
 const FeatureIcon = ({ children }: { children: React.ReactNode }) => (
     <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">

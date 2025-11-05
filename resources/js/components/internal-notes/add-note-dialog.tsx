@@ -52,7 +52,7 @@ export function AddNoteDialog({
         if (isMechanic && mechanics?.length === 1) {
             setData('mechanic_id', mechanics[0].id);
         }
-    }, [isMechanic, mechanics]);
+    }, [isMechanic, mechanics, setData]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
