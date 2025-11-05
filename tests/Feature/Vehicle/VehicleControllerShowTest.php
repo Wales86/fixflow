@@ -5,31 +5,37 @@ use App\Models\RepairOrder;
 use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\Workshop;
+use Spatie\Permission\Models\Role;
+
+use function Pest\Laravel\actingAs;
+use function Pest\Laravel\get;
+
+beforeEach(function () {
+    /** @var Workshop $this->workshop */
+    $this->workshop = Workshop::factory()->create();
+    $this->workshop->makeCurrent();
+
+    Role::firstOrCreate(['name' => 'Owner']);
+    Role::firstOrCreate(['name' => 'Office']);
+    Role::firstOrCreate(['name' => 'Mechanic']);
+});
 
 test('guests cannot view vehicle details', function () {
-    $workshop = Workshop::factory()->create();
-    $client = Client::factory()->create(['workshop_id' => $workshop->id]);
-    $vehicle = Vehicle::factory()->create([
-        'workshop_id' => $workshop->id,
-        'client_id' => $client->id,
-    ]);
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
 
-    $this->get(route('vehicles.show', $vehicle))
+    get(route('vehicles.show', $vehicle))
         ->assertRedirect(route('login'));
 });
 
 test('authenticated owner can view vehicle details from their workshop', function () {
-    $workshop = Workshop::factory()->create();
-    $user = User::factory()->create(['workshop_id' => $workshop->id]);
+    $user = User::factory()->for($this->workshop)->create();
     $user->assignRole('Owner');
 
-    $client = Client::factory()->create(['workshop_id' => $workshop->id]);
-    $vehicle = Vehicle::factory()->create([
-        'workshop_id' => $workshop->id,
-        'client_id' => $client->id,
-    ]);
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
 
-    $this->actingAs($user)
+    actingAs($user)
         ->get(route('vehicles.show', $vehicle))
         ->assertOk()
         ->assertInertia(fn ($page) => $page
@@ -48,70 +54,54 @@ test('authenticated owner can view vehicle details from their workshop', functio
 });
 
 test('authenticated office user can view vehicle details from their workshop', function () {
-    $workshop = Workshop::factory()->create();
-    $user = User::factory()->create(['workshop_id' => $workshop->id]);
+    $user = User::factory()->for($this->workshop)->create();
     $user->assignRole('Office');
 
-    $client = Client::factory()->create(['workshop_id' => $workshop->id]);
-    $vehicle = Vehicle::factory()->create([
-        'workshop_id' => $workshop->id,
-        'client_id' => $client->id,
-    ]);
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
 
-    $this->actingAs($user)
+    actingAs($user)
         ->get(route('vehicles.show', $vehicle))
         ->assertOk();
 });
 
 test('authenticated mechanic can view vehicle details from their workshop', function () {
-    $workshop = Workshop::factory()->create();
-    $user = User::factory()->create(['workshop_id' => $workshop->id]);
+    $user = User::factory()->for($this->workshop)->create();
     $user->assignRole('Mechanic');
 
-    $client = Client::factory()->create(['workshop_id' => $workshop->id]);
-    $vehicle = Vehicle::factory()->create([
-        'workshop_id' => $workshop->id,
-        'client_id' => $client->id,
-    ]);
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
 
-    $this->actingAs($user)
+    actingAs($user)
         ->get(route('vehicles.show', $vehicle))
         ->assertOk();
 });
 
 test('authenticated user cannot view vehicle from another workshop', function () {
-    $workshop1 = Workshop::factory()->create();
-    $workshop2 = Workshop::factory()->create();
+    $otherWorkshop = Workshop::factory()->create();
 
-    $user = User::factory()->create(['workshop_id' => $workshop1->id]);
+    $user = User::factory()->for($this->workshop)->create();
     $user->assignRole('Owner');
 
-    $client = Client::factory()->create(['workshop_id' => $workshop2->id]);
-    $vehicle = Vehicle::factory()->create([
-        'workshop_id' => $workshop2->id,
-        'client_id' => $client->id,
-    ]);
+    $client = Client::factory()->for($otherWorkshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($otherWorkshop)->create();
 
     expect($user->can('view', $vehicle))->toBeFalse();
 });
 
 test('vehicle details page includes paginated repair orders', function () {
-    $workshop = Workshop::factory()->create();
-    $user = User::factory()->create(['workshop_id' => $workshop->id]);
+    $user = User::factory()->for($this->workshop)->create();
     $user->assignRole('Owner');
 
-    $client = Client::factory()->create(['workshop_id' => $workshop->id]);
-    $vehicle = Vehicle::factory()->create([
-        'workshop_id' => $workshop->id,
-        'client_id' => $client->id,
-    ]);
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
 
     RepairOrder::factory()->count(3)->create([
-        'workshop_id' => $workshop->id,
+        'workshop_id' => $this->workshop->id,
         'vehicle_id' => $vehicle->id,
     ]);
 
-    $this->actingAs($user)
+    actingAs($user)
         ->get(route('vehicles.show', $vehicle))
         ->assertOk()
         ->assertInertia(fn ($page) => $page
@@ -122,29 +112,25 @@ test('vehicle details page includes paginated repair orders', function () {
 });
 
 test('repair orders are sorted by creation date descending', function () {
-    $workshop = Workshop::factory()->create();
-    $user = User::factory()->create(['workshop_id' => $workshop->id]);
+    $user = User::factory()->for($this->workshop)->create();
     $user->assignRole('Owner');
 
-    $client = Client::factory()->create(['workshop_id' => $workshop->id]);
-    $vehicle = Vehicle::factory()->create([
-        'workshop_id' => $workshop->id,
-        'client_id' => $client->id,
-    ]);
+    $client = Client::factory()->for($this->workshop)->create();
+    $vehicle = Vehicle::factory()->for($client)->for($this->workshop)->create();
 
     $oldOrder = RepairOrder::factory()->create([
-        'workshop_id' => $workshop->id,
+        'workshop_id' => $this->workshop->id,
         'vehicle_id' => $vehicle->id,
         'created_at' => now()->subDays(5),
     ]);
 
     $newOrder = RepairOrder::factory()->create([
-        'workshop_id' => $workshop->id,
+        'workshop_id' => $this->workshop->id,
         'vehicle_id' => $vehicle->id,
         'created_at' => now()->subDays(1),
     ]);
 
-    $this->actingAs($user)
+    actingAs($user)
         ->get(route('vehicles.show', $vehicle))
         ->assertOk()
         ->assertInertia(fn ($page) => $page
@@ -155,11 +141,10 @@ test('repair orders are sorted by creation date descending', function () {
 });
 
 test('vehicle show returns 404 for non-existent vehicle', function () {
-    $workshop = Workshop::factory()->create();
-    $user = User::factory()->create(['workshop_id' => $workshop->id]);
+    $user = User::factory()->for($this->workshop)->create();
     $user->assignRole('Owner');
 
-    $this->actingAs($user)
+    actingAs($user)
         ->get(route('vehicles.show', 99999))
         ->assertNotFound();
 });
