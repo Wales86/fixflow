@@ -3,6 +3,7 @@ import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
 import { Illustration } from '@/Components/Illustration';
+import AppLogoIconTools from '@/components/app-logo-icon-tools';
 
 const FeatureIcon = ({ children }: { children: React.ReactNode }) => (
     <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
@@ -51,31 +52,39 @@ export default function Welcome() {
             </Head>
             <div className="flex min-h-screen flex-col bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200">
                 <header className="absolute top-0 z-10 w-full p-6 lg:p-8">
-                    <nav className="flex items-center justify-end gap-4">
-                        {auth.user ? (
-                            <Link
-                                href={dashboard()}
-                                className="rounded-md px-4 py-2 text-sm font-medium text-gray-700 ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-indigo-500 dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                            >
-                                Panel
-                            </Link>
-                        ) : (
-                            <>
+                    <div className="mx-auto flex max-w-7xl items-center justify-between">
+                        <Link href="/" className="flex items-center gap-2">
+                            <AppLogoIconTools className="h-6 w-6 text-primary" />
+                            <span className="text-lg font-semibold text-gray-900 dark:text-white">
+                                FixFlow
+                            </span>
+                        </Link>
+                        <nav className="flex items-center gap-4">
+                            {auth.user ? (
                                 <Link
-                                    href={login()}
-                                    className="rounded-md px-4 py-2 text-sm font-medium text-gray-700 ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-primary dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                    href={dashboard()}
+                                    className="rounded-md px-4 py-2 text-sm font-medium text-gray-700 ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-indigo-500 dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                                 >
-                                    {t('login')}
+                                    Panel
                                 </Link>
-                                <Link
-                                    href={register()}
-                                    className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition hover:bg-primary/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900"
-                                >
-                                    {t('register')}
-                                </Link>
-                            </>
-                        )}
-                    </nav>
+                            ) : (
+                                <>
+                                    <Link
+                                        href={login()}
+                                        className="rounded-md px-4 py-2 text-sm font-medium text-gray-700 ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-primary dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                    >
+                                        {t('login')}
+                                    </Link>
+                                    <Link
+                                        href={register()}
+                                        className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition hover:bg-primary/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900"
+                                    >
+                                        {t('register')}
+                                    </Link>
+                                </>
+                            )}
+                        </nav>
+                    </div>
                 </header>
 
                 <main>
