@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Dto\Dashboard\DashboardData;
+use App\Dto\Dashboard\RecentOrderData;
 use App\Enums\RepairOrderStatus;
 use App\Models\RepairOrder;
 use App\Models\TimeEntry;
@@ -12,20 +13,13 @@ class DashboardService
 {
     public function getDashboardData(): DashboardData
     {
-        $recentOrders = $this->getRecentOrders()
-            ->map(fn ($order) => [
-                'id' => $order->id,
-                'vehicle' => "{$order->vehicle->make} {$order->vehicle->model} {$order->vehicle->year}",
-                'client' => "{$order->client->first_name} {$order->client->last_name}",
-                'status' => $order->status->value,
-                'created_at' => $order->created_at->toISOString(),
-            ]);
+        $recentOrders = $this->getRecentOrders();
 
         return DashboardData::from([
             'activeOrdersCount' => $this->getActiveOrdersCount(),
             'pendingOrdersCount' => $this->getPendingOrdersCount(),
             'todayTimeEntriesTotal' => $this->getTodayTimeEntriesTotal(),
-            'recentOrders' => $recentOrders->all(),
+            'recentOrders' => RecentOrderData::collect($recentOrders),
         ]);
     }
 

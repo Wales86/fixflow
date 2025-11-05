@@ -58,7 +58,7 @@ class RepairOrderService
         }
 
         return $query->paginate(15)
-            ->through(fn ($repairOrder) => RepairOrderListItemData::from($repairOrder));
+            ->through(fn ($repairOrder) => RepairOrderListItemData::fromRepairOrder($repairOrder));
     }
 
     public function createFormData(?int $preselectedVehicleId = null): RepairOrderCreatePageData
@@ -203,7 +203,7 @@ class RepairOrderService
         }
 
         return MechanicRepairOrderCardData::collect(
-            $query->latest('created_at')->get(),
+            $query->latest('created_at')->get()->map(fn ($repairOrder) => MechanicRepairOrderCardData::fromRepairOrder($repairOrder)),
             DataCollection::class
         );
     }
