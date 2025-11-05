@@ -8,33 +8,74 @@ use App\Models\TimeEntry;
 use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\Workshop;
+use Spatie\Permission\Models\Role;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
 beforeEach(function () {
+    /** @var Workshop $this->workshop */
+    $this->workshop = Workshop::factory()->create();
+    $this->workshop->makeCurrent();
+
+    // Additional workshops for multi-tenancy tests
     /** @var Workshop $this->workshop1 */
     $this->workshop1 = Workshop::factory()->create(['name' => 'Workshop 1']);
     /** @var Workshop $this->workshop2 */
     $this->workshop2 = Workshop::factory()->create(['name' => 'Workshop 2']);
 
+    Role::firstOrCreate(['name' => 'Owner']);
+    Role::firstOrCreate(['name' => 'Office']);
+    Role::firstOrCreate(['name' => 'Mechanic']);
+
+    // Users for multi-tenancy tests
     /** @var User $this->user1 */
     $this->user1 = User::factory()->owner()->create(['workshop_id' => $this->workshop1->id]);
     /** @var User $this->user2 */
     $this->user2 = User::factory()->owner()->create(['workshop_id' => $this->workshop2->id]);
 });
 
-// Authentication Tests
-test('unauthenticated users are redirected to login', function () {
-    get(route('dashboard'))
-        ->assertRedirect(route('login'));
+// ============================================================================
+// AUTHENTICATION TESTS
+// ============================================================================
+
+test('guests are redirected to login page when accessing dashboard', function () {
+    get(route('dashboard'))->assertRedirect(route('login'));
 });
 
-test('authenticated users can access dashboard', function () {
-    actingAs($this->user1)
+test('authenticated users without proper role are forbidden from dashboard', function () {
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole('Mechanic');
+
+    actingAs($user)
         ->get(route('dashboard'))
-        ->assertSuccessful()
-        ->assertInertia(fn ($page) => $page->component('dashboard/index'));
+        ->assertForbidden();
+});
+
+test('owner can view dashboard', function () {
+    $ownerRole = Role::firstOrCreate(['name' => 'Owner']);
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole($ownerRole);
+
+    actingAs($user)
+        ->get(route('dashboard'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('dashboard/index')
+        );
+});
+
+test('office can view dashboard', function () {
+    $officeRole = Role::firstOrCreate(['name' => 'Office']);
+    $user = User::factory()->for($this->workshop)->create();
+    $user->assignRole($officeRole);
+
+    actingAs($user)
+        ->get(route('dashboard'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('dashboard/index')
+        );
 });
 
 // Multi-Tenancy Tests
@@ -392,7 +433,7 @@ test('recent orders have correct data structure', function () {
                 ->has('recentOrders.0', fn ($order) => $order->where('id', $repairOrder->id)
                     ->where('vehicle', 'Toyota Camry 2022')
                     ->where('client', 'John Doe')
-                    ->where('status', 'W naprawie')
+                    ->where('status', 'in_progress')
                     ->has('created_at')
                 );
         });
