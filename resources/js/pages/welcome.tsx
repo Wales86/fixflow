@@ -49,7 +49,7 @@ const Feature = ({
     description: string;
     icon: React.ReactNode;
 }) => (
-    <motion.div 
+    <motion.div
         className="text-center"
         variants={{
             initial: { opacity: 0, y: 30 },
@@ -66,7 +66,7 @@ const Feature = ({
 );
 
 const Problem = ({ title }: { title: string }) => (
-    <motion.div 
+    <motion.div
         className="rounded-lg bg-gray-100 p-6 dark:bg-gray-800"
         variants={{
             initial: { opacity: 0, y: 30 },
@@ -94,7 +94,7 @@ export default function Welcome() {
                 />
             </Head>
             <div className="flex min-h-screen flex-col bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200">
-                <header className="absolute top-0 z-10 w-full p-6 lg:p-8">
+                <header className="w-full bg-white p-6 dark:bg-gray-950 lg:p-8">
                     <div className="mx-auto flex max-w-7xl items-center justify-between">
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
@@ -108,11 +108,15 @@ export default function Welcome() {
                                 </span>
                             </Link>
                         </motion.div>
-                        <motion.nav 
+                        <motion.nav
                             className="flex items-center gap-4"
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
+                            transition={{
+                                duration: 0.6,
+                                ease: 'easeOut',
+                                delay: 0.2,
+                            }}
                         >
                             {auth.user ? (
                                 <Link
@@ -143,37 +147,53 @@ export default function Welcome() {
 
                 <main>
                     {/* Hero Section */}
-                    <section className="relative flex min-h-screen items-center overflow-hidden bg-white pt-16 dark:bg-gray-950">
-                        <div className="absolute -left-32 -top-32 h-96 w-96">
-                            <Illustration className="h-full w-full opacity-20" />
+                    <section className="relative flex h-[40rem] items-center overflow-hidden">
+                        <div className="absolute inset-0 z-0">
+                            <img
+                                src="/img/hero1.jpg"
+                                alt="Mechanik pracujący przy samochodzie"
+                                className="h-full w-full object-cover"
+                            />
+                            <div className="absolute inset-0 bg-black/60" />
                         </div>
-                        <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 lg:grid-cols-2 lg:px-8">
-                            <div className="flex flex-col justify-center text-center lg:text-left">
-                                <motion.h1 
-                                    className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl dark:text-white"
+                        <div className="relative z-10 mx-auto max-w-7xl px-4 text-center lg:px-8">
+                            <div className="flex flex-col items-center">
+                                <motion.h1
+                                    className="text-4xl font-bold tracking-tight text-white sm:text-6xl"
                                     initial={{ opacity: 0, y: 30 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.8, ease: 'easeOut' }}
+                                    transition={{
+                                        duration: 0.8,
+                                        ease: 'easeOut',
+                                    }}
                                 >
                                     Zoptymalizuj pracę swojego warsztatu z
                                     FixFlow
                                 </motion.h1>
-                                <motion.p 
-                                    className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300"
+                                <motion.p
+                                    className="mt-6 max-w-2xl text-lg leading-8 text-gray-300"
                                     initial={{ opacity: 0, y: 30 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
+                                    transition={{
+                                        duration: 0.8,
+                                        ease: 'easeOut',
+                                        delay: 0.2,
+                                    }}
                                 >
                                     Precyzyjne śledzenie czasu pracy, analiza
                                     rentowności i efektywności zespołu w jednym
                                     miejscu. Pożegnaj papierową dokumentację i
                                     podejmuj decyzje oparte na danych.
                                 </motion.p>
-                                <motion.div 
-                                    className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start"
+                                <motion.div
+                                    className="mt-10 flex items-center justify-center gap-x-6"
                                     initial={{ opacity: 0, y: 30 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.8, ease: 'easeOut', delay: 0.4 }}
+                                    transition={{
+                                        duration: 0.8,
+                                        ease: 'easeOut',
+                                        delay: 0.4,
+                                    }}
                                 >
                                     <motion.div
                                         whileHover={{ scale: 1.05 }}
@@ -188,21 +208,13 @@ export default function Welcome() {
                                     </motion.div>
                                 </motion.div>
                             </div>
-                            <motion.div 
-                                className="relative hidden items-center justify-center lg:flex"
-                                initial={{ opacity: 0, x: 50 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.8, ease: 'easeOut', delay: 0.3 }}
-                            >
-                                <Illustration className="h-auto w-full max-w-md" />
-                            </motion.div>
                         </div>
                     </section>
 
                     {/* Problem Section */}
-                    <section className="bg-gray-50 py-24 sm:py-32 dark:bg-gray-900">
+                    <section className="bg-gray-100 py-24 sm:py-32 dark:bg-gray-950">
                         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                            <motion.div 
+                            <motion.div
                                 className="mx-auto max-w-2xl text-center"
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
@@ -220,7 +232,7 @@ export default function Welcome() {
                                     biznesu.
                                 </p>
                             </motion.div>
-                            <motion.div 
+                            <motion.div
                                 className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3"
                                 initial="initial"
                                 whileInView="animate"
@@ -241,9 +253,9 @@ export default function Welcome() {
                     </section>
 
                     {/* Features Section */}
-                    <section className="py-24 sm:py-32">
+                    <section className="bg-white py-24 sm:py-32 dark:bg-gray-900">
                         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                            <motion.div 
+                            <motion.div
                                 className="mx-auto max-w-2xl text-center"
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
@@ -258,7 +270,7 @@ export default function Welcome() {
                                     zarządzanie warsztatem na wyższy poziom.
                                 </p>
                             </motion.div>
-                            <motion.div 
+                            <motion.div
                                 className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-4"
                                 initial="initial"
                                 whileInView="animate"
