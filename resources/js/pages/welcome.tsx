@@ -4,6 +4,35 @@ import { Head, Link, usePage } from '@inertiajs/react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
 import { Illustration } from '@/Components/Illustration';
 import AppLogoIconTools from '@/components/app-logo-icon-tools';
+import { motion } from 'framer-motion';
+
+// Animation variants
+const fadeInUp = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6, ease: 'easeOut' }
+};
+
+const fadeIn = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    transition: { duration: 0.6 }
+};
+
+const staggerContainer = {
+    animate: {
+        transition: {
+            staggerChildren: 0.15
+        }
+    }
+};
+
+const cardVariant = {
+    initial: { opacity: 0, y: 30 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, margin: '-50px' },
+    transition: { duration: 0.6, ease: 'easeOut' }
+};
 
 const FeatureIcon = ({ children }: { children: React.ReactNode }) => (
     <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
@@ -20,21 +49,35 @@ const Feature = ({
     description: string;
     icon: React.ReactNode;
 }) => (
-    <div className="text-center">
+    <motion.div 
+        className="text-center"
+        variants={{
+            initial: { opacity: 0, y: 30 },
+            animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } }
+        }}
+        whileHover={{ y: -5, transition: { duration: 0.3 } }}
+    >
         <FeatureIcon>{icon}</FeatureIcon>
         <h3 className="mb-2 text-xl font-bold text-gray-900 dark:text-white">
             {title}
         </h3>
         <p className="text-gray-600 dark:text-gray-400">{description}</p>
-    </div>
+    </motion.div>
 );
 
 const Problem = ({ title }: { title: string }) => (
-    <div className="rounded-lg bg-gray-100 p-6 dark:bg-gray-800">
+    <motion.div 
+        className="rounded-lg bg-gray-100 p-6 dark:bg-gray-800"
+        variants={{
+            initial: { opacity: 0, y: 30 },
+            animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } }
+        }}
+        whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
+    >
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
             {title}
         </h3>
-    </div>
+    </motion.div>
 );
 
 export default function Welcome() {
@@ -53,13 +96,24 @@ export default function Welcome() {
             <div className="flex min-h-screen flex-col bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200">
                 <header className="absolute top-0 z-10 w-full p-6 lg:p-8">
                     <div className="mx-auto flex max-w-7xl items-center justify-between">
-                        <Link href="/" className="flex items-center gap-2">
-                            <AppLogoIconTools className="h-6 w-6 text-primary" />
-                            <span className="text-lg font-semibold text-gray-900 dark:text-white">
-                                FixFlow
-                            </span>
-                        </Link>
-                        <nav className="flex items-center gap-4">
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.6, ease: 'easeOut' }}
+                        >
+                            <Link href="/" className="flex items-center gap-2">
+                                <AppLogoIconTools className="h-6 w-6 text-primary" />
+                                <span className="text-lg font-semibold text-gray-900 dark:text-white">
+                                    FixFlow
+                                </span>
+                            </Link>
+                        </motion.div>
+                        <motion.nav 
+                            className="flex items-center gap-4"
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
+                        >
                             {auth.user ? (
                                 <Link
                                     href={dashboard()}
@@ -83,7 +137,7 @@ export default function Welcome() {
                                     </Link>
                                 </>
                             )}
-                        </nav>
+                        </motion.nav>
                     </div>
                 </header>
 
@@ -95,35 +149,66 @@ export default function Welcome() {
                         </div>
                         <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 lg:grid-cols-2 lg:px-8">
                             <div className="flex flex-col justify-center text-center lg:text-left">
-                                <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl dark:text-white">
+                                <motion.h1 
+                                    className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl dark:text-white"
+                                    initial={{ opacity: 0, y: 30 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.8, ease: 'easeOut' }}
+                                >
                                     Zoptymalizuj pracę swojego warsztatu z
                                     FixFlow
-                                </h1>
-                                <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
+                                </motion.h1>
+                                <motion.p 
+                                    className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300"
+                                    initial={{ opacity: 0, y: 30 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
+                                >
                                     Precyzyjne śledzenie czasu pracy, analiza
                                     rentowności i efektywności zespołu w jednym
                                     miejscu. Pożegnaj papierową dokumentację i
                                     podejmuj decyzje oparte na danych.
-                                </p>
-                                <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
-                                    <Link
-                                        href={register()}
-                                        className="rounded-md bg-primary px-6 py-3 text-base font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                                </motion.p>
+                                <motion.div 
+                                    className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start"
+                                    initial={{ opacity: 0, y: 30 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.8, ease: 'easeOut', delay: 0.4 }}
+                                >
+                                    <motion.div
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
                                     >
-                                        Rozpocznij teraz
-                                    </Link>
-                                </div>
+                                        <Link
+                                            href={register()}
+                                            className="rounded-md bg-primary px-6 py-3 text-base font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                                        >
+                                            Rozpocznij teraz
+                                        </Link>
+                                    </motion.div>
+                                </motion.div>
                             </div>
-                            <div className="relative hidden items-center justify-center lg:flex">
+                            <motion.div 
+                                className="relative hidden items-center justify-center lg:flex"
+                                initial={{ opacity: 0, x: 50 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.8, ease: 'easeOut', delay: 0.3 }}
+                            >
                                 <Illustration className="h-auto w-full max-w-md" />
-                            </div>
+                            </motion.div>
                         </div>
                     </section>
 
                     {/* Problem Section */}
                     <section className="bg-gray-50 py-24 sm:py-32 dark:bg-gray-900">
                         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                            <div className="mx-auto max-w-2xl text-center">
+                            <motion.div 
+                                className="mx-auto max-w-2xl text-center"
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, margin: '-50px' }}
+                                transition={{ duration: 0.6, ease: 'easeOut' }}
+                            >
                                 <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl dark:text-white">
                                     Czy Twój warsztat boryka się z tymi
                                     problemami?
@@ -134,19 +219,37 @@ export default function Welcome() {
                                     analizę kluczowych danych dla Twojego
                                     biznesu.
                                 </p>
-                            </div>
-                            <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+                            </motion.div>
+                            <motion.div 
+                                className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3"
+                                initial="initial"
+                                whileInView="animate"
+                                viewport={{ once: true, margin: '-50px' }}
+                                variants={{
+                                    animate: {
+                                        transition: {
+                                            staggerChildren: 0.1
+                                        }
+                                    }
+                                }}
+                            >
                                 <Problem title="Niedokładna analiza rentowności" />
                                 <Problem title="Brak wglądu w wydajność zespołu" />
                                 <Problem title="Uciążliwy dostęp do historii napraw" />
-                            </div>
+                            </motion.div>
                         </div>
                     </section>
 
                     {/* Features Section */}
                     <section className="py-24 sm:py-32">
                         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                            <div className="mx-auto max-w-2xl text-center">
+                            <motion.div 
+                                className="mx-auto max-w-2xl text-center"
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, margin: '-50px' }}
+                                transition={{ duration: 0.6, ease: 'easeOut' }}
+                            >
                                 <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl dark:text-white">
                                     Odkryj kluczowe funkcje FixFlow
                                 </h2>
@@ -154,8 +257,20 @@ export default function Welcome() {
                                     Wszystko, czego potrzebujesz, aby przenieść
                                     zarządzanie warsztatem na wyższy poziom.
                                 </p>
-                            </div>
-                            <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-4">
+                            </motion.div>
+                            <motion.div 
+                                className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-4"
+                                initial="initial"
+                                whileInView="animate"
+                                viewport={{ once: true, margin: '-50px' }}
+                                variants={{
+                                    animate: {
+                                        transition: {
+                                            staggerChildren: 0.15
+                                        }
+                                    }
+                                }}
+                            >
                                 <Feature
                                     title="Zarządzanie Zleceniami"
                                     description="Twórz, aktualizuj i śledź statusy zleceń w czasie rzeczywistym."
@@ -236,7 +351,7 @@ export default function Welcome() {
                                         </svg>
                                     }
                                 />
-                            </div>
+                            </motion.div>
                         </div>
                     </section>
                 </main>
