@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Dto\Dashboard\DashboardData;
+use App\Dto\Dashboard\RecentOrderData;
 use App\Enums\RepairOrderStatus;
 use App\Models\RepairOrder;
 use App\Models\TimeEntry;
@@ -12,34 +13,27 @@ class DashboardService
 {
     public function getDashboardData(): DashboardData
     {
-        $recentOrders = $this->getRecentOrders()
-            ->map(fn ($order) => [
-                'id' => $order->id,
-                'vehicle' => "{$order->vehicle->make} {$order->vehicle->model} {$order->vehicle->year}",
-                'client' => "{$order->client->first_name} {$order->client->last_name}",
-                'status' => $order->status->label(),
-                'created_at' => $order->created_at->toISOString(),
-            ]);
+        $recentOrders = $this->getRecentOrders();
 
         return DashboardData::from([
             'activeOrdersCount' => $this->getActiveOrdersCount(),
             'pendingOrdersCount' => $this->getPendingOrdersCount(),
             'todayTimeEntriesTotal' => $this->getTodayTimeEntriesTotal(),
-            'recentOrders' => $recentOrders->all(),
+            'recentOrders' => RecentOrderData::collect($recentOrders),
         ]);
     }
 
     private function getActiveOrdersCount(): int
     {
         return RepairOrder::query()
-            ->where('status', '!=', RepairOrderStatus::Closed)
+            ->where('status', '!=', RepairOrderStatus::CLOSED)
             ->count();
     }
 
     private function getPendingOrdersCount(): int
     {
         return RepairOrder::query()
-            ->where('status', RepairOrderStatus::ReadyForPickup)
+            ->where('status', RepairOrderStatus::READY_FOR_PICKUP)
             ->count();
     }
 

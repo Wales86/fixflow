@@ -30,6 +30,6 @@ class WorkshopSeeder extends Seeder
         ]);
 
         // Assign Owner role
-        $owner->assignRole(UserRole::Owner->value);
+        $owner->assignRole(UserRole::OWNER->value);
     }
 }

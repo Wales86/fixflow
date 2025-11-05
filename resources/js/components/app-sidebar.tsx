@@ -10,54 +10,26 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { getMainNavItems } from '@/lib/navigation';
 import { dashboard } from '@/routes';
-import clients from '@/routes/clients';
-import repairOrders from '@/routes/repair-orders';
-import vehicles from '@/routes/vehicles';
+import { mechanic } from '@/routes/repair-orders';
 import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
-import { BookOpen, Car, Folder, LayoutGrid, Users, Wrench } from 'lucide-react';
 import AppLogo from './app-logo';
+import { type SharedData } from '@/types';
 
 export function AppSidebar() {
     const { t } = useLaravelReactI18n();
+    const { auth } = usePage<SharedData>().props;
+    const mainNavItems = getMainNavItems(t);
 
-    const mainNavItems: NavItem[] = [
-        {
-            title: t('dashboard'),
-            href: dashboard(),
-            icon: LayoutGrid,
-        },
-        {
-            title: t('clients'),
-            href: clients.index(),
-            icon: Users,
-        },
-        {
-            title: t('vehicles'),
-            href: vehicles.index(),
-            icon: Car,
-        },
-        {
-            title: t('repair_orders'),
-            href: repairOrders.index(),
-            icon: Wrench,
-        },
-    ];
+    const footerNavItems: NavItem[] = [];
 
-    const footerNavItems: NavItem[] = [
-        {
-            title: 'Repository',
-            href: 'https://github.com/laravel/react-starter-kit',
-            icon: Folder,
-        },
-        {
-            title: 'Documentation',
-            href: 'https://laravel.com/docs/starter-kits#react',
-            icon: BookOpen,
-        },
-    ];
+    // Determine the logo link based on user role
+    const logoHref = auth.user?.roles?.includes('Mechanic')
+        ? mechanic()
+        : dashboard();
 
     return (
         <Sidebar collapsible="icon" variant="inset">
@@ -65,7 +37,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard()} prefetch>
+                            <Link href={logoHref} prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>

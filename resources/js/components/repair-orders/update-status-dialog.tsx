@@ -18,6 +18,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { usePage } from '@inertiajs/react';
+import { type SharedData } from '@/types';
 
 interface UpdateStatusDialogProps {
     order: App.Dto.RepairOrder.RepairOrderShowData;
@@ -41,10 +43,15 @@ export function UpdateStatusDialog({
     onClose,
 }: UpdateStatusDialogProps) {
     const { t } = useLaravelReactI18n();
+    const { mechanics } = usePage<SharedData>().props;
 
-    const { data, setData, patch, processing, reset } =
+    const { auth: { user } } = usePage<SharedData>().props;
+    const isMechanic = user?.roles.includes('Mechanic');
+
+    const { data, setData, patch, processing, reset, errors } =
         useForm<App.Dto.RepairOrder.UpdateRepairOrderStatusData>({
             status: order.status,
+            mechanic_id: null,
         });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -78,6 +85,49 @@ export function UpdateStatusDialog({
 
                 <form onSubmit={handleSubmit}>
                     <div className="space-y-4 py-4">
+                        {isMechanic && mechanics && mechanics.length > 0 && (
+                            <div className="space-y-2">
+                                <Label htmlFor="mechanic_id">
+                                    {t('select_mechanic')}
+                                    {isMechanic && (
+                                        <span className="text-destructive">
+                                            {' '}
+                                            *
+                                        </span>
+                                    )}
+                                </Label>
+                                <Select
+                                    value={data.mechanic_id?.toString() ?? ''}
+                                    onValueChange={(value) =>
+                                        setData(
+                                            'mechanic_id',
+                                            value ? parseInt(value) : null,
+                                        )
+                                    }
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue
+                                            placeholder={t('select_mechanic')}
+                                        />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {mechanics?.map((mechanic) => (
+                                            <SelectItem
+                                                key={mechanic.id}
+                                                value={mechanic.id.toString()}
+                                            >
+                                                {mechanic.full_name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                {errors.mechanic_id && (
+                                    <p className="text-sm text-red-500">
+                                        {errors.mechanic_id}
+                                    </p>
+                                )}
+                            </div>
+                        )}
                         <div className="space-y-2">
                             <Label htmlFor="status">{t('status')}</Label>
                             <Select
@@ -106,6 +156,7 @@ export function UpdateStatusDialog({
                                 </SelectContent>
                             </Select>
                         </div>
+                        
                     </div>
 
                     <DialogFooter>

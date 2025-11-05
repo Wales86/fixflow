@@ -772,27 +772,6 @@
 
 ### 2.6 TimeEntryController
 
-#### Create Time Entry Form
-- **Route:** `GET /time-entry` → `time-entry.create` → `TimeEntryController@create`
-- **Description:** Show time entry form (mobile optimized, for mechanics)
-- **Proposed Authorization:** Authenticated user with Mechanic role
-- **Proposed React Component:** `pages/time-entry/create`
-- **Component Props:**
-  ```typescript
-  {
-    active_orders: Array<{
-      id: number;
-      label: string;
-      status: string;
-    }>;
-    mechanics: Array<{
-      id: number;
-      first_name: string;
-      last_name: string;
-    }>;
-  }
-  ```
-
 #### Store Time Entry
 - **Route:** `POST /time-entry` → `time-entry.store` → `TimeEntryController@store`
 - **Description:** Store new time entry
@@ -801,30 +780,6 @@
 - **Success/Error Handling:**
   - Success: `redirect()->route('time-entry.create')->with('success', 'Czas pracy został zapisany')`
   - Error: `redirect()->back()->withErrors($validator)->withInput()`
-
-#### Edit Time Entry Form
-- **Route:** `GET /time-entries/{timeEntry}/edit` → `time-entries.edit` → `TimeEntryController@edit`
-- **Description:** Show edit time entry form
-- **Proposed Authorization:** `TimeEntryPolicy::update` (Owner, Office, or mechanic's own entry)
-- **Proposed React Component:** `pages/time-entry/edit`
-- **Component Props:**
-  ```typescript
-  {
-    time_entry: {
-      id: number;
-      repair_order_id: number;
-      mechanic_id: number;
-      duration_minutes: number;
-      description: string | null;
-      repair_order_label: string;
-    };
-    mechanics: Array<{
-      id: number;
-      first_name: string;
-      last_name: string;
-    }>;
-  }
-  ```
 
 #### Update Time Entry
 - **Route:** `PUT/PATCH /time-entries/{timeEntry}` → `time-entries.update` → `TimeEntryController@update`

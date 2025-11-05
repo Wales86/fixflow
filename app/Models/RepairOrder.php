@@ -58,14 +58,7 @@ class RepairOrder extends Model implements HasMedia
 
     public function client(): HasOneThrough
     {
-        return $this->hasOneThrough(
-            Client::class,
-            Vehicle::class,
-            'id',
-            'id',
-            'vehicle_id',
-            'client_id'
-        );
+        return $this->hasOneThrough(Client::class, Vehicle::class, 'id', 'id', 'vehicle_id', 'client_id');
     }
 
     public function timeEntries(): HasMany
@@ -87,6 +80,6 @@ class RepairOrder extends Model implements HasMedia
     {
         $this->addMediaCollection('images')
             ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/jpg', 'image/gif'])
-            ->maxFilesize(10 * 1024 * 1024);
+            ->useDisk('minio');
     }
 }

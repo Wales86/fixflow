@@ -8,14 +8,16 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
+import { useLaravelReactI18n } from 'laravel-react-i18n';
 
 export default function Register() {
+    const { t } = useLaravelReactI18n();
     return (
         <AuthLayout
-            title="Zarejestruj warsztat"
-            description="Stwórz konto warsztatu i właściciela"
+            title={t('register_workshop')}
+            description={t('create_workshop_account')}
         >
-            <Head title="Rejestracja Warsztatu" />
+            <Head title={t('register_workshop')} />
             <Form
                 action="/register"
                 method="post"
@@ -27,7 +29,7 @@ export default function Register() {
                         <div className="grid gap-6">
                             <div className="grid gap-2">
                                 <Label htmlFor="workshop_name">
-                                    Nazwa warsztatu
+                                    {t('workshop_name')}
                                 </Label>
                                 <Input
                                     id="workshop_name"
@@ -37,7 +39,7 @@ export default function Register() {
                                     tabIndex={1}
                                     autoComplete="organization"
                                     name="workshop_name"
-                                    placeholder="Warsztat Samochodowy ABC"
+                                    placeholder={t('workshop_name_placeholder')}
                                 />
                                 <InputError
                                     message={errors.workshop_name}
@@ -47,7 +49,7 @@ export default function Register() {
 
                             <div className="grid gap-2">
                                 <Label htmlFor="owner_name">
-                                    Imię i nazwisko właściciela
+                                    {t('owner_name')}
                                 </Label>
                                 <Input
                                     id="owner_name"
@@ -56,7 +58,7 @@ export default function Register() {
                                     tabIndex={2}
                                     autoComplete="name"
                                     name="owner_name"
-                                    placeholder="Jan Kowalski"
+                                    placeholder={t('owner_name_placeholder')}
                                 />
                                 <InputError
                                     message={errors.owner_name}
@@ -65,7 +67,7 @@ export default function Register() {
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Adres e-mail</Label>
+                                <Label htmlFor="email">{t('email')}</Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -73,13 +75,15 @@ export default function Register() {
                                     tabIndex={3}
                                     autoComplete="email"
                                     name="email"
-                                    placeholder="email@example.com"
+                                    placeholder={t('email_placeholder')}
                                 />
                                 <InputError message={errors.email} />
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="password">Hasło</Label>
+                                <Label htmlFor="password">
+                                    {t('password')}
+                                </Label>
                                 <Input
                                     id="password"
                                     type="password"
@@ -87,14 +91,14 @@ export default function Register() {
                                     tabIndex={4}
                                     autoComplete="new-password"
                                     name="password"
-                                    placeholder="Minimum 8 znaków"
+                                    placeholder={t('password_placeholder')}
                                 />
                                 <InputError message={errors.password} />
                             </div>
 
                             <div className="grid gap-2">
                                 <Label htmlFor="password_confirmation">
-                                    Potwierdź hasło
+                                    {t('confirm_password')}
                                 </Label>
                                 <Input
                                     id="password_confirmation"
@@ -103,7 +107,9 @@ export default function Register() {
                                     tabIndex={5}
                                     autoComplete="new-password"
                                     name="password_confirmation"
-                                    placeholder="Powtórz hasło"
+                                    placeholder={t(
+                                        'confirm_password_placeholder',
+                                    )}
                                 />
                                 <InputError
                                     message={errors.password_confirmation}
@@ -120,14 +126,14 @@ export default function Register() {
                                 {processing && (
                                     <LoaderCircle className="h-4 w-4 animate-spin" />
                                 )}
-                                Zarejestruj warsztat
+                                {t('register_workshop')}
                             </Button>
                         </div>
 
                         <div className="text-center text-sm text-muted-foreground">
-                            Masz już konto?{' '}
+                            {t('already_have_an_account')}{' '}
                             <TextLink href={login()} tabIndex={7}>
-                                Zaloguj się
+                                {t('login')}
                             </TextLink>
                         </div>
                     </>

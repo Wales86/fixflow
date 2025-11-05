@@ -13,7 +13,6 @@ class TimeEntryData extends Data
         public int $repair_order_id,
         public int $mechanic_id,
         public int $duration_minutes,
-        public float $duration_hours,
         public ?string $description,
         public string $created_at,
         public ?TimeEntryMechanicData $mechanic = null,

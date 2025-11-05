@@ -3,11 +3,10 @@ name: ci
 on:
   push:
     branches:
-      - develop
       - main
+      - dev
   pull_request:
     branches:
-      - develop
       - main
 
 permissions:
@@ -93,8 +92,11 @@ jobs:
   
   deploy:
     needs: [tests]
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to Laravel Cloud
+        env:
+          DEPLOY_HOOK: ${{ secrets.LARAVEL_CLOUD_DEPLOY_HOOK }}
         run: |
-          curl -X POST "${{ secrets.LARAVEL_CLOUD_DEPLOY_HOOK }}?commit_hash=${{ github.sha }}"
+          curl -X POST "$DEPLOY_HOOK?commit_hash=${{ github.sha }}"

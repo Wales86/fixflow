@@ -6,6 +6,7 @@ use App\Dto\Common\ActivityLogData;
 use App\Dto\Common\MediaData;
 use App\Dto\Common\SelectOptionData;
 use App\Dto\InternalNote\InternalNoteData;
+use App\Dto\RepairOrder\MechanicRepairOrderCardData;
 use App\Dto\RepairOrder\RepairOrderCreatePageData;
 use App\Dto\RepairOrder\RepairOrderEditPagePropsData;
 use App\Dto\RepairOrder\RepairOrderFormData;
@@ -18,10 +19,14 @@ use App\Dto\RepairOrder\UpdateRepairOrderStatusData;
 use App\Dto\RepairOrder\VehicleSelectionData;
 use App\Enums\RepairOrderStatus;
 use App\Exceptions\CannotDeleteRepairOrderWithTimeEntriesException;
+use App\Models\Mechanic;
 use App\Models\RepairOrder;
+use App\Models\User;
 use App\Models\Vehicle;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
+use Spatie\Activitylog\Facades\CauserResolver;
 use Spatie\LaravelData\DataCollection;
 
 class RepairOrderService
@@ -29,27 +34,14 @@ class RepairOrderService
     public function paginatedList(array $filters = []): LengthAwarePaginator
     {
         $query = RepairOrder::query()
-            ->with(['vehicle', 'client']);
+            ->with(['vehicle.client']);
 
         if (! empty($filters['status'])) {
             $query->where('status', $filters['status']);
         }
 
         if (! empty($filters['search'])) {
-            $search = $filters['search'];
-            $query->where(function ($q) use ($search) {
-                $q->where('problem_description', 'like', "%{$search}%")
-                    ->orWhereHas('vehicle', function ($vehicleQuery) use ($search) {
-                        $vehicleQuery->where('make', 'like', "%{$search}%")
-                            ->orWhere('model', 'like', "%{$search}%")
-                            ->orWhere('registration_number', 'like', "%{$search}%");
-                    })
-                    ->orWhereHas('client', function ($clientQuery) use ($search) {
-                        $clientQuery->where('first_name', 'like', "%{$search}%")
-                            ->orWhere('last_name', 'like', "%{$search}%")
-                            ->orWhere('phone_number', 'like', "%{$search}%");
-                    });
-            });
+            $this->applySearchFilter($query, $filters['search'], true);
         }
 
         if (! empty($filters['sort'])) {
@@ -66,7 +58,7 @@ class RepairOrderService
         }
 
         return $query->paginate(15)
-            ->through(fn ($repairOrder) => RepairOrderListItemData::from($repairOrder));
+            ->through(fn ($repairOrder) => RepairOrderListItemData::fromRepairOrder($repairOrder));
     }
 
     public function createFormData(?int $preselectedVehicleId = null): RepairOrderCreatePageData
@@ -88,7 +80,7 @@ class RepairOrderService
         $repairOrder = RepairOrder::create([
             'vehicle_id' => $data->vehicle_id,
             'problem_description' => $data->description,
-            'status' => RepairOrderStatus::New,
+            'status' => RepairOrderStatus::NEW,
         ]);
 
         if (! empty($data->attachments)) {
@@ -151,6 +143,13 @@ class RepairOrderService
 
     public function updateStatus(RepairOrder $repairOrder, UpdateRepairOrderStatusData $data): RepairOrder
     {
+        if ($data->mechanic_id) {
+            $mechanic = Mechanic::find($data->mechanic_id);
+            if ($mechanic) {
+                CauserResolver::setCauser($mechanic);
+            }
+        }
+
         $repairOrder->update([
             'status' => $data->status,
         ]);
@@ -167,8 +166,6 @@ class RepairOrderService
             'activities.causer',
         ]);
 
-        $user = Auth::user();
-
         $internalNotes = $repairOrder->internalNotes
             ->sortByDesc('created_at')
             ->values()
@@ -184,9 +181,31 @@ class RepairOrderService
             'time_entries' => $repairOrder->timeEntries,
             'internal_notes' => $internalNotes,
             'activity_log' => $activityLog,
-            'can_edit' => $user?->can('update', $repairOrder) ?? false,
-            'can_delete' => $user?->can('delete', $repairOrder) ?? false,
         ]);
+    }
+
+    /**
+     * Get active (non-closed) repair orders for mechanic view.
+     *
+     * @return DataCollection<int, MechanicRepairOrderCardData>
+     */
+    public function getMechanicActiveOrders(User $user, ?string $search = null): DataCollection
+    {
+        $query = RepairOrder::query()
+            ->with([
+                'vehicle.client',
+            ])
+            ->where('workshop_id', $user->workshop_id)
+            ->where('status', '!=', RepairOrderStatus::CLOSED);
+
+        if (! empty($search)) {
+            $this->applySearchFilter($query, $search);
+        }
+
+        return MechanicRepairOrderCardData::collect(
+            $query->latest('created_at')->get()->map(fn ($repairOrder) => MechanicRepairOrderCardData::fromRepairOrder($repairOrder)),
+            DataCollection::class
+        );
     }
 
     /**
@@ -201,5 +220,26 @@ class RepairOrderService
         }
 
         $repairOrder->delete();
+    }
+
+    private function applySearchFilter(Builder $query, string $search, bool $searchPhoneNumber = false): void
+    {
+        $search = strtolower($search);
+        $query->where(function ($q) use ($search, $searchPhoneNumber) {
+            $q->where(DB::raw('LOWER(problem_description)'), 'like', "%{$search}%")
+                ->orWhereHas('vehicle', function ($vehicleQuery) use ($search) {
+                    $vehicleQuery->where(DB::raw('LOWER(make)'), 'like', "%{$search}%")
+                        ->orWhere(DB::raw('LOWER(model)'), 'like', "%{$search}%")
+                        ->orWhere(DB::raw('LOWER(registration_number)'), 'like', "%{$search}%");
+                })
+                ->orWhereHas('vehicle.client', function ($clientQuery) use ($search, $searchPhoneNumber) {
+                    $clientQuery->where(DB::raw('LOWER(first_name)'), 'like', "%{$search}%")
+                        ->orWhere(DB::raw('LOWER(last_name)'), 'like', "%{$search}%");
+
+                    if ($searchPhoneNumber) {
+                        $clientQuery->orWhere(DB::raw('LOWER(phone_number)'), 'like', "%{$search}%");
+                    }
+                });
+        });
     }
 }

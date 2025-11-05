@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserPermission;
 use App\Enums\UserRole;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
@@ -11,15 +13,24 @@ class RolesAndPermissionsSeeder extends Seeder
 {
     public function run(): void
     {
-        // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // Create roles from enum
-        foreach (UserRole::cases() as $role) {
-            Role::create(['name' => $role->value]);
+        $permissions = UserPermission::all();
+
+        foreach ($permissions as $permission) {
+            Permission::firstOrCreate(['name' => $permission]);
         }
 
-        // Update cache to know about the newly created roles
+        $ownerRole = Role::firstOrCreate(['name' => UserRole::OWNER->value]);
+        $officeRole = Role::firstOrCreate(['name' => UserRole::OFFICE->value]);
+        $mechanicRole = Role::firstOrCreate(['name' => UserRole::MECHANIC->value]);
+
+        $ownerRole->syncPermissions(UserPermission::ownerPermissions());
+
+        $officeRole->syncPermissions(UserPermission::officePermissions());
+
+        $mechanicRole->syncPermissions(UserPermission::mechanicPermissions());
+
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
     }
 }

@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'title' => 'Użytkownicy',
+    'add_user' => 'Dodaj użytkownika',
+    'new_user' => 'Nowy użytkownik',
+    'list_title' => 'Lista użytkowników',
+    'list_description' => 'Zarządzaj użytkownikami warsztatu i ich uprawnieniami',
+    'search_placeholder' => 'Szukaj użytkowników...',
+    'name' => 'Nazwa',
+    'email' => 'Email',
+    'role' => 'Rola',
+    'roles' => 'Role',
+    'select_role' => 'Wybierz rolę',
+    'user_data' => 'Dane użytkownika',
+    'edit_user_data' => 'Edytuj dane użytkownika',
+    'created_at' => 'Data utworzenia',
+    'no_results_found' => 'Nie znaleziono użytkowników pasujących do wyszukiwania',
+    'no_users_found' => 'Nie znaleziono użytkowników',
+
+    'messages' => [
+        'created' => 'Użytkownik został dodany',
+        'updated' => 'Użytkownik został zaktualizowany',
+        'deleted' => 'Użytkownik został usunięty',
+    ],
+];

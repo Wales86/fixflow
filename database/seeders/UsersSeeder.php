@@ -31,6 +31,18 @@ class UsersSeeder extends Seeder
         ]);
 
         // Assign Office role
-        $office->assignRole(UserRole::Office->value);
+        $office->assignRole(UserRole::OFFICE->value);
+
+        // Create mechanic user (shared account for all mechanics)
+        $mechanic = User::create([
+            'workshop_id' => $workshop->id,
+            'name' => 'Mechanicy',
+            'email' => 'mechanicy@fixflow.pl',
+            'password' => Hash::make('password'),
+            'email_verified_at' => now(),
+        ]);
+
+        // Assign Mechanic role
+        $mechanic->assignRole(UserRole::MECHANIC->value);
     }
 }

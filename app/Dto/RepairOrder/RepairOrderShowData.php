@@ -22,6 +22,7 @@ class RepairOrderShowData extends Data
         public ?string $finished_at,
         public int $total_time_minutes,
         public string $created_at,
+        public string $updated_at,
         public RepairOrderVehicleData $vehicle,
         public RepairOrderClientData $client,
         #[DataCollectionOf(MediaData::class)]
@@ -50,6 +51,7 @@ class RepairOrderShowData extends Data
             finished_at: $repairOrder->finished_at,
             total_time_minutes: $repairOrder->total_time_minutes,
             created_at: $repairOrder->created_at,
+            updated_at: $repairOrder->updated_at,
             vehicle: RepairOrderVehicleData::from($repairOrder->vehicle),
             client: RepairOrderClientData::from($repairOrder->client),
             images: $images,

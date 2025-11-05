@@ -31,21 +31,21 @@ export type StoreClientData = {
 last_name: string;
 first_name: string;
 phone_number: string;
-email?: string;
-address_street?: string;
-address_city?: string;
-address_postal_code?: string;
-address_country?: string;
+email: string | null;
+address_street: string | null;
+address_city: string | null;
+address_postal_code: string | null;
+address_country: string | null;
 };
 export type UpdateClientData = {
 last_name: string;
 first_name: string;
 phone_number: string;
-email?: string;
-address_street?: string;
-address_city?: string;
-address_postal_code?: string;
-address_country?: string;
+email: string | null;
+address_street: string | null;
+address_city: string | null;
+address_postal_code: string | null;
+address_country: string | null;
 };
 }
 declare namespace App.Dto.Common {
@@ -118,9 +118,46 @@ export type StoreInternalNoteData = {
 notable_type: string;
 notable_id: number;
 content: string;
+mechanic_id: number | null;
+};
+export type UpdateInternalNoteData = {
+content: string;
+};
+}
+declare namespace App.Dto.Mechanic {
+export type MechanicData = {
+id: number;
+first_name: string;
+last_name: string;
+is_active: boolean;
+time_entries_count: number | null;
+created_at: string;
+};
+export type StoreMechanicData = {
+first_name: string;
+last_name: string;
+is_active: boolean;
+};
+export type UpdateMechanicData = {
+first_name: string;
+last_name: string;
+is_active: boolean;
 };
 }
 declare namespace App.Dto.RepairOrder {
+export type MechanicRepairOrderCardData = {
+id: number;
+status: App.Enums.RepairOrderStatus;
+problem_description: string;
+total_time_minutes: number;
+created_at: string;
+vehicle: App.Dto.RepairOrder.RepairOrderVehicleData;
+client: App.Dto.RepairOrder.RepairOrderClientData;
+};
+export type MechanicRepairOrderIndexPagePropsData = {
+orders: Array<App.Dto.RepairOrder.MechanicRepairOrderCardData>;
+search: string | null;
+};
 export type RepairOrderClientData = {
 id: number;
 first_name: string;
@@ -185,6 +222,7 @@ started_at: string | null;
 finished_at: string | null;
 total_time_minutes: number;
 created_at: string;
+updated_at: string;
 vehicle: App.Dto.RepairOrder.RepairOrderVehicleData;
 client: App.Dto.RepairOrder.RepairOrderClientData;
 images: Array<App.Dto.Common.MediaData>;
@@ -194,8 +232,6 @@ order: App.Dto.RepairOrder.RepairOrderShowData;
 time_entries: Array<App.Dto.TimeTracking.TimeEntryData>;
 internal_notes: Array<App.Dto.InternalNote.InternalNoteData>;
 activity_log: Array<App.Dto.Common.ActivityLogData>;
-can_edit: boolean;
-can_delete: boolean;
 };
 export type RepairOrderVehicleData = {
 id: number;
@@ -214,6 +250,7 @@ status: App.Enums.RepairOrderStatus | null;
 };
 export type UpdateRepairOrderStatusData = {
 status: App.Enums.RepairOrderStatus;
+mechanic_id: number | null;
 };
 export type VehicleSelectionData = {
 id: number;
@@ -222,21 +259,107 @@ registration_number: string;
 client_name: string;
 };
 }
+declare namespace App.Dto.Report {
+export type MechanicChartData = {
+name: string;
+minutes: number;
+};
+export type MechanicPerformanceReportData = {
+totalMinutes: number;
+ordersCompleted: number;
+avgTimePerOrder: number;
+repairOrders: Array<App.Dto.Report.RepairOrderDetailData>;
+};
+export type MechanicPerformanceStatsData = {
+mechanicId: number;
+mechanic: string;
+totalMinutes: number;
+ordersCompleted: number;
+avgTimePerOrder: number;
+};
+export type MechanicSelectOptionData = {
+id: number;
+name: string;
+};
+export type RepairOrderDetailData = {
+id: number;
+vehicleInfo: string;
+status: string;
+startedAt: string | null;
+finishedAt: string | null;
+totalMinutes: number;
+timeEntries: Array<App.Dto.Report.TimeEntryDetailData>;
+};
+export type TeamPerformanceReportData = {
+totalMinutes: number;
+totalOrders: number;
+activeMechanics: number;
+chartData: Array<App.Dto.Report.MechanicChartData>;
+tableData: Array<App.Dto.Report.MechanicPerformanceStatsData>;
+};
+export type TimeEntryDetailData = {
+id: number;
+date: string;
+durationMinutes: number;
+description: string | null;
+};
+}
 declare namespace App.Dto.TimeTracking {
+export type MechanicSelectOptionData = {
+id: number;
+full_name: string;
+is_active: boolean;
+};
 export type TimeEntryData = {
 id: number;
 repair_order_id: number;
 mechanic_id: number;
 duration_minutes: number;
-duration_hours: number;
 description: string | null;
 created_at: string;
 mechanic: App.Dto.TimeTracking.TimeEntryMechanicData | null;
+};
+export type TimeEntryEditData = {
+id: number;
+repair_order_id: number;
+mechanic_id: number;
+duration_minutes: number;
+description: string | null;
+mechanic: App.Dto.TimeTracking.TimeEntryMechanicData;
 };
 export type TimeEntryMechanicData = {
 id: number;
 first_name: string;
 last_name: string;
+};
+}
+declare namespace App.Dto.User {
+export type CreateUserData = {
+name: string;
+email: string;
+password: string;
+role: string;
+};
+export type SharedUserData = {
+id: number;
+name: string;
+email: string;
+created_at: string;
+workshop: App.Dto.Workshop.WorkshopData;
+roles: Array<any>;
+permissions: Array<any>;
+};
+export type UpdateUserData = {
+name: string;
+email: string;
+roles: Array<any>;
+};
+export type UserData = {
+id: number;
+name: string;
+email: string;
+roles: Array<any>;
+created_at: string;
 };
 }
 declare namespace App.Dto.Vehicle {
@@ -281,8 +404,16 @@ vehicle: App.Dto.Vehicle.VehicleData;
 repair_orders: any;
 };
 }
+declare namespace App.Dto.Workshop {
+export type WorkshopData = {
+id: number;
+name: string;
+created_at: string;
+};
+}
 declare namespace App.Enums {
 export type NotableType = 'repair_order' | 'client' | 'vehicle';
 export type RepairOrderStatus = 'new' | 'diagnosis' | 'awaiting_contact' | 'awaiting_parts' | 'in_progress' | 'ready_for_pickup' | 'closed';
+export type UserPermission = 'view_dashboard' | 'view_reports' | 'view_clients' | 'create_clients' | 'update_clients' | 'delete_clients' | 'view_vehicles' | 'create_vehicles' | 'update_vehicles' | 'delete_vehicles' | 'view_repair_orders' | 'view_repair_orders_mechanic' | 'create_repair_orders' | 'update_repair_orders' | 'delete_repair_orders' | 'update_repair_order_status' | 'view_internal_notes' | 'create_internal_notes' | 'update_internal_notes' | 'delete_internal_notes' | 'create_time_entries' | 'update_time_entries' | 'delete_time_entries' | 'view_mechanics' | 'create_mechanics' | 'update_mechanics' | 'delete_mechanics' | 'view_users' | 'create_users' | 'update_users' | 'delete_users';
 export type UserRole = 'Owner' | 'Office' | 'Mechanic';
 }

@@ -4,6 +4,7 @@ namespace App\Http\Requests\RepairOrders;
 
 use App\Enums\RepairOrderStatus;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
 class UpdateRepairOrderStatusRequest extends FormRequest
@@ -20,6 +21,13 @@ class UpdateRepairOrderStatusRequest extends FormRequest
     {
         return [
             'status' => ['required', new Enum(RepairOrderStatus::class)],
+            'mechanic_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('mechanics', 'id')->where(function ($query) {
+                    $query->where('workshop_id', $this->user()->workshop_id);
+                }),
+            ],
         ];
     }
 }

@@ -2,7 +2,7 @@ import { InertiaLinkProps } from '@inertiajs/react';
 import { LucideIcon } from 'lucide-react';
 
 export interface Auth {
-    user: User;
+    user: SharedUserData | null;
 }
 
 export interface BreadcrumbItem {
@@ -20,6 +20,8 @@ export interface NavItem {
     href: NonNullable<InertiaLinkProps['href']>;
     icon?: LucideIcon | null;
     isActive?: boolean;
+    permission?: string;
+    items?: NavItem[];
 }
 
 export interface FlashMessages {
@@ -31,10 +33,10 @@ export interface FlashMessages {
 
 export interface SharedData {
     name: string;
-    quote: { message: string; author: string };
     auth: Auth;
     sidebarOpen: boolean;
     flash: FlashMessages;
+    mechanics?: App.Dto.TimeTracking.MechanicSelectOptionData[];
     [key: string]: unknown;
 }
 
@@ -45,6 +47,7 @@ export interface User {
     avatar?: string;
     email_verified_at: string | null;
     two_factor_enabled?: boolean;
+    permissions?: string[];
     created_at: string;
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...

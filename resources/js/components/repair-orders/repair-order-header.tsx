@@ -9,24 +9,35 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Edit, FileText, MoreVertical, RefreshCw, Trash2 } from 'lucide-react';
+import { usePermission } from '@/lib/permissions';
+import {
+    Clock,
+    Edit,
+    FileText,
+    MoreVertical,
+    RefreshCw,
+    Trash2,
+} from 'lucide-react';
 
 interface RepairOrderHeaderProps {
     order: App.Dto.RepairOrder.RepairOrderShowData;
-    can_edit: boolean;
-    can_delete: boolean;
     onStatusChange: () => void;
     onAddNote: () => void;
+    onAddTimeEntry?: () => void;
 }
 
 export function RepairOrderHeader({
     order,
-    can_edit,
-    can_delete,
     onStatusChange,
     onAddNote,
+    onAddTimeEntry,
 }: RepairOrderHeaderProps) {
     const { t } = useLaravelReactI18n();
+    const canUpdateStatus = usePermission('update_repair_order_status');
+    const canCreateNotes = usePermission('create_internal_notes');
+    const canCreateTimeEntry = usePermission('create_time_entries');
+    const canEdit = usePermission('update_repair_orders');
+    const canDelete = usePermission('delete_repair_orders');
 
     const handleEdit = () => {
         router.visit(`/repair-orders/${order.id}/edit`);
@@ -38,8 +49,15 @@ export function RepairOrderHeader({
         }
     };
 
+    const hasAnyAction =
+        canUpdateStatus ||
+        canCreateNotes ||
+        canCreateTimeEntry ||
+        canEdit ||
+        canDelete;
+
     return (
-        <div className="flex items-start justify-between">
+        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
             <div className="space-y-1">
                 <div className="flex items-center gap-3">
                     <h1 className="text-2xl font-bold tracking-tight">
@@ -53,40 +71,63 @@ export function RepairOrderHeader({
                 </p>
             </div>
 
-            {can_edit && (
-                <div className="flex gap-2">
-                    <Button variant="outline" onClick={onStatusChange}>
-                        <RefreshCw className="mr-2 h-4 w-4" />
-                        {t('change_status')}
-                    </Button>
+            {hasAnyAction && (
+                <div className="flex w-full flex-col gap-2 md:w-auto md:flex-row md:flex-wrap">
+                    {canUpdateStatus && (
+                        <Button
+                            variant="outline"
+                            onClick={onStatusChange}
+                            className="w-full border-sky-500 text-sky-500 hover:bg-sky-50 hover:text-sky-600 md:w-auto"
+                        >
+                            <RefreshCw className="mr-2 h-4 w-4" />
+                            {t('change_status')}
+                        </Button>
+                    )}
 
-                    <Button variant="outline" onClick={onAddNote}>
-                        <FileText className="mr-2 h-4 w-4" />
-                        {t('add_note')}
-                    </Button>
+                    {canCreateNotes && (
+                        <Button
+                            variant="outline"
+                            onClick={onAddNote}
+                            className="w-full md:w-auto"
+                        >
+                            <FileText className="mr-2 h-4 w-4" />
+                            {t('add_note')}
+                        </Button>
+                    )}
 
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="outline" size="icon">
-                                <MoreVertical className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={handleEdit}>
-                                <Edit className="mr-2 h-4 w-4" />
-                                {t('edit')}
-                            </DropdownMenuItem>
-                            {can_delete && (
-                                <DropdownMenuItem
-                                    onClick={handleDelete}
-                                    className="text-red-600"
-                                >
-                                    <Trash2 className="mr-2 h-4 w-4" />
-                                    {t('delete')}
-                                </DropdownMenuItem>
-                            )}
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    {canCreateTimeEntry && onAddTimeEntry && (
+                        <Button onClick={onAddTimeEntry} className="w-full md:w-auto">
+                            <Clock className="mr-2 h-4 w-4" />
+                            {t('add_time_entry')}
+                        </Button>
+                    )}
+
+                    {(canEdit || canDelete) && (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" size="icon">
+                                    <MoreVertical className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                {canEdit && (
+                                    <DropdownMenuItem onClick={handleEdit}>
+                                        <Edit className="mr-2 h-4 w-4" />
+                                        {t('edit')}
+                                    </DropdownMenuItem>
+                                )}
+                                {canDelete && (
+                                    <DropdownMenuItem
+                                        onClick={handleDelete}
+                                        className="text-red-600"
+                                    >
+                                        <Trash2 className="mr-2 h-4 w-4" />
+                                        {t('delete')}
+                                    </DropdownMenuItem>
+                                )}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    )}
                 </div>
             )}
         </div>

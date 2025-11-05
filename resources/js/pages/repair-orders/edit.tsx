@@ -3,6 +3,7 @@ import { useLaravelReactI18n } from 'laravel-react-i18n';
 
 import { RepairOrderForm } from '@/components/repair-orders/repair-order-form';
 import AppLayout from '@/layouts/app-layout';
+import { useRepairOrdersListUrl } from '@/lib/permissions';
 import { type BreadcrumbItem } from '@/types';
 
 export default function RepairOrdersEdit({
@@ -11,11 +12,12 @@ export default function RepairOrdersEdit({
     statuses,
 }: App.Dto.RepairOrder.RepairOrderEditPagePropsData) {
     const { t } = useLaravelReactI18n();
+    const repairOrdersListUrl = useRepairOrdersListUrl();
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: t('repair_orders'),
-            href: '/repair-orders',
+            href: repairOrdersListUrl,
         },
         {
             title: t('edit'),
