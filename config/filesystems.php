@@ -59,20 +59,6 @@ return [
             'throw' => false,
             'report' => false,
         ],
-
-        'minio' => [
-            'driver' => 's3',
-            'key' => env('MINIO_ACCESS_KEY', 'sail'),
-            'secret' => env('MINIO_SECRET_KEY', 'password'),
-            'region' => env('MINIO_REGION', 'eu-central-1'),
-            'bucket' => env('MINIO_BUCKET', 'media'),
-            'endpoint' => env('MINIO_ENDPOINT', 'http://minio:9000'),
-            'url' => env('MINIO_URL', 'http://localhost:'.env('FORWARD_MINIO_PORT', '9000')),
-            'use_path_style_endpoint' => true,
-            'throw' => false,
-            'report' => false,
-        ],
-
     ],
 
     /*
