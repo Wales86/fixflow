@@ -52,7 +52,7 @@ export default function ClientShow({
                         <ClientDetailsCard client={client} />
                     </TabsContent>
                     <TabsContent value="vehicles">
-                        <ClientVehiclesTable vehicles={vehicles} />
+                        <ClientVehiclesTable vehicles={vehicles} clientId={client.id} />
                     </TabsContent>
                 </Tabs>
             </div>

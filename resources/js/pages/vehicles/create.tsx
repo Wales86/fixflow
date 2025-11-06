@@ -17,12 +17,12 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 interface VehiclesCreateProps {
     clients: App.Dto.Client.ClientSelectOptionData[];
-    preselected_client_id?: number;
+    preselectedClientId?: number;
 }
 
 export default function VehiclesCreate({
     clients,
-    preselected_client_id,
+    preselectedClientId,
 }: VehiclesCreateProps) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -33,7 +33,7 @@ export default function VehiclesCreate({
                 </h1>
                 <VehicleForm
                     clients={clients}
-                    preselectedClientId={preselected_client_id}
+                    preselectedClientId={preselectedClientId}
                 />
             </div>
         </AppLayout>

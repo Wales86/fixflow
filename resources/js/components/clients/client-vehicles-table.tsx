@@ -19,9 +19,10 @@ import { useLaravelReactI18n } from 'laravel-react-i18n';
 
 interface ClientVehiclesTableProps {
     vehicles: App.Dto.Vehicle.VehicleData[];
+    clientId: number;
 }
 
-export function ClientVehiclesTable({ vehicles }: ClientVehiclesTableProps) {
+export function ClientVehiclesTable({ vehicles, clientId }: ClientVehiclesTableProps) {
     const { t } = useLaravelReactI18n();
 
     const handleRowClick = (vehicleId: number) => {
@@ -34,18 +35,17 @@ export function ClientVehiclesTable({ vehicles }: ClientVehiclesTableProps) {
                 <CardHeader>
                     <CardTitle>{t('vehicles')}</CardTitle>
                     <CardDescription>
-                        Brak pojazdów dla tego klienta
+                        {t('no_vehicles_for_client')}
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="flex flex-col items-center justify-center gap-4 py-8">
                         <p className="text-sm text-muted-foreground">
-                            Ten klient nie ma jeszcze przypisanych żadnych
-                            pojazdów.
+                            {t('client_has_no_vehicles')}
                         </p>
                         <Button
                             onClick={() => {
-                                router.visit('/vehicles/create');
+                                router.visit(`/vehicles/create?preselected_client_id=${clientId}`);
                             }}
                         >
                             {t('add_vehicle')}
@@ -61,7 +61,7 @@ export function ClientVehiclesTable({ vehicles }: ClientVehiclesTableProps) {
             <CardHeader>
                 <CardTitle>{t('vehicles')}</CardTitle>
                 <CardDescription>
-                    Lista pojazdów przypisanych do klienta
+                    {t('client_vehicles_list')}
                 </CardDescription>
             </CardHeader>
             <CardContent>
