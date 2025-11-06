@@ -47,7 +47,7 @@ export function RepairOrderCard({ order }: RepairOrderCardProps) {
                                     </p>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <StatusBadge status={order.status} />
+                                    <StatusBadge status={order.status} size="lg" />
                                 </div>
                             </div>
 

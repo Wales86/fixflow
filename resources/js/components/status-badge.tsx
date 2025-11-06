@@ -1,6 +1,7 @@
 import { Badge } from '@/components/ui/badge';
 interface StatusBadgeProps {
     status: App.Enums.RepairOrderStatus;
+    size?: 'default' | 'lg';
 }
 
 const statusConfig: Record<
@@ -44,8 +45,17 @@ const statusConfig: Record<
     },
 };
 
-export function StatusBadge({ status }: StatusBadgeProps) {
+export function StatusBadge({ status, size = 'default' }: StatusBadgeProps) {
     const config = statusConfig[status] ?? statusConfig.new;
 
-    return <Badge className={config.className}>{config.label}</Badge>;
+    const sizeClasses = {
+        default: '',
+        lg: 'px-3 py-1 text-sm',
+    };
+
+    return (
+        <Badge className={`${config.className} ${sizeClasses[size]}`}>
+            {config.label}
+        </Badge>
+    );
 }
