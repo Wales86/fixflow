@@ -5,14 +5,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/react';
+import { useLaravelReactI18n } from 'laravel-react-i18n';
 
 export default function ClientShow({
     client,
     vehicles,
 }: App.Dto.Client.ClientShowPagePropsData) {
+    const { t } = useLaravelReactI18n();
+
     const breadcrumbs: BreadcrumbItem[] = [
         {
-            title: 'Klienci',
+            title: t('clients'),
             href: '/clients',
         },
         {
@@ -35,15 +38,15 @@ export default function ClientShow({
                     <h1 className="text-2xl font-bold tracking-tight">
                         {client.first_name} {client.last_name}
                     </h1>
-                    <Button onClick={handleEditClick}>Edytuj klienta</Button>
+                    <Button onClick={handleEditClick}>{t('edit_client')}</Button>
                 </div>
 
                 <Tabs defaultValue="client-details" className="w-full">
                     <TabsList>
                         <TabsTrigger value="client-details">
-                            Dane klienta
+                            {t('client_details')}
                         </TabsTrigger>
-                        <TabsTrigger value="vehicles">Pojazdy</TabsTrigger>
+                        <TabsTrigger value="vehicles">{t('vehicles')}</TabsTrigger>
                     </TabsList>
                     <TabsContent value="client-details">
                         <ClientDetailsCard client={client} />

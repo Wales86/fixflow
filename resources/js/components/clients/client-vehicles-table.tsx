@@ -15,12 +15,15 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { router } from '@inertiajs/react';
+import { useLaravelReactI18n } from 'laravel-react-i18n';
 
 interface ClientVehiclesTableProps {
     vehicles: App.Dto.Vehicle.VehicleData[];
 }
 
 export function ClientVehiclesTable({ vehicles }: ClientVehiclesTableProps) {
+    const { t } = useLaravelReactI18n();
+
     const handleRowClick = (vehicleId: number) => {
         router.visit(`/vehicles/${vehicleId}`);
     };
@@ -29,7 +32,7 @@ export function ClientVehiclesTable({ vehicles }: ClientVehiclesTableProps) {
         return (
             <Card>
                 <CardHeader>
-                    <CardTitle>Pojazdy</CardTitle>
+                    <CardTitle>{t('vehicles')}</CardTitle>
                     <CardDescription>
                         Brak pojazdów dla tego klienta
                     </CardDescription>
@@ -42,11 +45,10 @@ export function ClientVehiclesTable({ vehicles }: ClientVehiclesTableProps) {
                         </p>
                         <Button
                             onClick={() => {
-                                // TODO: Implementacja dodawania pojazdu
-                                console.log('Dodaj pojazd');
+                                router.visit('/vehicles/create');
                             }}
                         >
-                            Dodaj pojazd
+                            {t('add_vehicle')}
                         </Button>
                     </div>
                 </CardContent>
@@ -57,7 +59,7 @@ export function ClientVehiclesTable({ vehicles }: ClientVehiclesTableProps) {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Pojazdy</CardTitle>
+                <CardTitle>{t('vehicles')}</CardTitle>
                 <CardDescription>
                     Lista pojazdów przypisanych do klienta
                 </CardDescription>
@@ -66,11 +68,11 @@ export function ClientVehiclesTable({ vehicles }: ClientVehiclesTableProps) {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Marka</TableHead>
-                            <TableHead>Model</TableHead>
-                            <TableHead>Rok</TableHead>
-                            <TableHead>Nr. rejestracyjny</TableHead>
-                            <TableHead>VIN</TableHead>
+                            <TableHead>{t('make')}</TableHead>
+                            <TableHead>{t('model')}</TableHead>
+                            <TableHead>{t('year')}</TableHead>
+                            <TableHead>{t('registration_number')}</TableHead>
+                            <TableHead>{t('vin')}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
