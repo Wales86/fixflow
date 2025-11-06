@@ -11,7 +11,7 @@ use function Pest\Laravel\put;
 const VALID_USER_UPDATE_DATA = [
     'name' => 'Updated Name',
     'email' => 'updated@example.com',
-    'roles' => ['Office'],
+    'role' => 'Office',
 ];
 
 beforeEach(function () {
@@ -105,7 +105,7 @@ test('user cannot update user from different workshop', function () {
         ->assertForbidden();
 });
 
-test('user can update with multiple roles', function () {
+test('user can update with different role', function () {
     $owner = User::factory()->for($this->workshop)->create();
     $owner->assignRole('Owner');
 
@@ -115,7 +115,7 @@ test('user can update with multiple roles', function () {
     $data = [
         'name' => 'Updated Name',
         'email' => 'updated@example.com',
-        'roles' => ['Owner', 'Office'],
+        'role' => 'Owner',
     ];
 
     actingAs($owner)
@@ -124,7 +124,6 @@ test('user can update with multiple roles', function () {
 
     $userToUpdate->refresh();
     expect($userToUpdate->hasRole('Owner'))->toBeTrue();
-    expect($userToUpdate->hasRole('Office'))->toBeTrue();
     expect($userToUpdate->hasRole('Mechanic'))->toBeFalse();
 });
 
@@ -164,7 +163,7 @@ test('update validation fails when email is invalid', function () {
         ->assertInvalid(['email']);
 });
 
-test('update validation fails when roles is missing', function () {
+test('update validation fails when role is missing', function () {
     $owner = User::factory()->for($this->workshop)->create();
     $owner->assignRole('Owner');
 
@@ -172,8 +171,8 @@ test('update validation fails when roles is missing', function () {
     $userToUpdate->assignRole('Mechanic');
 
     actingAs($owner)
-        ->put(route('users.update', $userToUpdate), array_merge(VALID_USER_UPDATE_DATA, ['roles' => []]))
-        ->assertInvalid(['roles']);
+        ->put(route('users.update', $userToUpdate), array_merge(VALID_USER_UPDATE_DATA, ['role' => '']))
+        ->assertInvalid(['role']);
 });
 
 test('update validation fails when role is invalid', function () {
@@ -184,8 +183,8 @@ test('update validation fails when role is invalid', function () {
     $userToUpdate->assignRole('Mechanic');
 
     actingAs($owner)
-        ->put(route('users.update', $userToUpdate), array_merge(VALID_USER_UPDATE_DATA, ['roles' => ['InvalidRole']]))
-        ->assertInvalid(['roles.0']);
+        ->put(route('users.update', $userToUpdate), array_merge(VALID_USER_UPDATE_DATA, ['role' => 'InvalidRole']))
+        ->assertInvalid(['role']);
 });
 
 test('update validation fails when email is not unique', function () {
@@ -215,7 +214,7 @@ test('update allows keeping same email', function () {
     $data = [
         'name' => 'Updated Name',
         'email' => 'same@example.com',
-        'roles' => ['Office'],
+        'role' => 'Office',
     ];
 
     $response = actingAs($owner)
