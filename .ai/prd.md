@@ -135,11 +135,11 @@ Te funkcje mogą być rozważone w przyszłych wersjach produktu na podstawie op
     *   Formularz tworzenia zlecenia pozwala mi dodać opis usterki, notatki wewnętrzne i załączyć zdjęcia.
     *   Po utworzeniu, zlecenie otrzymuje unikalny identyfikator, a jego status jest ustawiany na "Nowe".
 
-*   _ID_: US-008
-*   _Tytuł_: Przeglądanie wszystkich aktywnych zleceń
-*   _Opis_: Jako użytkownik, chcę widzieć listę wszystkich aktywnych (nie "Zamkniętych") zleceń naprawy w moim warsztacie, aby mieć ogólny obraz bieżącego obciążenia pracą.
+*   _ID_: US-008 
+*   _Tytuł_: Przeglądanie wszystkich zleceń
+*   _Opis_: Jako Właściciel lub pracownik Biura, chcę widzieć listę wszystkich zleceń naprawy w moim warsztacie
 *   _Kryteria akceptacji_:
-    *   Będąc zalogowanym, mogę przejść do panelu, który pokazuje listę wszystkich zleceń w moim warsztacie o statusie innym niż "Zamknięte".
+    *   Będąc zalogowanym, mogę przejść do panelu, który pokazuje listę wszystkich zleceń w moim warsztacie
     *   Lista jest przeszukiwalna i może być filtrowana według statusu.
     *   Każdy element listy pokazuje kluczowe informacje, takie jak ID zlecenia, Imię klienta, Pojazd i obecny Status.
 
@@ -187,19 +187,16 @@ Te funkcje mogą być rozważone w przyszłych wersjach produktu na podstawie op
 
 *   _ID_: US-014
 *   _Tytuł_: Przeglądanie historii zmian
-*   _Opis_: Jako Właściciel, chcę widzieć historię zmian dla zlecenia, w szczególności edycje czasów i zmiany statusu, aby mieć pewność, że dane są poprawne.
+*   _Opis_: Jako Właściciel, chcę widzieć podstawową informację o tym, kto i kiedy edytował zlecenie, aby mieć ogólną świadomość zmian.
 *   _Kryteria akceptacji_:
-    *   Przeglądając szczegóły zlecenia, widzę sekcję lub log z historią kluczowych zmian.
-    *   Log pokazuje, kto dokonał zmiany, kiedy, oraz jaka była poprzednia i nowa wartość (np. zmiana statusu z "W naprawie" na "Gotowe").
-    *   Historia edycji wpisów czasu jest również widoczna.
+    *   Przeglądając szczegóły zlecenia, widzę informację o tym, kto i kiedy dokonał ostatniej edycji.
+    *   Szczegółowy log zmian z poprzednimi i nowymi wartościami nie jest wymagany w wersji MVP.
 
 ## 6. Metryki Sukcesu
 
 Sukces wersji MVP FixFlow będzie mierzony za pomocą następujących kluczowych wskaźników:
 
-*   _Współczynnik adopcji_: Procent mechaników, którzy aktywnie rejestrują swój czas pracy za pomocą aplikacji na co dzień. Cel: 95% w ciągu jednego miesiąca od uruchomienia.
 *   _Czas na zarejestrowanie zadania_: Średni czas, jaki zajmuje mechanikowi wybranie zlecenia i przesłanie wpisu czasu. Cel: Mniej niż 60 sekund.
-*   _Dokładność danych_: Jakościowa redukcja sporów lub pytań dotyczących zarejestrowanych godzin w porównaniu z poprzednim systemem papierowym. Mierzone na podstawie opinii menedżerów.
 *   _Satysfakcja użytkownika_: Jakościowe opinie zbierane od mechaników i menedżerów dotyczące łatwości obsługi i użyteczności aplikacji. Mierzone poprzez dwutygodniowe spotkania kontrolne przez pierwsze dwa miesiące.
 
 ## 7. Stos Technologiczny
