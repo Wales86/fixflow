@@ -62,7 +62,7 @@ class UserService
                 'email' => $data->email,
             ]);
 
-            $user->syncRoles($data->roles);
+            $user->syncRoles($data->role);
 
             return $user->fresh();
         });

@@ -18,6 +18,6 @@ class UpdateUserData extends Data
         #[Required, Email, Max(255)]
         public string $email,
         #[Required]
-        public array $roles,
+        public string $role,
     ) {}
 }

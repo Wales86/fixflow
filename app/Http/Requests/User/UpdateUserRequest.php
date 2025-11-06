@@ -4,6 +4,7 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Enums\UserRole;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -28,8 +29,7 @@ class UpdateUserRequest extends FormRequest
                 'max:255',
                 Rule::unique('users', 'email')->ignore($userId),
             ],
-            'roles' => ['required', 'array'],
-            'roles.*' => ['required', 'string', 'in:Owner,Office,Mechanic'],
+            'role' => ['required', 'string', Rule::in(UserRole::cases())],
         ];
     }
 }
