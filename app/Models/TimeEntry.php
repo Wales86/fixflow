@@ -7,10 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Builder;
 
 class TimeEntry extends Model
 {
     use HasFactory, LogsActivity;
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope('workshop', function (Builder $builder) {
+            if (auth()->check() && auth()->user()->workshop_id) {
+                $builder->whereHas('repairOrder');
+            }
+        });
+    }
 
     protected $fillable = [
         'repair_order_id',
