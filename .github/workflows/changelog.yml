@@ -1,0 +1,21 @@
+name: Update Changelog
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  update-changelog:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update Changelog and Create PR
+        uses: Wales86/action-changelog@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
